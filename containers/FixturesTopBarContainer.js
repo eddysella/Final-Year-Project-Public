@@ -10,23 +10,38 @@ export default class FixturesTopBarContainer extends PureComponent {
 
     state = {
         loading: true,
-        days: [-5,-4,-3,-2,-1,0,1,2,3,4,5],
+        dates:[],
     }
 
-    render(){
-        collect = [];
+    setDates() {
+        collect=[];
+        start = new Date();
+        start.setDate(start.getDate() - 5);
+        end = new Date();
+        end.setDate(end.getDate() + 5);
 
-        for (day in this.state.days) {
-            const date = new Date();
-            date.setDate(date.getDate() + day)
+        date = new Date(start);
+
+        while (date <= end) {
             var dd = String(date.getDate()).padStart(2, '0');
             var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
             collect.push(mm + '/' + dd);
+
+            date.setDate(date.getDate() + 1);
         }
-        console.log(collect);
+
+        this.setState({dates:collect});
+    }
+
+    componentDidMount(){
+        this.setDates();
+    }
+
+
+    render(){
 
         return (
-            <FixturesTopBar TopBarFlex={this.props.TopBarFlex} dates={collect}/>
+            <FixturesTopBar TopBarFlex={this.props.TopBarFlex} dates={this.state.dates}/>
         );
     }
 }
