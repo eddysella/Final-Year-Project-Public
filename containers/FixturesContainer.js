@@ -29,8 +29,8 @@ export default class FixturesContainer extends PureComponent {
         }else{
             return (
                 <View style={{ flex: 1}}>
-                    <FixturesTopBarContainer/>
-                    <FixturesScreen/>
+                    <FixturesTopBarContainer TopBarFlex={1}/>
+                    <FixturesScreen ScreenFlex={8}/>
                 </View>
             );
         }
