@@ -12,19 +12,19 @@ import FollowingScreen from '../screens/Following';
 const StandingsStack = createStackNavigator({
   Standings: StandingsContainer,
   Inner: SpecificStandingContainer,
-});
+}, {headerLayoutPreset: 'center'});
 
 const FixturesStack = createStackNavigator({
   Fixtures: FixturesContainer,
-});
+}, {headerLayoutPreset: 'center'});
 
 const SearchStack = createStackNavigator({
   Search: SearchScreen,
-});
+}, {headerLayoutPreset: 'center'});
 
 const FollowingStack = createStackNavigator({
   Following: FollowingScreen,
-});
+}, {headerLayoutPreset: 'center'});
 
 export default createBottomTabNavigator(
     {
