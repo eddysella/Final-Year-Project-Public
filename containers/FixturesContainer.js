@@ -13,14 +13,15 @@ export default class FixturesContainer extends PureComponent {
 
     state = {
         loading: true,
-        leaguesDict: undefined,
+        leagueNames: undefined,
+        leagueFixtures: undefined,
     }
 
     static navigationOptions = {
         title: 'Fixtures',
     };
 
-    async componentDidMount() {
+    componentDidMount() {
         const date = new Date();
         date.setDate(date.getDate());
         var dd = String(date.getDate()).padStart(2, '0');
@@ -52,8 +53,16 @@ export default class FixturesContainer extends PureComponent {
                 });
             });
 
+            collectNames=[];
+            collectFixtures=[];
+            for (league in collect) {
+                collectNames.push(league);
+                collectFixtures.push(collect[league]);
+            }
+
             this.setState({
-                leaguesDict: collect,
+                leagueNames: collectNames,
+                leagueFixtures: collectFixtures,
                 loading: false,
             });
         });
@@ -70,7 +79,7 @@ export default class FixturesContainer extends PureComponent {
             return (
                 <View style={{ flex: 1}}>
                     <FixturesTopBarContainer TopBarFlex={1}/>
-                    <FixturesScreen ScreenFlex={8} leaguesDict={this.state.leaguesDict}/>
+                    <FixturesScreen ScreenFlex={8} leagueNames={this.state.leagueNames} leagueFixtures={this.state.leagueFixtures}/>
                 </View>
             );
         }
