@@ -15,18 +15,18 @@ export default class FixturesTopBarContainer extends PureComponent {
 
     render(){
         collect = [];
-        var today = new Date();
 
         for (day in this.state.days) {
-            const date = new Date(today)
+            const date = new Date();
             date.setDate(date.getDate() + day)
             var dd = String(date.getDate()).padStart(2, '0');
             var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
             collect.push(mm + '/' + dd);
         }
+        console.log(collect);
 
         return (
-            <FixturesTopBar dates={collect}/>
+            <FixturesTopBar TopBarFlex={this.props.TopBarFlex} dates={collect}/>
         );
     }
 }

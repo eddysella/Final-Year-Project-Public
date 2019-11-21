@@ -1,12 +1,28 @@
 import React, {Component} from 'react';
 import { Button, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import SquareGrid from "react-native-square-grid";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+
+const screenWidth = Math.round(Dimensions.get('window').width);
+const screenHeight = Math.round(Dimensions.get('window').height);
 
 export const FixturesTopBar = props => {
 
+    let itemWidth = scale(screenWidth/5) - scale(3);
+    let itemHorizontalPadding = (itemWidth/5);
+    let itemVerticalPadding = scale(15);
+
     function renderItem(item) {
+        leftBorder = 0;
+        rightBorder = 0;
+        if(item.index == 0){
+            leftBorder = 3
+        }
+        if(item.index == 10){
+            rightBorder = 3
+        }
         return (
-            <View style={{flex: 1, borderWidth: 3, paddingHorizontal:20, paddingVertical: 10 , alignItems: 'center'}}>
+            <View style={{width: itemWidth, borderBottomWidth:scale(3), borderTopWidth: scale(3),  borderLeftWidth: leftBorder, borderRightWidth: rightBorder, paddingHorizontal: itemHorizontalPadding, paddingVertical: itemVerticalPadding, justifyContent: 'center', alignItems: 'center'}}>
                 <Text>
                     {item.item}
                 </Text>
@@ -14,19 +30,39 @@ export const FixturesTopBar = props => {
         );
     };
 
+    function flatListItemSeparator(){
+      return (
+        <View
+          style={{
+            height: '100%',
+            width: scale(3),
+            backgroundColor: "#000",
+          }}
+        />
+      );
+    };
+
 
     return (
-
-        <View style={{flex: 1}}>
+        <View style={props.TopBarFlex} onLayout={goIndex}>
             <FlatList
-                initialScrollIndex={4}
+                showsHorizontalScrollIndicator={false}
+                ItemSeparatorComponent={flatListItemSeparator}
+                // initialScrollIndex={4}
                 horizontal
-                // style={{flex:1}}
+                ref={ref => {
+                    this.flatList_Ref = ref;  // <------ ADD Ref for the Flatlist
+                }}
                 data={props.dates}
                 renderItem={renderItem}
                 keyExtractor={(item,index) => index.toString()}
             />
         </View>
     );
-
 }
+
+goIndex = () => {
+
+ this.flatList_Ref.scrollToIndex({animated: false,index:4,viewPosition:0.5});
+
+};
