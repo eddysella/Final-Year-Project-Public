@@ -37,11 +37,10 @@ export const FixturesScreen = props => {
             var hours = date.getHours();
             // Minutes part from the timestamp
             var minutes = "0" + date.getMinutes();
-
             // Will display time in 10:30:23 format
             status = hours + ':' + minutes.substr(-2);
         }else if (['1H','2H','ET','P','HT'].includes(fixture.status)){
-            status = String(fixture.elapsed + "'");
+            status = String(fixture.goalsHomeTeam + "  " + fixture.elapsed + "'  " + fixture.goalsAwayTeam);
         }
 
         return (
