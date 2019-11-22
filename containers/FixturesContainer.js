@@ -39,8 +39,6 @@ export default class FixturesContainer extends PureComponent {
             dateString = year + '-' + passedDate.split('/').join('-');
         }
 
-        console.log(dateString);
-
         collect={};
 
         getAllFixturesByDate( dateString ).then( data => {
@@ -54,7 +52,9 @@ export default class FixturesContainer extends PureComponent {
                 }
                 collect[leagueName].push({
                     flag:league.logo,
+                    country:league.country,
                     id:fixture.fixture_id,
+                    timeStamp:fixture.event_timestamp,
                     status:fixture.statusShort,
                     elapsed:fixture.elapsed,
                     homeTeam:fixture.homeTeam,

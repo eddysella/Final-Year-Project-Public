@@ -13,6 +13,7 @@ export const FixturesScreen = props => {
     let itemHeight = scale(screenWidth/4);
     let itemHorizontalPadding = (itemWidth/5);
     let itemVerticalPadding = scale(15);
+    count=0;
 
     function ItemSeparator(){
       return (
@@ -28,6 +29,20 @@ export const FixturesScreen = props => {
 
     function renderItem(fixture) {
         fixture = fixture.item;
+        status = fixture.status;
+
+        if(fixture.status == 'NS'){
+            var date = new Date(fixture.timeStamp*1000);
+            // Hours part from the timestamp
+            var hours = date.getHours();
+            // Minutes part from the timestamp
+            var minutes = "0" + date.getMinutes();
+
+            // Will display time in 10:30:23 format
+            status = hours + ':' + minutes.substr(-2);
+        }else if (['1H','2H','ET','P','HT'].includes(fixture.status)){
+            status = String(fixture.elapsed + "'");
+        }
 
         return (
             <View>
@@ -37,7 +52,7 @@ export const FixturesScreen = props => {
 
                     <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
                         <Text style={{flex:1}}>{fixture.homeTeam.team_name}</Text>
-                        <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{fixture.status}</Text>
+                        <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{status}</Text>
                         <Text style={{flex:1}}>{fixture.awayTeam.team_name}</Text>
                     </View>
                 </TouchableHighlight>
@@ -53,8 +68,9 @@ export const FixturesScreen = props => {
     };
 
     function renderCards(league) {
+
         return (
-            <Card title={props.leagueNames[league.index]}>
+            <Card title={ league.item[0].country + " " + props.leagueNames[league.index]}>
             {
                 <View key={props.leagueNames[league.index]} style={{justifyContent: 'center', alignItems: 'center'}}>
                     <FlatList
