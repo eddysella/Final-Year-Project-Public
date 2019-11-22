@@ -41,7 +41,7 @@ export default class FixturesTopBarContainer extends PureComponent {
     render(){
 
         return (
-            <FixturesTopBar TopBarFlex={this.props.TopBarFlex} dates={this.state.dates}/>
+            <FixturesTopBar TopBarFlex={this.props.TopBarFlex} setFixtures={this.props.setFixtures.bind(this)} dates={this.state.dates}/>
         );
     }
 }

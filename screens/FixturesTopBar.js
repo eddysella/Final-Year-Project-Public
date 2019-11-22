@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
+import { TouchableHighlight, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import SquareGrid from "react-native-square-grid";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
@@ -22,11 +22,15 @@ export const FixturesTopBar = props => {
             rightBorder = 3
         }
         return (
-            <View style={{width: itemWidth, borderBottomWidth:scale(3), borderTopWidth: scale(3),  borderLeftWidth: leftBorder, borderRightWidth: rightBorder, paddingHorizontal: itemHorizontalPadding, paddingVertical: itemVerticalPadding, justifyContent: 'center', alignItems: 'center'}}>
-                <Text>
-                    {item.item}
-                </Text>
-            </View>
+
+            <TouchableHighlight onPress={() =>
+                { props.setFixtures(item.item); }
+            }>
+
+                <View style={{width: itemWidth, borderBottomWidth:scale(3), borderTopWidth: scale(3),  borderLeftWidth: leftBorder, borderRightWidth: rightBorder, paddingHorizontal: itemHorizontalPadding, paddingVertical: itemVerticalPadding, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text> {item.item} </Text>
+                </View>
+            </TouchableHighlight>
         );
     };
 
@@ -63,6 +67,6 @@ export const FixturesTopBar = props => {
 
 goIndex = () => {
 
- this.flatList_Ref.scrollToIndex({animated: false,index:4,viewPosition:0.5});
+ this.flatList_Ref.scrollToIndex({animated: false,index:5,viewPosition:0.5});
 
 };

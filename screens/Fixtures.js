@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { ExpoConfigView } from '@expo/samples';
-import {Button, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
+import {TouchableHighlight, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import {Card} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
@@ -28,18 +28,23 @@ export const FixturesScreen = props => {
 
     function renderItem(fixture) {
         fixture = fixture.item;
-        console.log(fixture.homeTeam.team_name);
 
         return (
-            // displays dimensions but blank text!ASDNLKASNFLKNADLFKN
-            <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
-                <Text style={{flex:1}}>{fixture.homeTeam.team_name}</Text>
-                <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{fixture.status}</Text>
-                <Text style={{flex:1}}>{fixture.awayTeam.team_name}</Text>
-                <ItemSeparator>
+            <View>
+                <TouchableHighlight onPress={() =>
+                    { props.navigation.navigate('Inner', {date:fixture.id}); }
+                }>
+
+                    <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
+                        <Text style={{flex:1}}>{fixture.homeTeam.team_name}</Text>
+                        <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{fixture.status}</Text>
+                        <Text style={{flex:1}}>{fixture.awayTeam.team_name}</Text>
+                    </View>
+                </TouchableHighlight>
+                <ItemSeparator/>
             </View>
             );
-            // <Image
+            // <Image>
             // style={styles.image}
             // resizeMode="cover"
             // source={{ uri: u.avatar }}

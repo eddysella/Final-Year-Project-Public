@@ -6,6 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import StandingsContainer from '../containers/StandingsContainer';
 import SpecificStandingContainer from '../containers/SpecificStandingContainer';
 import FixturesContainer from '../containers/FixturesContainer';
+import SpecificFixtureContainer from '../containers/SpecificFixtureContainer';
 import SearchScreen from '../screens/Search';
 import FollowingScreen from '../screens/Following';
 
@@ -16,6 +17,7 @@ const StandingsStack = createStackNavigator({
 
 const FixturesStack = createStackNavigator({
   Fixtures: FixturesContainer,
+  Inner: SpecificFixtureContainer,
 }, {headerLayoutPreset: 'center'});
 
 const SearchStack = createStackNavigator({

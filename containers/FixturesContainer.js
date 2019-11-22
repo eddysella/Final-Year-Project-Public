@@ -22,12 +22,23 @@ export default class FixturesContainer extends PureComponent {
     };
 
     componentDidMount() {
+        this.setFixtures();
+    }
+
+    setFixtures(passedDate){
+        dateString=undefined;
         const date = new Date();
         date.setDate(date.getDate());
-        var dd = String(date.getDate()).padStart(2, '0');
-        var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var year = String(date.getFullYear());
-        dateString = year + '-' + mm + '-' + dd;
+        if(!passedDate){
+            var dd = String(date.getDate()).padStart(2, '0');
+            var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var year = String(date.getFullYear());
+            dateString = year + '-' + mm + '-' + dd;
+        }else{
+            var year = String(date.getFullYear());
+            dateString = year + '-' + passedDate.split('/').join('-');
+        }
+
         console.log(dateString);
 
         collect={};
@@ -78,8 +89,8 @@ export default class FixturesContainer extends PureComponent {
         }else{
             return (
                 <View style={{ flex: 1}}>
-                    <FixturesTopBarContainer TopBarFlex={1}/>
-                    <FixturesScreen ScreenFlex={8} leagueNames={this.state.leagueNames} leagueFixtures={this.state.leagueFixtures}/>
+                    <FixturesTopBarContainer TopBarFlex={1} setFixtures={this.setFixtures.bind(this)}/>
+                    <FixturesScreen ScreenFlex={8} navigation={this.props.navigation} leagueNames={this.state.leagueNames} leagueFixtures={this.state.leagueFixtures}/>
                 </View>
             );
         }
