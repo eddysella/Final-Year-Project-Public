@@ -71,7 +71,7 @@ export const Screen = props => {
     function renderCards(league) {
 
         return (
-            <Card title={ league.item[0].country + " " + props.leagueNames[league.index]}>
+            <Card title={props.leagueNames[league.index]}>
             {
                 <View key={props.leagueNames[league.index]} style={{justifyContent: 'center', alignItems: 'center'}}>
                     <FlatList

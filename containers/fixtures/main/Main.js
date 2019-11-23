@@ -46,13 +46,12 @@ export default class Container extends PureComponent {
             fixtures = data.fixtures;
             fixtures.forEach( fixture => {
                 league = fixture.league;
-                leagueName = league.name;
+                leagueName = league.country + " " + league.name;
                 if (!(leagueName in collect)) {
                     collect[leagueName] = [];
                 }
                 collect[leagueName].push({
                     flag:league.logo,
-                    country:league.country,
                     id:fixture.fixture_id,
                     timeStamp:fixture.event_timestamp,
                     status:fixture.statusShort,
