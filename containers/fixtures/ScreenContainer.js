@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react';
 import { Button, BackHandler, AsyncStorage, ScrollView, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import SquareGrid from "react-native-square-grid";
 import { Avatar } from 'react-native-elements';
-import { getAllFixturesByDate } from '../fetch/Fixtures';
-import { FixturesScreen } from '../screens/Fixtures';
-import FixturesTopBarContainer from '../containers/FixturesTopBarContainer';
+import { getAllFixturesByDate } from '../../fetch/Fixtures';
+import { Screen } from '../../screens/fixtures/Fixtures';
+import TopBarContainer from './TopBarContainer';
 
-export default class FixturesContainer extends PureComponent {
+export default class Container extends PureComponent {
     constructor(props){
         super(props);
     }
@@ -59,8 +59,8 @@ export default class FixturesContainer extends PureComponent {
                     elapsed:fixture.elapsed,
                     homeTeam:fixture.homeTeam,
                     awayTeam:fixture.awayTeam,
-                    goalsHome:fixture.goalsHomeTeam,
-                    goalsAway:fixture.goalsAwayTeam,
+                    goalsHome:String(fixture.goalsHomeTeam),
+                    goalsAway:String(fixture.goalsAwayTeam),
                 });
             });
 
@@ -89,8 +89,8 @@ export default class FixturesContainer extends PureComponent {
         }else{
             return (
                 <View style={{ flex: 1}}>
-                    <FixturesTopBarContainer TopBarFlex={1} setFixtures={this.setFixtures.bind(this)}/>
-                    <FixturesScreen ScreenFlex={8} navigation={this.props.navigation} leagueNames={this.state.leagueNames} leagueFixtures={this.state.leagueFixtures}/>
+                    <TopBarContainer TopBarFlex={1} setFixtures={this.setFixtures.bind(this)}/>
+                    <Screen ScreenFlex={8} navigation={this.props.navigation} leagueNames={this.state.leagueNames} leagueFixtures={this.state.leagueFixtures}/>
                 </View>
             );
         }

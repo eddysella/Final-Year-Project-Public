@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Button, BackHandler, AsyncStorage, ScrollView, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import SquareGrid from "react-native-square-grid";
-import {FixturesTopBar} from '../screens/FixturesTopBar'
+import { TopBar } from '../../screens/fixtures/FixturesTopBar'
 
-export default class FixturesTopBarContainer extends PureComponent {
+export default class Container extends PureComponent {
     constructor(props){
         super(props);
     }
@@ -41,7 +41,7 @@ export default class FixturesTopBarContainer extends PureComponent {
     render(){
 
         return (
-            <FixturesTopBar TopBarFlex={this.props.TopBarFlex} setFixtures={this.props.setFixtures.bind(this)} dates={this.state.dates}/>
+            <TopBar TopBarFlex={this.props.TopBarFlex} setFixtures={this.props.setFixtures.bind(this)} dates={this.state.dates}/>
         );
     }
 }

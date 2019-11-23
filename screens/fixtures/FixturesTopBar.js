@@ -6,7 +6,7 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
-export const FixturesTopBar = props => {
+export const TopBar = props => {
 
     let itemWidth = scale(screenWidth/5) - scale(3);
     let itemHorizontalPadding = (itemWidth/5);

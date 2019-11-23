@@ -5,7 +5,7 @@ import { SearchBar, ListItem} from 'react-native-elements';
 import Item from './Item';
 import * from fetch.fixturesByDate;
 
-export default class FixturesScreen extends Component {
+export const DetailsScreen = props => {
 
     this.state = {
         isLoading: true,

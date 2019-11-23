@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { ExpoConfigView } from '@expo/samples';
 
-export default function SpecificStandingContainer() {
+export default function StandingsDetailsContainer() {
   /**
    * Go ahead and delete ExpoConfigView and replace it with your content;
    * we just wanted to give you a quick view of your config.

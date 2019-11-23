@@ -2,10 +2,10 @@ import React, { PureComponent } from 'react';
 import { Button, BackHandler, AsyncStorage, ScrollView, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import SquareGrid from "react-native-square-grid";
 import { Avatar } from 'react-native-elements';
-import { getLeagueByID } from '../fetch/League';
-import { StandingsScreen } from '../screens/Standings'
+import { getLeagueByID } from '../../fetch/League';
+import { Screen } from '../../screens/standings/Standings'
 
-export default class StandingsContainer extends PureComponent {
+export default class Container extends PureComponent {
     constructor(props){
         super(props);
     }
@@ -66,7 +66,7 @@ export default class StandingsContainer extends PureComponent {
                 </View>
             );
         }else{
-            return <StandingsScreen leaguesList={this.state.leaguesList} navigation={this.props.navigation} />;
+            return <Screen leaguesList={this.state.leaguesList} navigation={this.props.navigation} />;
         }
     }
 }

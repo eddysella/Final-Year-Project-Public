@@ -3,21 +3,21 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import TabBarIcon from '../components/TabBarIcon';
-import StandingsContainer from '../containers/StandingsContainer';
-import SpecificStandingContainer from '../containers/SpecificStandingContainer';
-import FixturesContainer from '../containers/FixturesContainer';
-import SpecificFixtureContainer from '../containers/SpecificFixtureContainer';
-import SearchScreen from '../screens/Search';
-import FollowingScreen from '../screens/Following';
+import StandingsContainer from '../containers/standings/ScreenContainer';
+import StandingsDetailsContainer from '../containers/standings/DetailsContainer';
+import FixturesContainer from '../containers/fixtures/ScreenContainer';
+import FixturesDetailsContainer from '../containers/fixtures/DetailsContainer';
+import SearchScreen from '../screens/search/Search';
+import FollowingScreen from '../screens/following/Following';
 
 const StandingsStack = createStackNavigator({
   Standings: StandingsContainer,
-  Inner: SpecificStandingContainer,
+  Inner: StandingsDetailsContainer,
 }, {headerLayoutPreset: 'center'});
 
 const FixturesStack = createStackNavigator({
   Fixtures: FixturesContainer,
-  Inner: SpecificFixtureContainer,
+  Inner: FixturesDetailsContainer,
 }, {headerLayoutPreset: 'center'});
 
 const SearchStack = createStackNavigator({
@@ -63,7 +63,7 @@ export default createBottomTabNavigator(
                                 fontWeight: 'bold',
                               },
                 }),
-        lazy: 'false',
+        lazy: false,
         initialRouteName: 'Fixtures',
 
     }

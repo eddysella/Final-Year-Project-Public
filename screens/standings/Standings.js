@@ -3,7 +3,7 @@ import { Button, View, Text, ActivityIndicator} from 'react-native';
 import SquareGrid from "react-native-square-grid";
 import { Avatar } from 'react-native-elements';
 
-export const StandingsScreen = props => {
+export const Screen = props => {
 
     function renderItem(item, index) {
         return (

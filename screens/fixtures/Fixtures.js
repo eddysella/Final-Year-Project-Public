@@ -7,7 +7,7 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
-export const FixturesScreen = props => {
+export const Screen = props => {
 
     let itemWidth = screenWidth - scale(screenWidth/5);
     let itemHeight = scale(screenWidth/4);
@@ -39,8 +39,10 @@ export const FixturesScreen = props => {
             var minutes = "0" + date.getMinutes();
             // Will display time in 10:30:23 format
             status = hours + ':' + minutes.substr(-2);
-        }else if (['1H','2H','ET','P','HT'].includes(fixture.status)){
-            status = String(fixture.goalsHomeTeam + "  " + fixture.elapsed + "'  " + fixture.goalsAwayTeam);
+        }else if (['HT', 'FT'].includes(fixture.status)){
+            status = String(fixture.goalsHome + "  " + fixture.status + "'  " + fixture.goalsAway);
+        }else if (['1H','2H','ET','P'].includes(fixture.status)){
+            status = String(fixture.goalsHome + "  " + fixture.elapsed + "'  " + fixture.goalsAway);
         }
 
         return (
