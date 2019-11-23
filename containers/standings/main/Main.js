@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import { Button, BackHandler, AsyncStorage, ScrollView, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import SquareGrid from "react-native-square-grid";
 import { Avatar } from 'react-native-elements';
-import { getLeagueByID } from '../../fetch/League';
-import { Screen } from '../../screens/standings/Standings'
+import { getLeagueByID } from '../../../fetch/League';
+import { Screen } from '../../../screens/standings/main/Main'
 
 export default class Container extends PureComponent {
     constructor(props){

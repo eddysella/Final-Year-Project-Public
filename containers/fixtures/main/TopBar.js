@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Button, BackHandler, AsyncStorage, ScrollView, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import SquareGrid from "react-native-square-grid";
-import { TopBar } from '../../screens/fixtures/FixturesTopBar'
+import { TopBar } from '../../../screens/fixtures/main/TopBar';
 
 export default class Container extends PureComponent {
     constructor(props){

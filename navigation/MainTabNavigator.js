@@ -3,10 +3,10 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import TabBarIcon from '../components/TabBarIcon';
-import StandingsContainer from '../containers/standings/ScreenContainer';
-import StandingsDetailsContainer from '../containers/standings/DetailsContainer';
-import FixturesContainer from '../containers/fixtures/ScreenContainer';
-import FixturesDetailsContainer from '../containers/fixtures/DetailsContainer';
+import StandingsContainer from '../containers/standings/main/Main';
+import StandingsDetailsContainer from '../containers/standings/details/Details';
+import FixturesContainer from '../containers/fixtures/main/Main';
+import FixturesDetailsContainer from '../containers/fixtures/details/Details';
 import SearchScreen from '../screens/search/Search';
 import FollowingScreen from '../screens/following/Following';
 
@@ -63,7 +63,7 @@ export default createBottomTabNavigator(
                                 fontWeight: 'bold',
                               },
                 }),
-        lazy: false,
+        // lazy: false, TODO: Change to true in final version
         initialRouteName: 'Fixtures',
 
     }

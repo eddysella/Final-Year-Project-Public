@@ -2,12 +2,11 @@ import React, { PureComponent } from 'react';
 import { Button, BackHandler, AsyncStorage, ScrollView, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import SquareGrid from "react-native-square-grid";
 import { Avatar } from 'react-native-elements';
-import { getAllFixturesByDate } from '../../fetch/Fixtures';
-import { Screen } from '../../screens/fixtures/Fixtures';
-import TopBarContainer from './TopBarContainer';
+import { getFixtureByID } from '../../../fetch/Fixtures';
+import { Screen } from '../../../screens/fixtures/details/Details';
+import TopBarContainer from './TopBar';
 
-
-export default class Container extends PureComponent{
+export default class Container extends PureComponent {
     constructor(props){
         super(props);
     }
@@ -42,42 +41,42 @@ export default class Container extends PureComponent{
 
         collect={};
 
-        // getAllFixturesByDate( dateString ).then( data => {
-        //     data = data.api;
-        //     fixtures = data.fixtures;
-        //     fixtures.forEach( fixture => {
-        //         league = fixture.league;
-        //         leagueName = league.name;
-        //         if (!(leagueName in collect)) {
-        //             collect[leagueName] = [];
-        //         }
-        //         collect[leagueName].push({
-        //             flag:league.logo,
-        //             country:league.country,
-        //             id:fixture.fixture_id,
-        //             timeStamp:fixture.event_timestamp,
-        //             status:fixture.statusShort,
-        //             elapsed:fixture.elapsed,
-        //             homeTeam:fixture.homeTeam,
-        //             awayTeam:fixture.awayTeam,
-        //             goalsHome:String(fixture.goalsHomeTeam),
-        //             goalsAway:String(fixture.goalsAwayTeam),
-        //         });
-        //     });
-        //
-        //     collectNames=[];
-        //     collectFixtures=[];
-        //     for (league in collect) {
-        //         collectNames.push(league);
-        //         collectFixtures.push(collect[league]);
-        //     }
-        //
-        //     this.setState({
-        //         leagueNames: collectNames,
-        //         leagueFixtures: collectFixtures,
-        //         loading: false,
-        //     });
-        // });
+        getAllFixturesByDate( dateString ).then( data => {
+            data = data.api;
+            fixtures = data.fixtures;
+            fixtures.forEach( fixture => {
+                league = fixture.league;
+                leagueName = league.name;
+                if (!(leagueName in collect)) {
+                    collect[leagueName] = [];
+                }
+                collect[leagueName].push({
+                    flag:league.logo,
+                    country:league.country,
+                    id:fixture.fixture_id,
+                    timeStamp:fixture.event_timestamp,
+                    status:fixture.statusShort,
+                    elapsed:fixture.elapsed,
+                    homeTeam:fixture.homeTeam,
+                    awayTeam:fixture.awayTeam,
+                    goalsHome:String(fixture.goalsHomeTeam),
+                    goalsAway:String(fixture.goalsAwayTeam),
+                });
+            });
+
+            collectNames=[];
+            collectFixtures=[];
+            for (league in collect) {
+                collectNames.push(league);
+                collectFixtures.push(collect[league]);
+            }
+
+            this.setState({
+                leagueNames: collectNames,
+                leagueFixtures: collectFixtures,
+                loading: false,
+            });
+        });
     }
 
     render(){

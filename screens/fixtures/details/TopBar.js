@@ -24,7 +24,9 @@ export const TopBar = props => {
         return (
 
             <TouchableHighlight onPress={() =>
-                { props.setFixtures(item.item); }
+                { props.setFixtures(item.item);
+                    goIndex(item.index);
+                }
             }>
 
                 <View style={{width: itemWidth, borderBottomWidth:scale(3), borderTopWidth: scale(3),  borderLeftWidth: leftBorder, borderRightWidth: rightBorder, paddingHorizontal: itemHorizontalPadding, paddingVertical: itemVerticalPadding, justifyContent: 'center', alignItems: 'center'}}>
@@ -48,7 +50,7 @@ export const TopBar = props => {
 
 
     return (
-        <View style={props.TopBarFlex} onLayout={goIndex}>
+        <View style={props.TopBarFlex} onLayout={() => {goIndex(5)}} >
             <FlatList
                 showsHorizontalScrollIndicator={false}
                 ItemSeparatorComponent={flatListItemSeparator}
@@ -65,8 +67,8 @@ export const TopBar = props => {
     );
 }
 
-goIndex = () => {
+goIndex = (index) => {
 
- this.flatList_Ref.scrollToIndex({animated: false,index:5,viewPosition:0.5});
+ this.flatList_Ref.scrollToIndex({animated: false,index:index,viewPosition:0.5});
 
 };
