@@ -13,7 +13,6 @@ export const Screen = props => {
     let itemHeight = scale(screenWidth/4);
     let itemHorizontalPadding = (itemWidth/5);
     let itemVerticalPadding = scale(15);
-    count=0;
 
     function ItemSeparator(){
       return (
@@ -27,76 +26,148 @@ export const Screen = props => {
       );
     };
 
-    function renderItem(fixture) {
-        fixture = fixture.item;
-        status = fixture.status;
-
-        if(fixture.status == 'NS'){
-            var date = new Date(fixture.timeStamp*1000);
-            // Hours part from the timestamp
-            var hours = date.getHours();
-            // Minutes part from the timestamp
-            var minutes = "0" + date.getMinutes();
-            // Will display time in 10:30:23 format
-            status = hours + ':' + minutes.substr(-2);
-        }else if (['HT', 'FT'].includes(fixture.status)){
-            status = String(fixture.goalsHome + "  " + fixture.status + "'  " + fixture.goalsAway);
-        }else if (['1H','2H','ET','P'].includes(fixture.status)){
-            status = String(fixture.goalsHome + "  " + fixture.elapsed + "'  " + fixture.goalsAway);
-        }
-
+    function renderStatItem(stat) {
+        console.log(stat);
+        stat=stat.item
         return (
-            <View>
-                <TouchableHighlight onPress={() =>
-                    { props.navigation.navigate('Inner', {date:fixture.id}); }
-                }>
-
-                    <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
-                        <Text style={{flex:1}}>{fixture.homeTeam.team_name}</Text>
-                        <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{status}</Text>
-                        <Text style={{flex:1}}>{fixture.awayTeam.team_name}</Text>
-                    </View>
-                </TouchableHighlight>
+            <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
+                <Text style={{flex:1, textAlign: 'center'}}>{stat.home}</Text>
+                <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{stat.stat}</Text>
+                <Text style={{flex:1, textAlign: 'center'}}>{stat.away}</Text>
                 <ItemSeparator/>
             </View>
-            );
-            // <Image>
-            // style={styles.image}
-            // resizeMode="cover"
-            // source={{ uri: u.avatar }}
-            // />
-            // <Text style={styles.name}>{u.name}</Text>
-    };
-
-    function renderCards(league) {
-
-        return (
-            <Card title={ league.item[0].country + " " + props.leagueNames[league.index]}>
-            {
-                <View key={props.leagueNames[league.index]} style={{justifyContent: 'center', alignItems: 'center'}}>
-                    <FlatList
-                    // showsVerticalScrollIndicator={false}
-                    // initialScrollIndex={4}
-                    data={league.item}
-                    renderItem={renderItem}
-                    keyExtractor={(item,index) => item.id.toString()}
-                    />
-                </View>
-            }
-            </Card>
         );
     };
 
-    return (
-        <View style={props.ScreenFlex}>
-            <FlatList
-            // showsVerticalScrollIndicator={false}
-            // initialScrollIndex={4}
-            data={props.leagueFixtures}
-            renderItem={renderCards}
-            keyExtractor={(item,index) => index.toString()}
-            />
-        </View>
-    );
+    function renderStatsCardTitle(homeTeam, awayTeam){
+        return(
+            <View flexDirection={'row'} style={{justifyContent: 'space-around'}}>
+                <View style={{flex:1}}>
+                    <Text style={{flex:1}}>{homeTeam}</Text>
+                </View>
+                <View style={{flex:1}}>
+                    <Text style={{flex:1}}>{awayTeam}</Text>
+                </View>
+            </View>
+        );
+    }
 
+    function renderStats(stats, homeTeam, awayTeam) {
+        if(!stats){
+            return renderStats(props.emptyStats);
+        }
+        return (
+            //title={ () => renderStatsCardTitle(homeTeam,awayTeam)}
+            <View style={{flex:props.ScreenFlex}}>
+                <Card>
+                {
+                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                        <FlatList
+                        // showsVerticalScrollIndicator={false}
+                        // initialScrollIndex={4}
+                        data={stats}
+                        renderItem={renderStatItem}
+                        keyExtractor={(item,index) => index.toString()}
+                        />
+                    </View>
+                }
+                </Card>
+            </View>
+        );
+    };
+
+    function renderNoData(data){
+
+        title="There are no " + {data} + " available";
+        return (
+            //title={ () => renderStatsCardTitle(homeTeam,awayTeam)}
+            <View style={{flex:props.ScreenFlex}}>
+                <Card title={title} >
+                {
+                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                    </View>
+                }
+                </Card>
+            </View>
+        );
+    }
+
+    function renderEventItem(ev) {
+        ev=ev.item;
+        return (
+            <View style={{ justifyContent: 'space-around'}}>
+                <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{ev.elapsed}' {ev.player} {ev.detail}</Text>
+                <ItemSeparator/>
+            </View>
+        );
+    };
+
+    function renderEvents(events){
+        if(!events){
+            return renderNoData('Events');
+        }
+        return (
+            //title={ () => renderStatsCardTitle(homeTeam,awayTeam)}
+            <View style={{flex:props.ScreenFlex}}>
+                <Card>
+                {
+                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                        <FlatList
+                        // showsVerticalScrollIndicator={false}
+                        // initialScrollIndex={4}
+                        data={events}
+                        renderItem={renderEventItem}
+                        keyExtractor={(item,index) => index.toString()}
+                        />
+                    </View>
+                }
+                </Card>
+            </View>
+        );
+    }
+
+    function renderLineupItem(lineup) {
+        lineup=lineup.item;
+        return (
+            <View style={{ justifyContent: 'space-around'}}>
+                <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{ev.elapsed}' {ev.player} {ev.detail}</Text>
+                <ItemSeparator/>
+            </View>
+        );
+    };
+
+    function renderLineups(lineups){
+        if(!events){
+            return renderNoData('Lineups');
+        }
+        return (
+            //title={ () => renderStatsCardTitle(homeTeam,awayTeam)}
+            <View style={{flex:props.ScreenFlex}}>
+                <Card>
+                {
+                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                        <FlatList
+                        // showsVerticalScrollIndicator={false}
+                        // initialScrollIndex={4}
+                        data={lineups}
+                        renderItem={renderLineupItem}
+                        keyExtractor={(item,index) => index.toString()}
+                        />
+                    </View>
+                }
+                </Card>
+            </View>
+        );
+    }
+
+    fixture = props.data[0];
+    data=[];
+
+    if(props.currentTab == 0){
+        return renderStats(fixture.stats, fixture.homeTeam, fixture.awayTeam);
+    }else if(props.currentTab == 1){
+        return renderEvents(fixture.events);
+    }else if(props.currentTab == 2){
+        return renderLineups(fixture.lineups);
+    }
 };

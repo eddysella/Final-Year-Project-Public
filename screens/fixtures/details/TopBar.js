@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { TouchableHighlight, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
+import { TouchableHighlight, Image, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import SquareGrid from "react-native-square-grid";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
@@ -8,67 +8,86 @@ const screenHeight = Math.round(Dimensions.get('window').height);
 
 export const TopBar = props => {
 
-    let itemWidth = scale(screenWidth/5) - scale(3);
-    let itemHorizontalPadding = (itemWidth/5);
-    let itemVerticalPadding = scale(15);
+    itemWidth = screenWidth/3;
 
-    function renderItem(item) {
-        leftBorder = 0;
-        rightBorder = 0;
-        if(item.index == 0){
-            leftBorder = 3
-        }
-        if(item.index == 10){
-            rightBorder = 3
-        }
-        return (
+    fixture = props.data[0];
+    status = fixture.status;
 
-            <TouchableHighlight onPress={() =>
-                { props.setFixtures(item.item);
-                    goIndex(item.index);
-                }
-            }>
+    if(fixture.status == 'NS'){
+        var date = new Date(fixture.timeStamp*1000);
+        // Hours part from the timestamp
+        var hours = date.getHours();
+        // Minutes part from the timestamp
+        var minutes = "0" + date.getMinutes();
+        // Will display time in 10:30:23 format
+        status = hours + ':' + minutes.substr(-2);
+    }else if (['HT', 'FT'].includes(fixture.status)){
+        status = String(fixture.goalsHome + "  " + fixture.status + "  " + fixture.goalsAway);
+    }else if (['1H','2H','ET','P'].includes(fixture.status)){
+        status = String(fixture.goalsHome + "  " + fixture.elapsed + "'  " + fixture.goalsAway);
+    }
 
-                <View style={{width: itemWidth, borderBottomWidth:scale(3), borderTopWidth: scale(3),  borderLeftWidth: leftBorder, borderRightWidth: rightBorder, paddingHorizontal: itemHorizontalPadding, paddingVertical: itemVerticalPadding, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text> {item.item} </Text>
-                </View>
-            </TouchableHighlight>
-        );
-    };
+    homeLogo=fixture.homeTeam['logo'];
+    homeName=fixture.homeTeam['team_name'];
+    awayLogo=fixture.awayTeam['logo'];
+    awayName=fixture.awayTeam['team_name'];
 
-    function flatListItemSeparator(){
-      return (
-        <View
-          style={{
-            height: '100%',
-            width: scale(3),
-            backgroundColor: "#000",
-          }}
-        />
-      );
-    };
+    statsBorder=0;
+    eventsBorder=0;
+    lineupBorder=0;
+    if(props.currentTab == 0){
+        statsBorder=2;
+    }else if(props.currentTab == 1){
+        eventsBorder=2;
+    }else if(props.currentTab == 2){
+        lineupBorder=2;
+    }
 
 
     return (
-        <View style={props.TopBarFlex} onLayout={() => {goIndex(5)}} >
-            <FlatList
-                showsHorizontalScrollIndicator={false}
-                ItemSeparatorComponent={flatListItemSeparator}
-                // initialScrollIndex={4}
-                horizontal
-                ref={ref => {
-                    this.flatList_Ref = ref;  // <------ ADD Ref for the Flatlist
-                }}
-                data={props.dates}
-                renderItem={renderItem}
-                keyExtractor={(item,index) => index.toString()}
-            />
+        <View style={{flex:props.TopBarFlex}}>
+            <View  flexDirection={'row'} style={{flex:3, justifyContent: 'space-around'}}>
+                <View style={{flex:1, margin: 5, padding: 10}}>
+                    <Image
+                    style={{flex:2}}
+                    resizeMode={"contain"}
+                    source={{ uri: homeLogo }}
+                    />
+                    <Text style={{flex:1, textAlign:'center'}}>{homeName}</Text>
+                </View>
+
+                <View style={{flex:1, margin: 5, padding: 10, alignItems:'center', justifyContent:'center'}}>
+                    <Text>{status}</Text>
+                </View>
+
+                <View style={{flex:1, margin: 5, padding: 10}}>
+                    <Image
+                    style={{flex:2}}
+                    resizeMode={"contain"}
+                    source={{ uri: awayLogo}}
+                    />
+                    <Text style={{flex:1, textAlign:'center'}}>{awayName}</Text>
+                </View>
+            </View>
+            <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
+                <TouchableHighlight onPress={() => props.setTab(0)}
+                style={{flex:1,  margin: 5, padding: 5, borderBottomWidth:statsBorder}}
+                >
+                <Text style={{textAlign: 'center'}}>Stats</Text>
+                </TouchableHighlight>
+
+                <TouchableHighlight onPress={() => props.setTab(1)}
+                    style={{flex:1,  margin: 5, padding: 5, alignItems: 'center', borderBottomWidth:eventsBorder}}
+                    >
+                <Text style={{textAlign:'center'}}>Events</Text>
+                </TouchableHighlight>
+
+                <TouchableHighlight onPress={() => props.setTab(2)}
+                style={{flex:1,  margin: 5, padding: 5, borderBottomWidth:lineupBorder}}
+                >
+                <Text style={{textAlign: 'center'}}>Line-Up</Text>
+                </TouchableHighlight>
+            </View>
         </View>
     );
 }
-
-goIndex = (index) => {
-
- this.flatList_Ref.scrollToIndex({animated: false,index:index,viewPosition:0.5});
-
-};

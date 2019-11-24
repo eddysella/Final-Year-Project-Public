@@ -30,25 +30,11 @@ export const Screen = props => {
     function renderItem(fixture) {
         fixture = fixture.item;
         status = fixture.status;
-
-        if(fixture.status == 'NS'){
-            var date = new Date(fixture.timeStamp*1000);
-            // Hours part from the timestamp
-            var hours = date.getHours();
-            // Minutes part from the timestamp
-            var minutes = "0" + date.getMinutes();
-            // Will display time in 10:30:23 format
-            status = hours + ':' + minutes.substr(-2);
-        }else if (['HT', 'FT'].includes(fixture.status)){
-            status = String(fixture.goalsHome + "  " + fixture.status + "'  " + fixture.goalsAway);
-        }else if (['1H','2H','ET','P'].includes(fixture.status)){
-            status = String(fixture.goalsHome + "  " + fixture.elapsed + "'  " + fixture.goalsAway);
-        }
-
+        
         return (
             <View>
                 <TouchableHighlight onPress={() =>
-                    { props.navigation.navigate('Inner', {date:fixture.id}); }
+                    { props.navigation.navigate('Inner', {fixtureID:fixture.id}); }
                 }>
 
                     <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
@@ -88,7 +74,7 @@ export const Screen = props => {
     };
 
     return (
-        <View style={props.ScreenFlex}>
+        <View style={{flex:props.ScreenFlex}}>
             <FlatList
             // showsVerticalScrollIndicator={false}
             // initialScrollIndex={4}

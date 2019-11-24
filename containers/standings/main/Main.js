@@ -59,7 +59,7 @@ export default class Container extends PureComponent {
     }
 
     render(){
-        if (this.state.isLoading) {
+        if (this.state.loading) {
             return (
                 <View style={{ flex: 1}}>
                     <ActivityIndicator />

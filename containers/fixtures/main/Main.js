@@ -42,9 +42,23 @@ export default class Container extends PureComponent {
         collect={};
 
         getAllFixturesByDate( dateString ).then( data => {
+            status='';
             data = data.api;
             fixtures = data.fixtures;
             fixtures.forEach( fixture => {
+                if(fixture.statusShort == 'NS'){
+                    var date = new Date(fixture.event_timestamp*1000);
+                    // Hours part from the timestamp
+                    var hours = date.getHours();
+                    // Minutes part from the timestamp
+                    var minutes = "0" + date.getMinutes();
+                    // Will display time in 10:30:23 format
+                    status = hours + ':' + minutes.substr(-2);
+                }else if (['HT', 'FT'].includes(fixture.statusShort)){
+                    status = String(fixture.goalsHomeTeam + "  " + fixture.statusShort + "  " + fixture.goalsAwayTeam);
+                }else if (['1H','2H','ET','P'].includes(fixture.status)){
+                    status = String(fixture.goalsHomeTeam + "  " + fixture.elapsed + "'  " + fixture.goalsAwayTeam);
+                }
                 league = fixture.league;
                 leagueName = league.country + " " + league.name;
                 if (!(leagueName in collect)) {
@@ -54,7 +68,7 @@ export default class Container extends PureComponent {
                     flag:league.logo,
                     id:fixture.fixture_id,
                     timeStamp:fixture.event_timestamp,
-                    status:fixture.statusShort,
+                    status:status,
                     elapsed:fixture.elapsed,
                     homeTeam:fixture.homeTeam,
                     awayTeam:fixture.awayTeam,
@@ -79,7 +93,7 @@ export default class Container extends PureComponent {
     }
 
     render(){
-        if (this.state.isLoading) {
+        if (this.state.loading) {
             return (
                 <View style={{ flex: 1}}>
                     <ActivityIndicator />
