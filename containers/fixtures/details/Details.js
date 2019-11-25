@@ -16,7 +16,6 @@ export default class Container extends PureComponent {
         fixtureID:this.props.navigation.state.params.fixtureID,
         fixture:[],
         tabDisplayed:0,
-        emptyStats:[],
     }
 
     createStats(passedStats){
@@ -53,29 +52,19 @@ export default class Container extends PureComponent {
     }
 
     createLineups(passedLineups){
-
+        lineups=[];
         if(!passedLineups){
             return;
         }
-        lineups=[]
-        passedLineups.forEach(team => {
-            collect=[team];
-            team.forEach(item => {
-                if(item == 'startXI'){
-                    collect.push(item);
-                }if(item == 'substitutes'){
-                    collect.push(item);
-                }
-            });
-            lineups.push(collect);
-        });
+        for (team in passedLineups){
+            lineups.push({team:team, starting:passedLineups[team]['startXI'], subs:passedLineups[team]['substitutes']});
+        }
         return lineups;
     }
 
     componentDidMount() {
         this.setState({
             fixtureID:this.props.navigation.state.params.fixtureID,
-            emptyStats:this.createStats(),
         });
 
         collect={topBar:[],screen:[]};
@@ -86,6 +75,7 @@ export default class Container extends PureComponent {
             fixtures = data.fixtures;
             fixtures.forEach( fixture => {
                 league = fixture.league;
+                console.log(fixture.statusShort);
                 if(fixture.statusShort == 'NS'){
                     var date = new Date(fixture.event_timestamp*1000);
                     // Hours part from the timestamp
@@ -96,7 +86,7 @@ export default class Container extends PureComponent {
                     status = hours + ':' + minutes.substr(-2);
                 }else if (['HT', 'FT'].includes(fixture.statusShort)){
                     status = String(fixture.goalsHomeTeam + "  " + fixture.statusShort + "  " + fixture.goalsAwayTeam);
-                }else if (['1H','2H','ET','P'].includes(fixture.status)){
+                }else if (['1H','2H','ET','P'].includes(fixture.statusShort)){
                     status = String(fixture.goalsHomeTeam + "  " + fixture.elapsed + "'  " + fixture.goalsAwayTeam);
                 }
                 collect['topBar'].push({
@@ -110,17 +100,19 @@ export default class Container extends PureComponent {
                     goalsHome:String(fixture.goalsHomeTeam),
                     goalsAway:String(fixture.goalsAwayTeam),
                 });
+                stats = this.createStats(fixture.statistics);
+                lineups = this.createLineups(fixture.lineups);
                 collect['screen'].push({
                     homeTeam:fixture.homeTeam,
                     awayTeam:fixture.awayTeam,
-                    stats:this.createStats(fixture.statistics),
+                    stats:stats,
                     events:fixture.events,
-                    lineups:this.createLineups(fixture.lineups),
+                    lineups:lineups,
                 });
-                this.setState({
-                    fixture: collect,
-                    loading: false,
-                });
+            });
+            this.setState({
+                fixture: collect,
+                loading: false,
             });
         });
     }
@@ -145,7 +137,7 @@ export default class Container extends PureComponent {
         return (
             <View style={{ flex: 1}}>
                 <TopBar TopBarFlex={1} currentTab={this.state.tabDisplayed} setTab={this.setTab.bind(this)} data={topBarData} navigation={this.props.navigation}/>
-                <Screen ScreenFlex={3} emptyStats={this.state.emptyStats} currentTab={this.state.tabDisplayed} data={screenData} navigation={this.props.navigation} />
+                <Screen ScreenFlex={3} currentTab={this.state.tabDisplayed} data={screenData} navigation={this.props.navigation} />
             </View>
         );
     }

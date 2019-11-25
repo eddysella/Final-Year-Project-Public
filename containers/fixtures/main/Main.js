@@ -42,10 +42,10 @@ export default class Container extends PureComponent {
         collect={};
 
         getAllFixturesByDate( dateString ).then( data => {
-            status='';
             data = data.api;
             fixtures = data.fixtures;
             fixtures.forEach( fixture => {
+                status='';
                 if(fixture.statusShort == 'NS'){
                     var date = new Date(fixture.event_timestamp*1000);
                     // Hours part from the timestamp
@@ -56,7 +56,7 @@ export default class Container extends PureComponent {
                     status = hours + ':' + minutes.substr(-2);
                 }else if (['HT', 'FT'].includes(fixture.statusShort)){
                     status = String(fixture.goalsHomeTeam + "  " + fixture.statusShort + "  " + fixture.goalsAwayTeam);
-                }else if (['1H','2H','ET','P'].includes(fixture.status)){
+                }else if (['1H','2H','ET','P'].includes(fixture.statusShort)){
                     status = String(fixture.goalsHomeTeam + "  " + fixture.elapsed + "'  " + fixture.goalsAwayTeam);
                 }
                 league = fixture.league;

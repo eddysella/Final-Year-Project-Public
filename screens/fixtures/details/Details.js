@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { ExpoConfigView } from '@expo/samples';
-import {TouchableHighlight, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
+import {TouchableHighlight, SectionList, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import {Card} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
@@ -27,50 +27,27 @@ export const Screen = props => {
     };
 
     function renderStatItem(stat) {
-        console.log(stat);
         stat=stat.item
         return (
-            <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
+            <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
                 <Text style={{flex:1, textAlign: 'center'}}>{stat.home}</Text>
                 <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{stat.stat}</Text>
                 <Text style={{flex:1, textAlign: 'center'}}>{stat.away}</Text>
-                <ItemSeparator/>
             </View>
         );
     };
 
-    function renderStatsCardTitle(homeTeam, awayTeam){
-        return(
-            <View flexDirection={'row'} style={{justifyContent: 'space-around'}}>
-                <View style={{flex:1}}>
-                    <Text style={{flex:1}}>{homeTeam}</Text>
-                </View>
-                <View style={{flex:1}}>
-                    <Text style={{flex:1}}>{awayTeam}</Text>
-                </View>
-            </View>
-        );
-    }
-
     function renderStats(stats, homeTeam, awayTeam) {
-        if(!stats){
-            return renderStats(props.emptyStats);
-        }
         return (
-            //title={ () => renderStatsCardTitle(homeTeam,awayTeam)}
             <View style={{flex:props.ScreenFlex}}>
                 <Card>
-                {
-                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                        <FlatList
-                        // showsVerticalScrollIndicator={false}
-                        // initialScrollIndex={4}
-                        data={stats}
-                        renderItem={renderStatItem}
-                        keyExtractor={(item,index) => index.toString()}
-                        />
-                    </View>
-                }
+                    <FlatList
+                    showsVerticalScrollIndicator={false}
+                    // initialScrollIndex={4}
+                    data={stats}
+                    renderItem={renderStatItem}
+                    keyExtractor={(item,index) => index.toString()}
+                    />
                 </Card>
             </View>
         );
@@ -78,15 +55,13 @@ export const Screen = props => {
 
     function renderNoData(data){
 
-        title="There are no " + {data} + " available";
+        title="There are no " + data + " available";
         return (
             //title={ () => renderStatsCardTitle(homeTeam,awayTeam)}
             <View style={{flex:props.ScreenFlex}}>
                 <Card title={title} >
-                {
-                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                    </View>
-                }
+                <View>
+                </View>
                 </Card>
             </View>
         );
@@ -97,7 +72,6 @@ export const Screen = props => {
         return (
             <View style={{ justifyContent: 'space-around'}}>
                 <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{ev.elapsed}' {ev.player} {ev.detail}</Text>
-                <ItemSeparator/>
             </View>
         );
     };
@@ -110,58 +84,63 @@ export const Screen = props => {
             //title={ () => renderStatsCardTitle(homeTeam,awayTeam)}
             <View style={{flex:props.ScreenFlex}}>
                 <Card>
-                {
-                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                        <FlatList
-                        // showsVerticalScrollIndicator={false}
-                        // initialScrollIndex={4}
-                        data={events}
-                        renderItem={renderEventItem}
-                        keyExtractor={(item,index) => index.toString()}
-                        />
-                    </View>
-                }
+                    <FlatList
+                    showsVerticalScrollIndicator={false}
+                    // initialScrollIndex={4}
+                    data={events}
+                    renderItem={renderEventItem}
+                    keyExtractor={(item,index) => index.toString()}
+                    />
                 </Card>
             </View>
         );
     }
 
-    function renderLineupItem(lineup) {
-        lineup=lineup.item;
+    function renderLineupItem(player) {
+        player=player.item;
         return (
             <View style={{ justifyContent: 'space-around'}}>
-                <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{ev.elapsed}' {ev.player} {ev.detail}</Text>
-                <ItemSeparator/>
+                <Text style={{flex:1}}>{player.pos} {player.player}</Text>
             </View>
         );
     };
 
+    function renderLineupCards(team) {
+        team = team.item;
+        return (
+            //title={ () => renderStatsCardTitle(homeTeam,awayTeam)}
+            <Card title={team.team}>
+            <SectionList
+                sections={[
+                 { title: 'Starting', data: team.starting },
+                 { title: 'Substitutes', data: team.subs },
+                ]}
+                renderSectionHeader={ ({section}) => <Text> { section.title } </Text> }
+                renderItem={renderLineupItem}
+                keyExtractor={ (item, index) => item+index.toString() }
+                />
+            </Card>
+        );
+    };
+
     function renderLineups(lineups){
-        if(!events){
+        if(!lineups){
             return renderNoData('Lineups');
         }
         return (
-            //title={ () => renderStatsCardTitle(homeTeam,awayTeam)}
             <View style={{flex:props.ScreenFlex}}>
-                <Card>
-                {
-                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                        <FlatList
-                        // showsVerticalScrollIndicator={false}
-                        // initialScrollIndex={4}
-                        data={lineups}
-                        renderItem={renderLineupItem}
-                        keyExtractor={(item,index) => index.toString()}
-                        />
-                    </View>
-                }
-                </Card>
+                <FlatList
+                showsVerticalScrollIndicator={false}
+                // initialScrollIndex={4}
+                data={lineups}
+                renderItem={renderLineupCards}
+                keyExtractor={(item,index) => index.toString()}
+                />
             </View>
         );
     }
 
     fixture = props.data[0];
-    data=[];
 
     if(props.currentTab == 0){
         return renderStats(fixture.stats, fixture.homeTeam, fixture.awayTeam);
