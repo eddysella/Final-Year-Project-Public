@@ -58,6 +58,8 @@ export default class Container extends PureComponent {
                     status = String(fixture.goalsHomeTeam + "  " + fixture.statusShort + "  " + fixture.goalsAwayTeam);
                 }else if (['1H','2H','ET','P'].includes(fixture.statusShort)){
                     status = String(fixture.goalsHomeTeam + "  " + fixture.elapsed + "'  " + fixture.goalsAwayTeam);
+                }else{
+                  status = fixture.status;
                 }
                 league = fixture.league;
                 leagueName = league.country + " " + league.name;
