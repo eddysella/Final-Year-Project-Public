@@ -75,7 +75,6 @@ export default class Container extends PureComponent {
             fixtures = data.fixtures;
             fixtures.forEach( fixture => {
                 league = fixture.league;
-                console.log(fixture.statusShort);
                 if(fixture.statusShort == 'NS'){
                     var date = new Date(fixture.event_timestamp*1000);
                     // Hours part from the timestamp
