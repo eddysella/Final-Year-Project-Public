@@ -30,7 +30,7 @@ export const Screen = props => {
     function renderItem(fixture) {
         fixture = fixture.item;
         status = fixture.status;
-        
+
         return (
             <View>
                 <TouchableHighlight onPress={() =>
@@ -38,9 +38,9 @@ export const Screen = props => {
                 }>
 
                     <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
-                        <Text style={{flex:1}}>{fixture.homeTeam.team_name}</Text>
+                        <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
                         <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{status}</Text>
-                        <Text style={{flex:1}}>{fixture.awayTeam.team_name}</Text>
+                        <Text style={{flex:1,   textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
                     </View>
                 </TouchableHighlight>
                 <ItemSeparator/>
@@ -78,6 +78,7 @@ export const Screen = props => {
             <FlatList
             // showsVerticalScrollIndicator={false}
             // initialScrollIndex={4}
+            initialNumToRender={5}
             data={props.leagueFixtures}
             renderItem={renderCards}
             keyExtractor={(item,index) => index.toString()}
