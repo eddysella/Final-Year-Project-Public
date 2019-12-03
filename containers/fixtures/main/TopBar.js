@@ -3,10 +3,29 @@ import { Button, BackHandler, AsyncStorage, ScrollView, View, ActivityIndicator,
 import SquareGrid from "react-native-square-grid";
 import { TopBar } from '../../../screens/fixtures/main/TopBar';
 
+import { setFixturesByDate } from '../../../redux/action/creators/creators'
+import { connect } from 'react-redux'
+
+const mapStateToProps = state => {
+  return {
+    dates: state.fixturesDates,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setFixtures: date => {dispatch(setFixturesByDate(date))},
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(TopBar);
+
 export default class Container extends PureComponent {
     constructor(props){
         super(props);
     }
+
+    const visibileDates =
 
     state = {
         loading: true,
@@ -14,21 +33,7 @@ export default class Container extends PureComponent {
     }
 
     setDates() {
-        collect=[];
-        start = new Date();
-        start.setDate(start.getDate() - 5);
-        end = new Date();
-        end.setDate(end.getDate() + 5);
 
-        date = new Date(start);
-
-        while (date <= end) {
-            var dd = String(date.getDate()).padStart(2, '0');
-            var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
-            collect.push(mm + '/' + dd);
-
-            date.setDate(date.getDate() + 1);
-        }
 
         this.setState({dates:collect});
     }

@@ -22,17 +22,15 @@ export const TopBar = props => {
             rightBorder = 3
         }
         return (
-
-            <TouchableHighlight onPress={() =>
-                {
-                    props.setFixtures(item.item);
-                    goIndex(item.index);
-                }
-            }>
-
-                <View style={{width: itemWidth, borderBottomWidth:scale(3), borderTopWidth: scale(3),  borderLeftWidth: leftBorder, borderRightWidth: rightBorder, paddingHorizontal: itemHorizontalPadding, paddingVertical: itemVerticalPadding, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text> {item.item} </Text>
-                </View>
+              <TouchableHighlight onPress={() =>
+                  {
+                      props.setFixtures(item.item);
+                      goIndex(item.index);
+                  }
+              }>
+              <View style={{width: itemWidth, borderBottomWidth:scale(3), borderTopWidth: scale(3),  borderLeftWidth: leftBorder, borderRightWidth: rightBorder, paddingHorizontal: itemHorizontalPadding, paddingVertical: itemVerticalPadding, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text> {item.item} </Text>
+              </View>
             </TouchableHighlight>
         );
     };
