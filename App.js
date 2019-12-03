@@ -8,10 +8,20 @@ import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
 
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import rootReducer from './reducers/index'
+import thunkMiddleware from 'redux-thunk'
+import { createStore, applyMiddleware } from 'redux'
+import rootReducer from './redux/reducers/index'
 
-const store = createStore(rootReducer)
+const store = createStore(
+  rootReducer,
+  applyMiddleware(
+    thunkMiddleware,
+  )
+)
+
+console.log(store.getState());
+
+store.dispatch()
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);

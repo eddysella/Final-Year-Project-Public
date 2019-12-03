@@ -7,7 +7,7 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
-export const Screen = props => {
+export const Main = props => {
 
     let itemWidth = screenWidth - scale(screenWidth/5);
     let itemHeight = scale(screenWidth/4);
@@ -31,11 +31,13 @@ export const Screen = props => {
         fixture = fixture.item;
         status = fixture.status;
 
+        // <TouchableHighlight onPress={() =>
+        //     { props.navigation.navigate('Inner', {fixtureID:fixture.id}); }
+        // }>
+
         return (
             <View>
-                <TouchableHighlight onPress={() =>
-                    { props.navigation.navigate('Inner', {fixtureID:fixture.id}); }
-                }>
+                <TouchableHighlight>
 
                     <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
                         <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
@@ -74,7 +76,7 @@ export const Screen = props => {
     };
 
     return (
-        <View style={{flex:props.ScreenFlex}}>
+        <View style={{flex:props.screenFlex}}>
             <FlatList
             // showsVerticalScrollIndicator={false}
             // initialScrollIndex={4}

@@ -49,7 +49,7 @@ export const TopBar = props => {
 
 
     return (
-        <View style={{flex:props.TopBarFlex}} onLayout={() => {goIndex(5)}} >
+        <View style={{flex:props.topBarFlex}} onLayout={() => {goIndex(5)}} >
             <FlatList
                 showsHorizontalScrollIndicator={false}
                 ItemSeparatorComponent={flatListItemSeparator}
