@@ -2,7 +2,7 @@ import {
   REQUEST_FIXTURES_BY_DATE,
   RECEIVE_FIXTURES_BY_DATE,
   SET_FIXTURE_DATES,
-} from '../action/types/types'
+} from '../types/types'
 import { getAllFixturesByDate } from '../../../fetch/Fixtures';
 
 export const setFixtureDates = () => ({
