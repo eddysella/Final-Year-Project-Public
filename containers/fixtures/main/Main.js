@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Button, BackHandler, AsyncStorage, ScrollView, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import SquareGrid from "react-native-square-grid";
 import { Avatar } from 'react-native-elements';
-import { getAllFixturesByDate } from '../../../fetch/Fixtures';
+import { getAllFixturesByDateV1 } from '../../../fetch/Fixtures';
 import { Screen } from '../../../screens/fixtures/main/Main';
 import TopBarContainer from './TopBar';
 
@@ -36,12 +36,12 @@ export default class Container extends PureComponent {
             dateString = year + '-' + mm + '-' + dd;
         }else{
             var year = String(date.getFullYear());
-            dateString = year + '-' + passedDate.split('/').join('-');
+            formatedDate = passedDate.split('/').join('-');
+            dateString = year + '-' + formatedDate;
         }
 
-        collect={};
-
-        getAllFixturesByDate( dateString ).then( data => {
+        getAllFixturesByDateV1( dateString ).then( data => {
+            collect={};
             data = data.api;
             fixtures = data.fixtures;
             fixtures.forEach( fixture => {
