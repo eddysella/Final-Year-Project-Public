@@ -2,33 +2,48 @@ import {
   REQUEST_FIXTURES_BY_DATE,
   RECEIVE_FIXTURES_BY_DATE,
   SET_FIXTURE_DATES,
+  SET_CURRENT_DATE,
+  SET_FIXTURES,
 } from '../action/types/types'
 
-export const fixturesTopbarDates = (state = [], action) => {
+export function fixturesTopbarDates(state=[], action){
   switch(action.type){
     case SET_FIXTURE_DATES:
-      return [...state, action.dates]
+      return action.dates
     default:
       return state;
   }
 }
 
+export function currentDate(state = '', action){
+  switch(action.type){
+    case SET_CURRENT_DATE:
+      return action.date;
+    default:
+      return state;
+  }
+
+}
+
 function fixtures(
   state = {
     isFetching: false,
-    fixtures:[]
+    leagueNames: [],
+    fixturesInOrder: [],
   },
   action
   ){
   switch(action.type){
     case REQUEST_FIXTURES_BY_DATE:
       return Object.assign({}, state, {
+        date: action.date,
         isFetching:true,
       })
     case RECEIVE_FIXTURES_BY_DATE:
     return Object.assign({
-      isFetching:false,
-      fixtures: action.fixtures,
+      isFetching: false,
+      leagueNames: action.leagueNames,
+      fixturesInOrder: action.fixturesInOrder,
       lastUpdated: action.receivedAt,
     });
     default:
@@ -36,7 +51,7 @@ function fixtures(
   }
 }
 
-export const fixturesByDate = (state={}, action) =>{
+export function fixturesByDate(state={}, action){
   switch(action.type){
     case RECEIVE_FIXTURES_BY_DATE:
     case REQUEST_FIXTURES_BY_DATE:

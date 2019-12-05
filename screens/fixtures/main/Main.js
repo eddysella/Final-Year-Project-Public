@@ -75,17 +75,24 @@ export const Main = props => {
         );
     };
 
-    return (
-        <View style={{flex:props.screenFlex}}>
-            <FlatList
-            // showsVerticalScrollIndicator={false}
-            // initialScrollIndex={4}
-            initialNumToRender={5}
-            data={props.leagueFixtures}
-            renderItem={renderCards}
-            keyExtractor={(item,index) => index.toString()}
-            />
+    if(!props.leagueNames){
+      return (
+        <View>
+          <ActivityIndicator/>
         </View>
-    );
-
+      );
+    }else{
+      return (
+          <View style={{flex:props.screenFlex}}>
+              <FlatList
+              // showsVerticalScrollIndicator={false}
+              // initialScrollIndex={4}
+              initialNumToRender={5}
+              data={props.leagueFixtures}
+              renderItem={renderCards}
+              keyExtractor={(item,index) => index.toString()}
+              />
+          </View>
+      );  
+    }
 };

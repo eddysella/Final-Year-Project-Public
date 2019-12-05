@@ -1,24 +1,16 @@
-import React from 'react';
+import React,{Component}from 'react';
 import { fetchFixturesByDate } from '../../../redux/action/creators/creators'
 import { connect } from 'react-redux'
-import { Screen } from '../../../screens/fixtures/main/Index';
+import { Screen } from '../../../screens/fixtures/main/Index'
 
-const mapStateToProps = state => {
-  collectNames=[];
-  collectFixtures=[];
-  for (league in state.fixturesByDate) {
-      collectNames.push(league);
-      collectFixtures.push(collect[league]);
-  }
-  return {
+const mapStateToProps = state => ({
     dates: state.fixturesTopbarDates,
-    leagueNames: collectNames,
-    leagueFixtures: collectFixtures,
-  };
-}
+    leagueNames: state.fixturesByDate[state.currentDate]['leagueNames'],
+    leagueFixtures: state.fixturesByDate[state.currentDate]['leagueFixtures'],
+})
 
-const mapDispatchToProps = dispatch => {
-  return {setFixtures: date => {dispatch(fetchFixturesByDate(date))}};
-}
+const mapDispatchToProps = dispatch => ({
+  setFixtures: date => dispatch(fetchFixturesByDate(date)),
+})
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);

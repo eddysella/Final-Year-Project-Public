@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux'
-import {fixturesByDate, fixturesTopbarDates} from './fixtures'
+import {fixturesByDate, fixturesTopbarDates, currentDate} from './fixtures'
 
 export default combineReducers({
   fixturesTopbarDates,
-  fixturesByDate
+  fixturesByDate,
+  currentDate,
 })

@@ -67,7 +67,5 @@ export const TopBar = props => {
 }
 
 goIndex = (index) => {
-
  this.flatList_Ref.scrollToIndex({animated: false,index:index,viewPosition:0.5});
-
 };

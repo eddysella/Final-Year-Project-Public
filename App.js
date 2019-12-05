@@ -11,6 +11,7 @@ import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers/index'
+import { setFixtureDates, initCurrentDate } from './redux/action/creators/creators'
 
 const store = createStore(
   rootReducer,
@@ -19,9 +20,12 @@ const store = createStore(
   )
 )
 
+store.dispatch(setFixtureDates());
 console.log(store.getState());
-
-store.dispatch()
+store.dispatch(initCurrentDate());
+console.log(store.getState());
+store.dispatch(setTodaysFixtures());
+// console.log(store.getState());
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -42,7 +46,8 @@ export default function App(props) {
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           <AppNavigator />
         </View>
-      </Provider>
+      </Provider>,
+      document.getElementById('root')
     );
   }
 }
