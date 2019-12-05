@@ -11,7 +11,7 @@ import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers/index'
-import { setFixtureDates, initCurrentDate } from './redux/action/creators/creators'
+import { setFixtureDates, initCurrentDate, setTodaysFixtures } from './redux/action/creators/creators'
 
 const store = createStore(
   rootReducer,
@@ -24,7 +24,7 @@ store.dispatch(setFixtureDates());
 console.log(store.getState());
 store.dispatch(initCurrentDate());
 console.log(store.getState());
-store.dispatch(setTodaysFixtures());
+// store.dispatch(setTodaysFixtures());
 // console.log(store.getState());
 
 export default function App(props) {

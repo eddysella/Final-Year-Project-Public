@@ -40,8 +40,8 @@ export function setCurrentDate(date){
 }
 
 export function initCurrentDate(){
-  date =
-  setCurrentDate();
+  date = today();
+  return setCurrentDate(date);
 }
 
 export const getFixtureByID = id => ({
