@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Button, BackHandler, AsyncStorage, ScrollView, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import SquareGrid from "react-native-square-grid";
 import { Avatar } from 'react-native-elements';
-import { getAllFixturesByDateV1 } from '../../../fetch/Fixtures';
+import { getAllFixturesByDateV1 } from '../../../fetch/Fixtures.js';
 import { Screen } from '../../../screens/fixtures/main/Main';
 import TopBarContainer from './TopBar';
 
