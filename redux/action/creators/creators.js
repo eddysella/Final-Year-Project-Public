@@ -49,8 +49,12 @@ export const selectFixtureTab = tab => ({
 })
 
 function shouldFetchFixtures(state, date){
-  const fixtures = state.fixturesByDate[date];
+  fixtures = state.fixturesByDate[date]
   if(!fixtures){
+    console.log("Fetching Fixtures for " + date);
+    return true;
+  }else if(!fixtures.leagueNames.length){
+    console.log("2nd Fetching Fixtures for " + date);
     return true;
   }else if(fixtures.isFetching){
     return false;
@@ -69,20 +73,18 @@ function today(){
 
 export function setTodaysFixtures(){
   date = today();
-  return (dispatch, getState) => {
-    console.log("Fetching Fixtures for " + date);
-    return dispatch(fetchFixturesByDate(date));
-  }
+  return (dispatch, getState) => dispatch(fetchFixturesByDate(date))
 }
 
 export function initCurrentDate(){
-  start = new Date();
-  start.setDate(start.getDate());
-  date = new Date(start);
-  var dd = String(date.getDate()).padStart(2, '0');
-  var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
-  var year = String(date.getFullYear());
-  date = String(year + '-' + mm + '-' + dd);
+  date = today();
+  return {
+    type: SET_CURRENT_DATE,
+    date: date,
+  }
+}
+
+function setCurrentDate(date){
   return {
     type: SET_CURRENT_DATE,
     date: date,
@@ -123,11 +125,16 @@ export function fetchFixturesByDate(passedDate){
     var year = String(date.getFullYear());
     passedDate = year + '-' + passedDate.split('/').join('-');
   }
-  return dispatch => {
-    dispatch(requestFixturesByDate(passedDate))
-    return getAllFixturesByDate(passedDate)
-      .then( data => processFixtures(data))
-      .then( fixtures => dispatch(receiveFixturesByDate(passedDate, fixtures)))
+  return (dispatch, getState) => {
+    if(shouldFetchFixtures(getState(), passedDate)){
+        dispatch(requestFixturesByDate(passedDate))
+        return getAllFixturesByDate(passedDate)
+          .then( data => processFixtures(data))
+          .then( fixtures => dispatch(receiveFixturesByDate(passedDate, fixtures)))
+          .then( () => dispatch(setCurrentDate(passedDate)))
+    }else{
+      dispatch(setCurrentDate(passedDate))
+    }
   }
 }
 

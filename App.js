@@ -48,13 +48,9 @@ async function loadResourcesAsync() {
       'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     }),
     store.dispatch(setFixtureDates()),
-    console.log(store.getState()),
     store.dispatch(initCurrentDate()),
-    console.log(store.getState()),
     store.dispatch(initFixtures(store.getState().fixturesCurrentDate)),
-    console.log(store.getState()),
     store.dispatch(setTodaysFixtures()),
-    console.log(store.getState()),
   ]);
 }
 
