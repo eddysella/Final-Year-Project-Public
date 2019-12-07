@@ -1,7 +1,9 @@
 import React,{Component}from 'react';
-import { fetchFixturesByDate } from '../../../redux/action/creators/creators'
+import { fetchFixturesByDate,fetchSpecificFixture } from '../../../redux/action/creators/creators'
 import { connect } from 'react-redux'
-import { Screen } from '../../../screens/fixtures/main/Index'
+import { View } from 'react-native'
+import { TopBar } from '../../../screens/fixtures/main/TopBar';
+import {Main} from '../../../screens/fixtures/main/Main';
 
 const mapStateToProps = state => ({
     dates: state.fixturesTopbarDates,
@@ -10,7 +12,16 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setFixtures: date => dispatch(fetchFixturesByDate(date))
+  setFixtures: date => dispatch(fetchFixturesByDate(date)),
+  fetchSpecificFixture: id => dispatch(fetchSpecificFixture(id)),
 })
+
+const Screen = ({setFixtures, dates, leagueNames, fixturesInOrder}) => (
+  <View style={{flex:1}}>
+    <TopBar topBarFlex={1} setFixtures={setFixtures} dates={dates}/>
+    <Main screenFlex={8} leagueNames={leagueNames} leagueFixtures={fixturesInOrder}/>
+  </View>
+)
+
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);

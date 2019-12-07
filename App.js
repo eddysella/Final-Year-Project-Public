@@ -16,7 +16,8 @@ import store from './redux/store'
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
-
+  store.dispatch(setFixtureDates());
+  store.dispatch(initCurrentDate());
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
           <AppLoading
@@ -40,6 +41,7 @@ export default function App(props) {
 
 async function loadResourcesAsync() {
   await Promise.all([
+    store.dispatch(setTodaysFixtures()),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,
@@ -47,10 +49,6 @@ async function loadResourcesAsync() {
       // remove this if you are not using it in your app
       'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     }),
-    store.dispatch(setFixtureDates()),
-    store.dispatch(initCurrentDate()),
-    store.dispatch(initFixtures(store.getState().fixturesCurrentDate)),
-    store.dispatch(setTodaysFixtures()),
   ]);
 }
 

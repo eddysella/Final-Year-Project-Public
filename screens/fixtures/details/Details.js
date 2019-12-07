@@ -7,7 +7,7 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
-export const Screen = props => {
+export const Details = props => {
 
     let itemWidth = screenWidth - scale(screenWidth/5);
     let itemHeight = scale(screenWidth/4);

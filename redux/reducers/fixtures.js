@@ -4,8 +4,36 @@ import {
   RECEIVE_FIXTURES_BY_DATE,
   SET_FIXTURE_DATES,
   SET_CURRENT_DATE,
-  SET_FIXTURES,
+  RECEIVE_FIXTURE_BY_ID,
+  REQUEST_FIXTURE_BY_ID,
+  SET_TAB,
 } from '../action/types/types'
+
+export function specificFixture(
+  state = {
+    fixtureID:'',
+    topBar: [],
+    screen: [],
+    tabDisplayed:0,
+  },
+  action
+  ){
+    switch(action.type){
+      case SET_TAB:
+      return Object.assign({}, state,{
+        tabDisplayed: action.tab,
+      })
+      case REQUEST_FIXTURE_BY_ID:
+      case RECEIVE_FIXTURE_BY_ID:
+        return Object.assign({}, state,{
+          fixtureID: action.fixtureID,
+          topBar: action.topBar,
+          screen: action.screen,
+        })
+      default:
+        return state;
+    }
+}
 
 export function fixturesTopbarDates(state=[], action){
   switch(action.type){
@@ -72,31 +100,6 @@ export function fixturesByDate(state={}, action){
   }
 }
 
-//
-// function fixturesMain(state, action){
-//   switch(action.type){
-//     case SET_FIXTURE_DATES:
-//       return Object.assign({}, state, {
-//         fixtures_all_dates: action.dates
-//       });
-//     case GET_FIXTURES_BY_DATE:
-//       return Object.assign({}, state, {
-//         fixtures_current_date: action.date
-//       });
-//     case SET_FIXTURES_BY_DATE:
-//       return Object.assign({}, state, {
-//         fixtures_displayed: action.fixtures
-//       });
-//     case GET_FIXTURE_BY_ID:
-//     case SET_FIXTURE_BY_ID:
-//     case SELECT_FIXTURE_TAB:
-//       return this.fixturesSpecific(state, action);
-//     default:
-//       return state;
-//   }
-//   return state;
-// }
-//
 // function fixturesSpecific(state, action){
 //   switch(action.type){
 //     case GET_FIXTURE_BY_ID:

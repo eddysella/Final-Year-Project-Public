@@ -31,13 +31,13 @@ export const Main = props => {
         fixture = fixture.item;
         status = fixture.status;
 
-        // <TouchableHighlight onPress={() =>
-        //     { props.navigation.navigate('Inner', {fixtureID:fixture.id}); }
-        // }>
+
 
         return (
             <View>
-                <TouchableHighlight>
+            <TouchableHighlight onPress={() =>
+                { props.navigation.navigate('Inner', {fixtureID:fixture.id}); }
+            }>
 
                     <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
                         <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
@@ -87,12 +87,12 @@ export const Main = props => {
               <FlatList
               // showsVerticalScrollIndicator={false}
               // initialScrollIndex={4}
-              initialNumToRender={5}
+              initialNumToRender={3}
               data={props.leagueFixtures}
               renderItem={renderCards}
               keyExtractor={(item,index) => index.toString()}
               />
           </View>
-      );  
+      );
     }
 };

@@ -1,145 +1,25 @@
 import React, { PureComponent } from 'react';
-import { Button, BackHandler, AsyncStorage, ScrollView, View, ActivityIndicator, Text, Dimensions } from 'react-native';
-import SquareGrid from "react-native-square-grid";
-import { Avatar } from 'react-native-elements';
-import { getFixtureByID } from '../../../fetch/Fixtures';
-import { Screen }  from '../../../screens/fixtures/details/Details';
-import { TopBar } from '../../../screens/fixtures/details/TopBar';
+import { View } from 'react-native'
+import { fetchFixturesByDate,fetchSpecificFixture } from '../../../redux/action/creators/creators'
+import { connect } from 'react-redux'
+import { TopBar } from '../../../screens/fixtures/details/TopBar'
+import { Details }  from '../../../screens/fixtures/details/Details'
 
-export default class Container extends PureComponent {
-    constructor(props){
-        super(props);
-    }
+const mapStateToProps = state =>({
+  topBar: state.specificFixture.topBar,
+  screen: state.specificFixture.screen,
+  tabDisplayed: state.specificFixture.tabDisplayed,
+})
 
-    state = {
-        loading: true,
-        fixtureID:this.props.navigation.state.params.fixtureID,
-        fixture:[],
-        tabDisplayed:0,
-    }
+const mapDispatchToProps = dispatch => ({
+  setTab: tab => dispatch(setTab(tab)),
+})
 
-    createStats(passedStats){
-        emptyStats=[]
-        stats = [
-            'Shots on Goal',
-            'Shots off Goal',
-            'Total Shots',
-            'Blocked Shots',
-            'Shots insidebox',
-            'Shots outsidebox',
-            'Fouls',
-            'Corner Kicks',
-            'Offsides',
-            'Ball Possession',
-            'Yellow Cards',
-            'Red Cards',
-            'Goalkeeper Saves',
-            'Total passes',
-            'Passes accurate',
-            'Passes %',
-        ]
+const Screen = ({topBar, screen, tabDisplayed, setTab}) => (
+    <View style={{ flex: 1}}>
+        <TopBar TopBarFlex={1} currentTab={tabDisplayed} setTab={setTab} data={topBarData}/>
+        <Details ScreenFlex={3} currentTab={tabDisplayed} data={screen}/>
+    </View>
+)
 
-        if(!passedStats){
-            stats.forEach( stat => {
-                emptyStats.push({stat:stat,home:0,away:0});
-            });
-        }else{
-            for (stat in passedStats){
-                emptyStats.push({stat:stat,home:passedStats[stat]['home'],away:passedStats[stat]['away']});
-            }
-        }
-        return emptyStats
-    }
-
-    createLineups(passedLineups){
-        lineups=[];
-        if(!passedLineups){
-            return;
-        }
-        for (team in passedLineups){
-            lineups.push({team:team, starting:passedLineups[team]['startXI'], subs:passedLineups[team]['substitutes']});
-        }
-        return lineups;
-    }
-
-    componentDidMount() {
-        this.setState({
-            fixtureID:this.props.navigation.state.params.fixtureID,
-        });
-
-        collect={topBar:[],screen:[]};
-
-        getFixtureByID( String(this.state.fixtureID) ).then( data => {
-            status='';
-            data = data.api;
-            fixtures = data.fixtures;
-            fixtures.forEach( fixture => {
-                league = fixture.league;
-                if(fixture.statusShort == 'NS'){
-                    var date = new Date(fixture.event_timestamp*1000);
-                    // Hours part from the timestamp
-                    var hours = date.getHours();
-                    // Minutes part from the timestamp
-                    var minutes = "0" + date.getMinutes();
-                    // Will display time in 10:30:23 format
-                    status = hours + ':' + minutes.substr(-2);
-                }else if (['HT', 'FT'].includes(fixture.statusShort)){
-                    status = String(fixture.goalsHomeTeam + "  " + fixture.statusShort + "  " + fixture.goalsAwayTeam);
-                }else if (['1H','2H','ET','P'].includes(fixture.statusShort)){
-                    status = String(fixture.goalsHomeTeam + "  " + fixture.elapsed + "'  " + fixture.goalsAwayTeam);
-                }else{
-                  status = fixture.status;
-                }
-                collect['topBar'].push({
-                    leagueName:league.name,
-                    id:fixture.fixture_id,
-                    timeStamp:fixture.event_timestamp,
-                    status:status,
-                    elapsed:fixture.elapsed,
-                    homeTeam:fixture.homeTeam,
-                    awayTeam:fixture.awayTeam,
-                    goalsHome:String(fixture.goalsHomeTeam),
-                    goalsAway:String(fixture.goalsAwayTeam),
-                });
-                stats = this.createStats(fixture.statistics);
-                lineups = this.createLineups(fixture.lineups);
-                collect['screen'].push({
-                    homeTeam:fixture.homeTeam,
-                    awayTeam:fixture.awayTeam,
-                    stats:stats,
-                    events:fixture.events,
-                    lineups:lineups,
-                });
-            });
-            this.setState({
-                fixture: collect,
-                loading: false,
-            });
-        });
-    }
-
-    setTab(index){
-        if (!(index == this.state.tabDisplayed)){
-            this.setState({tabDisplayed:index});
-        }
-    }
-
-
-    render(){
-        if (this.state.loading) {
-            return (
-                <View style={{ flex: 1}}>
-                    <ActivityIndicator />
-                </View>
-            );
-        }
-        topBarData=this.state.fixture['topBar'];
-        screenData=this.state.fixture['screen'];
-        return (
-            <View style={{ flex: 1}}>
-                <TopBar TopBarFlex={1} currentTab={this.state.tabDisplayed} setTab={this.setTab.bind(this)} data={topBarData} navigation={this.props.navigation}/>
-                <Screen ScreenFlex={3} currentTab={this.state.tabDisplayed} data={screenData} navigation={this.props.navigation} />
-            </View>
-        );
-    }
-}
+export default connect(mapStateToProps, mapDispatchToProps)(Screen)
