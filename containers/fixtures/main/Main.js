@@ -5,12 +5,12 @@ import { Screen } from '../../../screens/fixtures/main/Index'
 
 const mapStateToProps = state => ({
     dates: state.fixturesTopbarDates,
-    leagueNames: state.fixturesByDate[state.currentDate]['leagueNames'],
-    leagueFixtures: state.fixturesByDate[state.currentDate]['leagueFixtures'],
+    leagueNames: state.fixturesByDate[state.fixturesCurrentDate]['leagueNames'],
+    fixturesInOrder: state.fixturesByDate[state.fixturesCurrentDate]['fixturesInOrder'],
 })
 
 const mapDispatchToProps = dispatch => ({
-  setFixtures: date => dispatch(fetchFixturesByDate(date)),
+  setFixtures: date => dispatch(fetchFixturesByDate(date))
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);

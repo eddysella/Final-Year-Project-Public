@@ -11,21 +11,8 @@ import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers/index'
-import { setFixtureDates, initCurrentDate, setTodaysFixtures } from './redux/action/creators/creators'
-
-const store = createStore(
-  rootReducer,
-  applyMiddleware(
-    thunkMiddleware,
-  )
-)
-
-store.dispatch(setFixtureDates());
-console.log(store.getState());
-store.dispatch(initCurrentDate());
-console.log(store.getState());
-// store.dispatch(setTodaysFixtures());
-// console.log(store.getState());
+import { setFixtureDates, setTodaysFixtures, initFixtures, initCurrentDate} from './redux/action/creators/creators'
+import store from './redux/store'
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -41,13 +28,12 @@ export default function App(props) {
     );
   } else {
     return (
-      <Provider store={store}>\
+      <Provider store={store}>
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           <AppNavigator />
         </View>
-      </Provider>,
-      document.getElementById('root')
+      </Provider>
     );
   }
 }
@@ -61,6 +47,14 @@ async function loadResourcesAsync() {
       // remove this if you are not using it in your app
       'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     }),
+    store.dispatch(setFixtureDates()),
+    console.log(store.getState()),
+    store.dispatch(initCurrentDate()),
+    console.log(store.getState()),
+    store.dispatch(initFixtures(store.getState().fixturesCurrentDate)),
+    console.log(store.getState()),
+    store.dispatch(setTodaysFixtures()),
+    console.log(store.getState()),
   ]);
 }
 

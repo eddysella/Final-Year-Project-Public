@@ -1,4 +1,5 @@
 import {
+  INIT_FIXTURES,
   REQUEST_FIXTURES_BY_DATE,
   RECEIVE_FIXTURES_BY_DATE,
   SET_FIXTURE_DATES,
@@ -15,25 +16,31 @@ export function fixturesTopbarDates(state=[], action){
   }
 }
 
-export function currentDate(state = '', action){
+export function fixturesCurrentDate(state=[], action){
   switch(action.type){
     case SET_CURRENT_DATE:
-      return action.date;
+      return action.date
     default:
       return state;
   }
-
 }
 
 function fixtures(
   state = {
     isFetching: false,
+    date: '',
     leagueNames: [],
     fixturesInOrder: [],
   },
   action
   ){
   switch(action.type){
+    case INIT_FIXTURES:
+      return Object.assign({}, state, {
+        date: action.date,
+        leagueNames: action.leagueNames,
+        fixturesInOrder: action.fixturesInOrder,
+      })
     case REQUEST_FIXTURES_BY_DATE:
       return Object.assign({}, state, {
         date: action.date,
@@ -41,6 +48,7 @@ function fixtures(
       })
     case RECEIVE_FIXTURES_BY_DATE:
     return Object.assign({
+      date: action.date,
       isFetching: false,
       leagueNames: action.leagueNames,
       fixturesInOrder: action.fixturesInOrder,
@@ -53,6 +61,7 @@ function fixtures(
 
 export function fixturesByDate(state={}, action){
   switch(action.type){
+    case INIT_FIXTURES:
     case RECEIVE_FIXTURES_BY_DATE:
     case REQUEST_FIXTURES_BY_DATE:
       return Object.assign({}, state, {
