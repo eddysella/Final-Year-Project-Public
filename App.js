@@ -29,12 +29,12 @@ export default function App(props) {
     );
   } else {
     return (
-      <Provider store={store}>
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
+          <Provider store={store}>
+          <AppNavigator/>
+          </Provider>
         </View>
-      </Provider>
     );
   }
 }
@@ -64,8 +64,7 @@ function handleFinishLoading(setLoadingComplete) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    flex:1,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });

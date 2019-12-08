@@ -1,5 +1,4 @@
 import {
-  INIT_FIXTURES,
   REQUEST_FIXTURES_BY_DATE,
   RECEIVE_FIXTURES_BY_DATE,
   SET_FIXTURE_DATES,
@@ -49,6 +48,21 @@ function shouldFetchFixtures(state, date){
   }
 }
 
+function shouldFetchSpecificFixture(state, id){
+  console.log(state);
+  fixture = state.specificFixture
+  if(!fixture.id.length){
+    console.log("Fetching fixture " + ID);
+    return true;
+  }else if(fixture.receivedAt < Date.now()){
+    console.log("Replacing specificFixture");
+    return true;
+  }else if(fixture.fetching){
+    return false;
+  }
+}
+
+
 function today(){
   start = new Date();
   start.setDate(start.getDate());
@@ -79,15 +93,6 @@ function setCurrentDate(date){
   }
 }
 
-export function initFixtures(date){
-  return {
-    type: INIT_FIXTURES,
-    date: date,
-    leagueNames: [],
-    fixturesInOrder: [],
-  }
-}
-
 function receiveFixturesByDate(date, fixtures){
   return {
     type: RECEIVE_FIXTURES_BY_DATE,
@@ -109,16 +114,35 @@ function requestFixtureByID(id){
   return {
     type: REQUEST_FIXTURE_BY_ID,
     fixtureID: id,
+    fetching: true,
+    topBar:
+    [{
+      status: '',
+      homeLogo: '',
+      homeName: '',
+      awayLogo: '',
+      awayName: '',
+      },
+    ],
+    screen:
+    [{
+      stats: [],
+      events: [],
+      lineups: [],
+      homeTeam: '',
+      awayTeam: '',
+      },
+    ],
   };
 }
 
 function receiveFixtureByID(id, fixture){
   return {
     type: RECEIVE_FIXTURE_BY_ID,
-    fixtureID: id,
     topBar: fixture['topBar'],
     screen: fixture['screen'],
     receivedAt: Date.now(),
+    fetching: false,
   };
 }
 
@@ -131,52 +155,15 @@ export function setTab(tab){
 
 export function fetchSpecificFixture(id){
   return (dispatch, getState) => {
+    if(shouldFetchSpecificFixture(getState(), id)){
       dispatch(requestFixtureByID(id))
       return getFixtureByID(id)
         .then( data => processFixture(data))
         .then( fixture => dispatch(receiveFixtureByID(id, fixture)))
+    }
   }
 }
 
-function processFixture(id){
-  collect={topBar:[],screen:[]};
-
-  getFixtureByID( String(id) ).then( data => {
-      data = data.api;
-      fixtures = data.fixtures;
-      fixtures.forEach( fixture => {
-          league = fixture.league;
-          status = processFixtureStatus([
-            fixture.statusShort,
-            fixture.event_timestamp,
-            fixture.goalsHomeTeam,
-            fixture.goalsAwayTeam,
-            fixture.elapsed
-          ])
-          collect['topBar'].push({
-              leagueName:league.name,
-              id:fixture.fixture_id,
-              timeStamp:fixture.event_timestamp,
-              status:status,
-              elapsed:fixture.elapsed,
-              homeTeam:fixture.homeTeam,
-              awayTeam:fixture.awayTeam,
-              goalsHome:String(fixture.goalsHomeTeam),
-              goalsAway:String(fixture.goalsAwayTeam),
-          });
-          stats = this.createStats(fixture.statistics);
-          lineups = this.createLineups(fixture.lineups);
-          collect['screen'].push({
-              homeTeam:fixture.homeTeam,
-              awayTeam:fixture.awayTeam,
-              stats:stats,
-              events:fixture.events,
-              lineups:lineups,
-          });
-      });
-  });
-  return collect;
-}
 
 export function fetchFixturesByDate(passedDate){
   if(passedDate.length < 8){
@@ -197,6 +184,44 @@ export function fetchFixturesByDate(passedDate){
       dispatch(setCurrentDate(passedDate))
     }
   }
+}
+
+function processFixture(data){
+  console.log("PROCESSING " + id);
+  collect={topBar:[],screen:[]};
+  data = data.api;
+  fixtures = data.fixtures;
+  fixtures.forEach( fixture => {
+      league = fixture.league;
+      status = processFixtureStatus([
+        fixture.statusShort,
+        fixture.event_timestamp,
+        fixture.goalsHomeTeam,
+        fixture.goalsAwayTeam,
+        fixture.elapsed
+      ])
+      collect['topBar'].push({
+          leagueName:league.name,
+          id:fixture.fixture_id,
+          timeStamp:fixture.event_timestamp,
+          status:status,
+          elapsed:fixture.elapsed,
+          homeTeam:fixture.homeTeam,
+          awayTeam:fixture.awayTeam,
+          goalsHome:String(fixture.goalsHomeTeam),
+          goalsAway:String(fixture.goalsAwayTeam),
+      });
+      stats = this.createStats(fixture.statistics);
+      lineups = this.createLineups(fixture.lineups);
+      collect['screen'].push({
+          homeTeam:fixture.homeTeam,
+          awayTeam:fixture.awayTeam,
+          stats:stats,
+          events:fixture.events,
+          lineups:lineups,
+      });
+  });
+  return collect;
 }
 
 function processFixtureStatus(data){
@@ -257,39 +282,40 @@ function processFixtures(data){
   }
   return [collectNames, collectFixtures];
 }
-
-function createStats(passedStats){
-    emptyStats=[]
-    stats = [
-        'Shots on Goal',
-        'Shots off Goal',
-        'Total Shots',
-        'Blocked Shots',
-        'Shots insidebox',
-        'Shots outsidebox',
-        'Fouls',
-        'Corner Kicks',
-        'Offsides',
-        'Ball Possession',
-        'Yellow Cards',
-        'Red Cards',
-        'Goalkeeper Saves',
-        'Total passes',
-        'Passes accurate',
-        'Passes %',
-    ]
-
-    if(!passedStats){
-        stats.forEach( stat => {
-            emptyStats.push({stat:stat,home:0,away:0});
-        });
-    }else{
-        for (stat in passedStats){
-            emptyStats.push({stat:stat,home:passedStats[stat]['home'],away:passedStats[stat]['away']});
-        }
-    }
-    return emptyStats
-}
+//
+// function createStats(passedStats){
+//   console.log("Creating Stats")
+//     emptyStats=[]
+//     stats = [
+//         'Shots on Goal',
+//         'Shots off Goal',
+//         'Total Shots',
+//         'Blocked Shots',
+//         'Shots insidebox',
+//         'Shots outsidebox',
+//         'Fouls',
+//         'Corner Kicks',
+//         'Offsides',
+//         'Ball Possession',
+//         'Yellow Cards',
+//         'Red Cards',
+//         'Goalkeeper Saves',
+//         'Total passes',
+//         'Passes accurate',
+//         'Passes %',
+//     ]
+//
+//     if(!passedStats){
+//         stats.forEach( stat => {
+//             emptyStats.push({stat:stat,home:0,away:0});
+//         });
+//     }else{
+//         for (stat in passedStats){
+//             emptyStats.push({stat:stat,home:passedStats[stat]['home'],away:passedStats[stat]['away']});
+//         }
+//     }
+//     return emptyStats
+// }
 
 function createLineups(passedLineups){
     lineups=[];

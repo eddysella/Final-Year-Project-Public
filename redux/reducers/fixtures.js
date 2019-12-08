@@ -1,5 +1,4 @@
 import {
-  INIT_FIXTURES,
   REQUEST_FIXTURES_BY_DATE,
   RECEIVE_FIXTURES_BY_DATE,
   SET_FIXTURE_DATES,
@@ -12,23 +11,32 @@ import {
 export function specificFixture(
   state = {
     fixtureID:'',
+    tabDisplayed:0,
+    fetching: false,
     topBar: [],
     screen: [],
-    tabDisplayed:0,
   },
   action
   ){
     switch(action.type){
       case SET_TAB:
       return Object.assign({}, state,{
-        tabDisplayed: action.tab,
+        tabDisplayed: action.tabDisplayed,
       })
       case REQUEST_FIXTURE_BY_ID:
-      case RECEIVE_FIXTURE_BY_ID:
-        return Object.assign({}, state,{
+        return Object.assign({}, state, {
           fixtureID: action.fixtureID,
+          fetching: action.fetching,
           topBar: action.topBar,
           screen: action.screen,
+        })
+      case RECEIVE_FIXTURE_BY_ID:
+      console.log("Received Fixture");
+        return Object.assign({}, state,{
+          receivedAt: action.receivedAt,
+          topBar: action.topBar,
+          screen: action.screen,
+          fetching: action.fetching,
         })
       default:
         return state;
@@ -63,12 +71,6 @@ function fixtures(
   action
   ){
   switch(action.type){
-    case INIT_FIXTURES:
-      return Object.assign({}, state, {
-        date: action.date,
-        leagueNames: action.leagueNames,
-        fixturesInOrder: action.fixturesInOrder,
-      })
     case REQUEST_FIXTURES_BY_DATE:
       return Object.assign({}, state, {
         date: action.date,
@@ -89,7 +91,6 @@ function fixtures(
 
 export function fixturesByDate(state={}, action){
   switch(action.type){
-    case INIT_FIXTURES:
     case RECEIVE_FIXTURES_BY_DATE:
     case REQUEST_FIXTURES_BY_DATE:
       return Object.assign({}, state, {

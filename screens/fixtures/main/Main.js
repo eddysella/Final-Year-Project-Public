@@ -30,13 +30,16 @@ export const Main = props => {
     function renderItem(fixture) {
         fixture = fixture.item;
         status = fixture.status;
-
+        id = fixture.id
 
 
         return (
             <View>
-            <TouchableHighlight onPress={() =>
-                { props.navigation.navigate('Inner', {fixtureID:fixture.id}); }
+            <TouchableHighlight onPress={ () =>
+                {
+                  props.fetchSpecificFixture(String(id));
+                  props.navigation.navigate('Inner');
+              }
             }>
 
                     <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>

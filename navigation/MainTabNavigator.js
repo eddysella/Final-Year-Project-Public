@@ -28,7 +28,7 @@ const FollowingStack = createStackNavigator({
   Following: FollowingScreen,
 }, {headerLayoutPreset: 'center'});
 
-export default createBottomTabNavigator(
+const MainTabNavigator = createBottomTabNavigator(
     {
         Standings: StandingsStack,
         Fixtures: FixturesStack,
@@ -68,3 +68,5 @@ export default createBottomTabNavigator(
 
     }
 );
+
+export default MainTabNavigator;

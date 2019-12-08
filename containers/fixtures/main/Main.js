@@ -1,7 +1,7 @@
 import React,{Component}from 'react';
-import { fetchFixturesByDate,fetchSpecificFixture } from '../../../redux/action/creators/creators'
+import { fetchFixturesByDate, fetchSpecificFixture } from '../../../redux/action/creators/creators'
 import { connect } from 'react-redux'
-import { View } from 'react-native'
+import { View} from 'react-native'
 import { TopBar } from '../../../screens/fixtures/main/TopBar';
 import {Main} from '../../../screens/fixtures/main/Main';
 
@@ -16,10 +16,10 @@ const mapDispatchToProps = dispatch => ({
   fetchSpecificFixture: id => dispatch(fetchSpecificFixture(id)),
 })
 
-const Screen = ({setFixtures, dates, leagueNames, fixturesInOrder}) => (
+const Screen = ({fetching, setFixtures, dates, leagueNames, fixturesInOrder, ...props}) => (
   <View style={{flex:1}}>
-    <TopBar topBarFlex={1} setFixtures={setFixtures} dates={dates}/>
-    <Main screenFlex={8} leagueNames={leagueNames} leagueFixtures={fixturesInOrder}/>
+    <TopBar topBarFlex={1} setFixtures={setFixtures} dates={dates} navigation={props.navigation}/>
+    <Main screenFlex={8} fetchSpecificFixture={fetchSpecificFixture} leagueNames={leagueNames} leagueFixtures={fixturesInOrder} navigation={props.navigation}/>
   </View>
 )
 

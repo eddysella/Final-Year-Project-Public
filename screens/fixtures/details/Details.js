@@ -38,6 +38,9 @@ export const Details = props => {
     };
 
     function renderStats(stats, homeTeam, awayTeam) {
+      if(!stats){
+          return renderNoData('Stats');
+      }
         return (
             <View style={{flex:props.ScreenFlex}}>
                 <Card>
@@ -140,7 +143,7 @@ export const Details = props => {
         );
     }
 
-    fixture = props.data[0];
+    fixture = props.data;
 
     if(props.currentTab == 0){
         return renderStats(fixture.stats, fixture.homeTeam, fixture.awayTeam);

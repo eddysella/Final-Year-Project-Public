@@ -9,24 +9,27 @@ const screenHeight = Math.round(Dimensions.get('window').height);
 export const TopBar = props => {
 
     itemWidth = screenWidth/3;
-
-    fixture = props.data[0];
-
+    fixture = props.data;
     status = fixture.status;
-    console.log(status);
-    homeLogo=fixture.homeTeam['logo'];
-    homeName=fixture.homeTeam['team_name'];
-    awayLogo=fixture.awayTeam['logo'];
-    awayName=fixture.awayTeam['team_name'];
+    homeLogo=fixture.homeLogo;
+    homeName=fixture.homeName;
+    awayLogo=fixture.awayLogo;
+    awayName=fixture.awayName;
 
     statsBorder=0;
     eventsBorder=0;
     lineupBorder=0;
     if(props.currentTab == 0){
         statsBorder=2;
+        eventsBorder=0;
+        lineupBorder=0;
     }else if(props.currentTab == 1){
+        statsBorder=0;
         eventsBorder=2;
+        lineupBorder=0;
     }else if(props.currentTab == 2){
+        statsBorder=0;
+        eventsBorder=0;
         lineupBorder=2;
     }
 
