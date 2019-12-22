@@ -18,6 +18,11 @@ export const Screen = props => {
                 </Text>
             </View>
         );
+
+        // <Button
+        //     title="Go to Details"
+        //     onPress={() => props.navigation.navigate('Inner')}
+        // />
     }
 
     return (
@@ -27,10 +32,6 @@ export const Screen = props => {
                 columns={3}
                 items={props.leaguesList}
                 renderItem={renderItem}
-            />
-            <Button
-                title="Go to Details"
-                onPress={() => props.navigation.navigate('Inner')}
             />
         </View>
     );

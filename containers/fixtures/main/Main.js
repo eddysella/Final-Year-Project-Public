@@ -16,7 +16,7 @@ const mapDispatchToProps = dispatch => ({
   fetchSpecificFixture: id => dispatch(fetchSpecificFixture(id)),
 })
 
-const Screen = ({fetching, setFixtures, dates, leagueNames, fixturesInOrder, ...props}) => (
+const Screen = ({fetchSpecificFixture, setFixtures, dates, leagueNames, fixturesInOrder, ...props}) => (
   <View style={{flex:1}}>
     <TopBar topBarFlex={1} setFixtures={setFixtures} dates={dates} navigation={props.navigation}/>
     <Main screenFlex={8} fetchSpecificFixture={fetchSpecificFixture} leagueNames={leagueNames} leagueFixtures={fixturesInOrder} navigation={props.navigation}/>

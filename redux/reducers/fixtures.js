@@ -26,17 +26,16 @@ export function specificFixture(
       case REQUEST_FIXTURE_BY_ID:
         return Object.assign({}, state, {
           fixtureID: action.fixtureID,
-          fetching: action.fetching,
+          fetching: true,
           topBar: action.topBar,
           screen: action.screen,
         })
       case RECEIVE_FIXTURE_BY_ID:
-      console.log("Received Fixture");
         return Object.assign({}, state,{
           receivedAt: action.receivedAt,
           topBar: action.topBar,
           screen: action.screen,
-          fetching: action.fetching,
+          fetching: false,
         })
       default:
         return state;

@@ -30,14 +30,12 @@ export const Main = props => {
     function renderItem(fixture) {
         fixture = fixture.item;
         status = fixture.status;
-        id = fixture.id
-
 
         return (
             <View>
             <TouchableHighlight onPress={ () =>
                 {
-                  props.fetchSpecificFixture(String(id));
+                  props.fetchSpecificFixture(fixture.id);
                   props.navigation.navigate('Inner');
               }
             }>

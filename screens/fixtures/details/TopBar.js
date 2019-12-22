@@ -33,7 +33,6 @@ export const TopBar = props => {
         lineupBorder=2;
     }
 
-
     return (
         <View style={{flex:props.TopBarFlex}}>
             <View  flexDirection={'row'} style={{flex:3, justifyContent: 'space-around'}}>
