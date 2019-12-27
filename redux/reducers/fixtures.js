@@ -99,23 +99,3 @@ export function fixturesByDate(state={}, action){
       return state;
   }
 }
-
-// function fixturesSpecific(state, action){
-//   switch(action.type){
-//     case GET_FIXTURE_BY_ID:
-//       return Object.assign({}, state, {
-//         fixture_by_id: action.id
-//       });
-//     case SET_FIXTURE_BY_ID:
-//       return Object.assign({}, state, {
-//         fixture: action.fixture
-//       });
-//     case SELECT_FIXTURE_TAB:
-//       return Object.assign({}, state, {
-//         tab: action.tab
-//       });
-//     default:
-//       return state;
-//   }
-//   return state;
-// }

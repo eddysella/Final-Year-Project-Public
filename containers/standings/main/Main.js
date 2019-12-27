@@ -1,9 +1,25 @@
-import React, { PureComponent } from 'react';
-import { Button, BackHandler, AsyncStorage, ScrollView, View, ActivityIndicator, Text, Dimensions } from 'react-native';
-import SquareGrid from "react-native-square-grid";
-import { Avatar } from 'react-native-elements';
-import { getLeagueByID } from '../../../fetch/League';
+import React,{Component}from 'react';
+import { addLeagueToStandings, removeLeagueFromStandings } from '../../../redux/action/creators/creators'
+import { connect } from 'react-redux'
 import { Screen } from '../../../screens/standings/main/Main'
+
+const mapStateToProps = state => ({
+    leagues: state.standings['leagues'],
+    standingsInOrder: state.standings['standingsInOrder'],
+})
+
+const mapDispatchToProps = dispatch => ({
+
+  addLeague: league => dispatch(addLeagueToStandings(league)),
+  removeLeague: league => dispatch(removeLeagueFromStandings(league)),
+})
+
+const Screen = ({fetchSpecificFixture, setFixtures, dates, leagueNames, fixturesInOrder, ...props}) => (
+  <Screen leagueID={leagues}
+)
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(Screen);
 
 export default class Container extends PureComponent {
     constructor(props){

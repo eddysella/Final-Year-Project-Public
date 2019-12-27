@@ -6,11 +6,141 @@ import {
   RECEIVE_FIXTURE_BY_ID,
   REQUEST_FIXTURE_BY_ID,
   SET_TAB,
-  SAVED_STANDINGS,
-  REQUEST_STANDINGS_BY_LEAGUE,
-  RECEIVE_STANDINGS_BY_LEAGUE,
+  REQUEST_STANDINGS,
+  RECEIVE_STANDINGS,
+  ADD_LEAGUE_STANDINGS,
+  REMOVE_LEAGUE_STANDINGS,
 } from '../types/types'
 import { getAllFixturesByDate, getFixtureByID } from '../../../fetch/Fixtures';
+import { getStandingsByLeague } from '../../../fetch/Standings';
+import { getAllSeasonsForLeague } from '../../../fetch/League';
+
+
+FETCH LEAGUE BY ID and retrieve info. Make main screen standings functionality
+deal with league info and then details screen has specificstandings
+
+change addLeagueToStandings
+change removeLeagueFromStandings
+
+// CHECK IF YOU CAN ADD 2019 to league retrieval
+
+
+
+export function addLeagueToStandings(league){
+  return {
+    type: ADD_LEAGUE_STANDINGS,
+    leagueID: league,
+  };
+}
+
+export function removeLeagueFromStandings(league){
+  return {
+    type: REMOVE_LEAGUE_STANDINGS,
+    leagueID: league,
+  };
+}
+
+export function setStandingsLeagues(leagues){
+  return (dispatch, getState) => {
+    dispatch(fetchLeagues(leagues));
+  }
+}
+
+function fetchLeagues(leagueIDs){
+  return (dispatch, getState) => {
+    dispatch(requestStandingsLeagues(leagueIDs))
+    return getLeaguesByIDs(leagueID)
+      .then( data => processStandings(data))
+      .then( standings => dispatch(receiveStandings(standings)));
+  }
+}
+
+function requestStandingsLeagues(leagueIDs){
+  return leagueIDs => {
+    collect = {};
+    for (leagueID in leagueIDs){
+      getAllSeasonsForLeague(leagueID)
+        // get latest season
+      .then( data => processLeague(data))
+      .then( processedData => collect.push(processedData));
+    }
+    return collect;
+  }
+}
+
+function processLeague(data){
+  data = data.api;
+  leagues = data.leagues;
+  league = leagues[leagues.length-1]
+  leagueName = league.country + league.name;
+  collect = {
+      countryCode: league.country_code,
+      logo: league.logo,
+  };
+
+  return [leagueName, collect];
+}
+
+export function setStandings(leagueID){
+  return (dispatch,getState) => {
+    dispatch(fetchStandings(leagueID));
+  }
+}
+
+function receiveStandingsByLeague(standings){
+  return {
+    type: RECEIVE_STANDINGS,
+    teamNames: standings[0],
+    standingsInOrder: standings[1],
+    lastUpdated: Date.now(),
+  };
+}
+
+function requestStandingsByLeague(leagueID, leagueName){
+  return {
+    type: REQUEST_STANDINGS,
+    leagueID: leagueID,
+    leagueName: leagueName,
+  };
+}
+
+function fetchStandings(leagueID, leagueName){
+  return (dispatch, getState) => {
+    dispatch(requestStandings(leagueID, leagueName))
+    return getStandingsByLeague(leagueID)
+      .then( data => processStandings(data))
+      .then( standings => dispatch(receiveStandings(standings)));
+  }
+}
+
+function processStandings(data){
+  collect={};
+  data = data.api;
+  standings = data.standings;
+  standings.forEach( team => {
+      teamName = team.teamName;
+      stats = team.all;
+      collect[teamName].push({
+          rank: team.rank,
+          teamID: team.team_id,
+          logo: team.logo,
+          totPoints: team.points,
+          played: stats.matchsPlayed,
+          gamesWon: stats.win,
+          gamesDrawn: stats.draw,
+          gamesLost: stats.lose,
+          scored: stats.goalsFor,
+          conceded: stats.goalsAgainst,
+      });
+  });
+  collectNames=[];
+  collectFixtures=[];
+  for (team in collect) {
+      collectNames.push(team);
+      collectFixtures.push(collect[team]);
+  }
+  return [collectNames, collectFixtures];
+}
 
 function createStats(passedStats){
     emptyStats=[]
@@ -92,7 +222,7 @@ function shouldFetchFixtures(state, date){
   }
 }
 
-function shouldFetchSpecificFixture(state, id){
+function shouldFetchSpecificFixture(state){
   fixture = state.specificFixture
   if(!fixture.receivedAt){
     return true;
@@ -113,40 +243,6 @@ function today(){
   var year = String(date.getFullYear());
   return String(year + '-' + mm + '-' + dd);
 }
-
-// export function setStandings(){
-//   return (dispatch,getState) => dispatch(fetchStandings())
-// }
-
-function receiveStandingsByLeague(league, standings){
-  return {
-    type: RECEIVE_STANDINGS_BY_LEAGUE,
-    league: league,
-    teamNames: standings[0],
-    standingsInOrder: standings[1],
-    receivedAt: Date.now(),
-  };
-}
-
-function requestStandingsByLeague(league){
-  return {
-    type: REQUEST_STANDINGS_BY_LEAGUE,
-    league: league,
-  };
-}
-
-// function fetchStandings(){
-//   return (dispatch, getState) => {
-//     if(shouldFetchStandings(getState())){
-//         dispatch(requestStandingsByLeague(league))
-//         return getStandingsByLeague(league) ** TODO: ADD fetch **
-//           .then( data => processStandings(data))
-//           .then( standings => dispatch(receiveStandingsByLeague(league, standings)))
-//     }else{
-//       console.log("Standings not working")
-//     }
-//   }
-// }
 
 export function setTodaysFixtures(){
   date = today();
@@ -224,7 +320,7 @@ export function setTab(tab){
 
 export function fetchSpecificFixture(id){
   return (dispatch, getState) => {
-    if(shouldFetchSpecificFixture(getState(), id)){
+    if(shouldFetchSpecificFixture(getState())){
       dispatch(requestFixtureByID(id))
       return getFixtureByID(id)
         .then( data => processFixture(data))
