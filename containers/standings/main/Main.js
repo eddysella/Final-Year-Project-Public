@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Screen } from '../../../screens/standings/main/Main'
 
 const mapStateToProps = state => ({
-    leagueIDs: state.standingsLeagues,
+    leagueIDs: state.standingsLeagueIDs,
     leagues: state.leaguesByIDs,
 })
 

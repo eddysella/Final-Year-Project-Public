@@ -5,7 +5,7 @@ import {
   REMOVE_LEAGUE_STANDINGS,
 } from '../action/types/types'
 
-export function standingsLeagues(state = [], action){
+export function standingsLeagueIDs(state = [], action){
   switch(action.type){
     case ADD_LEAGUE_STANDINGS:
       return [...state, action.leagueID]
