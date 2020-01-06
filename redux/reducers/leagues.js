@@ -31,12 +31,12 @@ function league(
   }
 }
 
-export function leaguesByIDs(state={}, action){
+export function leaguesByID(state={}, action){
   switch(action.type){
     case REQUEST_LEAGUE_BY_ID:
     case RECEIVE_LEAGUE_BY_ID:
       return Object.assign({}, state, {
-        [action.date]: league(state[action.date], action)
+        [action.leagueID]: league(state[action.leagueID], action)
         });
     default:
       return state;
