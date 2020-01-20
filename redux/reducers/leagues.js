@@ -20,7 +20,7 @@ function league(
         isFetching: true,
       })
     case RECEIVE_LEAGUE_BY_ID:
-    return Object.assign({
+    return Object.assign({}, state, {
       isFetching: false,
       leagueName: action.leagueName,
       countryCode: action.countryCode,

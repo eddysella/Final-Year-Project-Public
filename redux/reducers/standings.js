@@ -35,7 +35,7 @@ export function specificStandings(
         isFetching:true,
       })
     case RECEIVE_STANDINGS:
-    return Object.assign({
+    return Object.assign({}, state, {
       isFetching: false,
       teamNames: action.teamNames,
       standingsInOrder: action.standingsInOrder,

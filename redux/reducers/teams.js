@@ -4,13 +4,6 @@ import {
   ADD_PLAYER_IDS_TO_TEAM,
   ADD_LEAGUE_IDS_TO_TEAM,
 } from '../action/types/types'
-
-- statistics:
-  - add types for add team statistics for key:leagueID+teamID
-    - fetch:getStatisticsForTeamInLeague
-  - add types for add player statistics for key:playerID
-    - fetch:getPlayerStatisticsByTeamID
-
 function team(
   state = {
     isFetching: false,

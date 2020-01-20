@@ -19,7 +19,7 @@ export function teamSearch( state = {}, action ){
   }
 }
 
-export function teamSearch( state = {}, action ){
+export function leagueSearch( state = {}, action ){
   switch(action.type){
     case REQUEST_LEAGUE_SEARCH:
       return [];
@@ -33,7 +33,7 @@ export function teamSearch( state = {}, action ){
   }
 }
 
-export function search(
+export function searchStatus(
   state = {
     teamIsFetching: false,
     leagueIsFetching: false,
@@ -46,7 +46,7 @@ export function search(
         leagueIsFetching: true,
       })
     case RECEIVE_LEAGUE_SEARCH:
-      return Object.assign({
+      return Object.assign({}, state, {
         leagueIsFetching: false,
     });
     case REQUEST_TEAM_SEARCH:
@@ -54,7 +54,7 @@ export function search(
         teamIsFetching: true,
       })
     case RECEIVE_TEAM_SEARCH:
-      return Object.assign({
+      return Object.assign({}, state, {
         teamIsFetching: false,
     });
     default:

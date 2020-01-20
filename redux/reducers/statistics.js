@@ -25,7 +25,7 @@ function teamStats(
         isFetching: true,
       })
     case RECEIVE_STATISTICS_BY_LEAGUE_AND_TEAM_ID:
-    return Object.assign({
+    return Object.assign({}, state, {
       isFetching: false,
       matchesPlayed: action.matchesPlayed,
       wins: action.wins,
@@ -80,7 +80,7 @@ function playerStats(
         playerID: action.playerID,
       })
     case RECEIVE_PLAYER_STATS_BY_TEAM_ID:
-    return Object.assign({
+    return Object.assign({}, state, {
       isFetching: false,
       name: action.name,
       position: action.position,

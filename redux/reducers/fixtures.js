@@ -78,7 +78,7 @@ function fixtures(
       })
     case RECEIVE_FIXTURES_BY_TEAM_ID:
     case RECEIVE_FIXTURES_BY_DATE:
-    return Object.assign({
+    return Object.assign({}, state, {
       date: action.date,
       isFetching: false,
       leagueNames: action.leagueNames,
@@ -102,7 +102,7 @@ export function fixturesByDate(state={}, action){
   }
 }
 
-export function fixturesByTeam(state={}, action){
+export function fixturesNextTenByTeam(state={}, action){
   switch(action.type){
     case RECEIVE_FIXTURES_BY_TEAM_ID:
     case REQUEST_FIXTURES_BY_TEAM_ID:
