@@ -5,12 +5,6 @@ import {
   ADD_LEAGUE_IDS_TO_TEAM,
 } from '../action/types/types'
 
-- teams:
-    // - add types for add leagueIDs to existing team reducer
-      - fetch:getAllLeaguesForTeam
-    // - add types for add playerIDs to existing team reducer
-      - fetch:getPlayerStatisticsByTeamID
-
 - statistics:
   - add types for add team statistics for key:leagueID+teamID
     - fetch:getStatisticsForTeamInLeague
