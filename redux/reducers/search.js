@@ -5,7 +5,7 @@ import {
   RECEIVE_TEAM_SEARCH,
 } from '../action/types/types'
 
-export function teamSearch( state = {}, action ){
+export function searchTeam( state = {}, action ){
   switch(action.type){
     case REQUEST_TEAM_SEARCH:
       return [];
@@ -19,7 +19,7 @@ export function teamSearch( state = {}, action ){
   }
 }
 
-export function leagueSearch( state = {}, action ){
+export function searchLeague( state = {}, action ){
   switch(action.type){
     case REQUEST_LEAGUE_SEARCH:
       return [];

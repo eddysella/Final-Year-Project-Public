@@ -4,6 +4,7 @@ import {
   ADD_PLAYER_IDS_TO_TEAM,
   ADD_LEAGUE_IDS_TO_TEAM,
 } from '../action/types/types'
+
 function team(
   state = {
     isFetching: false,

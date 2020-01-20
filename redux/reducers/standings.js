@@ -19,7 +19,7 @@ export function standingsLeagueIDs(state = [], action){
   }
 }
 
-export function specificStandings(
+export function standingsSpecific(
   state = {
     isFetching: false,
     teamNames: [],

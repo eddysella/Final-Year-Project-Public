@@ -10,7 +10,7 @@ import {
   RECEIVE_FIXTURES_BY_TEAM_ID,
 } from '../action/types/types'
 
-export function specificFixture(
+export function fixturesSpecific(
   state = {
     fixtureID:'',
     tabDisplayed:0,
