@@ -5,9 +5,9 @@ import {
   SET_CURRENT_DATE,
   RECEIVE_FIXTURE_BY_ID,
   REQUEST_FIXTURE_BY_ID,
-  SET_TAB,
   REQUEST_FIXTURES_BY_TEAM_ID,
   RECEIVE_FIXTURES_BY_TEAM_ID,
+  SET_TAB,
 } from '../action/types/types'
 
 export function fixturesSpecific(
