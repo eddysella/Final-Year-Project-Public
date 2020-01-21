@@ -10,10 +10,7 @@ export function searchTeam( state = {}, action ){
     case REQUEST_TEAM_SEARCH:
       return [];
     case RECEIVE_TEAM_SEARCH:
-      return state.filter(function(value, index, arr){
-        return [...state, action.teamIDs];
-      });
-      return
+      return [...state, ...action.teamIDs]
     default:
       return state;
   }
@@ -24,10 +21,7 @@ export function searchLeague( state = {}, action ){
     case REQUEST_LEAGUE_SEARCH:
       return [];
     case RECEIVE_LEAGUE_SEARCH:
-      return state.filter(function(value, index, arr){
-        return [...state, action.leagueIDs];
-      });
-      return
+      return [...state, ...action.leagueIDs];
     default:
       return state;
   }

@@ -1,6 +1,7 @@
 import {
   REQUEST_LEAGUE_BY_ID,
   RECEIVE_LEAGUE_BY_ID,
+  RECEIVE_MULTIPLE_LEAGUES,
 } from '../action/types/types'
 
 function league(
@@ -38,6 +39,8 @@ export function leaguesByID(state={}, action){
       return Object.assign({}, state, {
         [action.leagueID]: league(state[action.leagueID], action)
         });
+    case RECEIVE_MULTIPLE_LEAGUES:
+      return Object.assign({}, state, action.leagues);
     default:
       return state;
   }

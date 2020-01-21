@@ -3,16 +3,16 @@ import {
   RECEIVE_TEAM_BY_ID,
   ADD_PLAYER_IDS_TO_TEAM,
   ADD_LEAGUE_IDS_TO_TEAM,
+  RECEIVE_MULTIPLE_TEAMS,
 } from '../action/types/types'
 
 function team(
   state = {
     isFetching: false,
-    teamID: '',
     teamName: '',
+    logo: '',
     leagueIDs: [],
     playerIDs: [],
-    logo: '',
   },
   action
   ){
@@ -50,6 +50,8 @@ export function teamsByID(state={}, action){
       return Object.assign({}, state, {
         [action.teamID]: team(state[action.teamID], action)
         });
+    case RECEIVE_MULTIPLE_TEAMS:
+      return Object.assign({}, state, action.teams);
     default:
       return state;
   }
