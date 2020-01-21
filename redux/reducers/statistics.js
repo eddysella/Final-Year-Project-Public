@@ -1,8 +1,8 @@
 import {
-  REQUEST_STATISTICS_BY_LEAGUE_AND_TEAM_ID,
-  RECEIVE_STATISTICS_BY_LEAGUE_AND_TEAM_ID,
-  REQUEST_PLAYER_STATS_BY_TEAM_ID,
-  RECEIVE_PLAYER_STATS_BY_TEAM_ID,
+  REQUEST_TEAM_STATISTICS_BY_ID,
+  RECEIVE_TEAM_STATISTICS_BY_ID,
+  REQUEST_PLAYER_STATS_BY_ID,
+  RECEIVE_PLAYER_STATS_BY_ID,
 } from '../action/types/types'
 
 function teamStats(
@@ -18,13 +18,13 @@ function teamStats(
   action
   ){
   switch(action.type){
-    case REQUEST_STATISTICS_BY_LEAGUE_AND_TEAM_ID:
+    case REQUEST_TEAM_STATISTICS_BY_ID:
       return Object.assign({}, state, {
         teamID: action.teamID,
         leagueID: action.leagueID,
         isFetching: true,
       })
-    case RECEIVE_STATISTICS_BY_LEAGUE_AND_TEAM_ID:
+    case RECEIVE_TEAM_STATISTICS_BY_ID:
     return Object.assign({}, state, {
       isFetching: false,
       matchesPlayed: action.matchesPlayed,
@@ -41,8 +41,8 @@ function teamStats(
 
 export function teamStatsByLeague(state={}, action){
   switch(action.type){
-    case REQUEST_STATISTICS_BY_LEAGUE_AND_TEAM_ID:
-    case RECEIVE_STATISTICS_BY_LEAGUE_AND_TEAM_ID:
+    case REQUEST_TEAM_STATISTICS_BY_ID:
+    case RECEIVE_TEAM_STATISTICS_BY_ID:
       return Object.assign({}, state, {
           [action.key]: teamStats(state[action.key], action)
         });
@@ -74,12 +74,12 @@ function playerStats(
   action
   ){
   switch(action.type){
-    case REQUEST_PLAYER_STATS_BY_TEAM_ID:
+    case REQUEST_PLAYER_STATS_BY_ID:
       return Object.assign({}, state, {
         isFetching: true,
         playerID: action.playerID,
       })
-    case RECEIVE_PLAYER_STATS_BY_TEAM_ID:
+    case RECEIVE_PLAYER_STATS_BY_ID:
     return Object.assign({}, state, {
       isFetching: false,
       name: action.name,
@@ -102,10 +102,10 @@ function playerStats(
   }
 }
 
-export function playerStatsByPlayerID(state={}, action){
+export function playerStatsByID(state={}, action){
   switch(action.type){
-    case REQUEST_PLAYER_STATS_BY_TEAM_ID:
-    case RECEIVE_PLAYER_STATS_BY_TEAM_ID:
+    case REQUEST_PLAYER_STATS_BY_ID:
+    case RECEIVE_PLAYER_STATS_BY_ID:
       return Object.assign({}, state, {
         [action.playerID]: playerStats(state[action.playerID], action)
         });
