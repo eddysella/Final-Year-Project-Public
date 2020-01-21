@@ -29,6 +29,25 @@ function processLeague(data){
   };
 }
 
+function processLeagues(data){
+  collect = {};
+  ids = [];
+  data = data.api;
+  leagues = data.leagues;
+  leagues.forEach( league => {
+    if(league.is_current == 1){
+        ids.push(league.league_id);
+        collect[league.league_id] = {
+          leagueName: league.country + league.name,
+          leagueName: leagueName,
+          countryCode: league.country_code,
+          logo: league.logo,
+        };
+    }
+  })
+  return [ids,collect];
+}
+
 export function requestLeagueByID(leagueID){
   return {
     type: REQUEST_LEAGUE_BY_ID,

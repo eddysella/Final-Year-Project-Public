@@ -112,7 +112,7 @@ function processFixtureStatus(data){
   return status
 }
 
-function processFixtures(data){
+export function processFixtures(data){
   collect={};
   data = data.api;
   fixtures = data.fixtures;
