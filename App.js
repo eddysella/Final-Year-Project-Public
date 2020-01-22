@@ -11,7 +11,11 @@ import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers/index'
+<<<<<<< HEAD
 import { initFixtureDates, initTodaysFixtures, initCurrentDate} from './redux/creators/fixturesMain'
+=======
+import { initFixtureDates, initTodaysFixtures, initCurrentDate} from './redux/action/creators/fixturesMain'
+>>>>>>> 40d3f6f80047a8c6a5c3f2bda6ce062c4be29a3f
 import store from './redux/store'
 
 export default function App(props) {
