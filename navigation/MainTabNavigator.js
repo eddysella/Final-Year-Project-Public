@@ -11,8 +11,8 @@ import SearchScreen from '../screens/search/Search';
 // import FollowingScreen from '../screens/following/Following';
 
 const StandingsStack = createStackNavigator({
-  Standings: StandingsContainer,
-  Inner: StandingsDetailsContainer,
+  Standings: SearchScreen, // TODO: Change to real screen
+  Inner: SearchScreen,
 }, {headerLayoutPreset: 'center'});
 
 const FixturesStack = createStackNavigator({

@@ -1,5 +1,6 @@
 import React,{ Component }from 'react';
-import { fetchFixturesByDate, fetchSpecificFixture } from '../../redux/creators/fixturesMain'
+import { fetchFixturesByDate, } from '../../redux/creators/fixturesMain'
+import { fetchSpecificFixture , } from '../../redux/creators/fixturesSpecific'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
 import { TopBar } from '../../screens/fixtures/main/TopBar';

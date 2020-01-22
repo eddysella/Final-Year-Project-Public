@@ -3,10 +3,8 @@ import {
   RECEIVE_FIXTURES_BY_DATE,
   SET_FIXTURE_DATES,
   SET_CURRENT_DATE,
-  RECEIVE_FIXTURE_BY_ID,
   REQUEST_FIXTURE_BY_ID,
-  REQUEST_FIXTURES_BY_TEAM_ID,
-  RECEIVE_FIXTURES_BY_TEAM_ID,
+  RECEIVE_FIXTURE_BY_ID,
   SET_TAB,
 } from '../types'
 
@@ -70,13 +68,11 @@ function fixtures(
   action
   ){
   switch(action.type){
-    case REQUEST_FIXTURES_BY_TEAM_ID:
     case REQUEST_FIXTURES_BY_DATE:
       return Object.assign({}, state, {
         date: action.date,
         isFetching:true,
       })
-    case RECEIVE_FIXTURES_BY_TEAM_ID:
     case RECEIVE_FIXTURES_BY_DATE:
     return Object.assign({}, state, {
       date: action.date,
@@ -96,18 +92,6 @@ export function fixturesByDate(state={}, action){
     case REQUEST_FIXTURES_BY_DATE:
       return Object.assign({}, state, {
         [action.date]: fixtures(state[action.date], action)
-        });
-    default:
-      return state;
-  }
-}
-
-export function fixturesNextTenByTeam(state={}, action){
-  switch(action.type){
-    case RECEIVE_FIXTURES_BY_TEAM_ID:
-    case REQUEST_FIXTURES_BY_TEAM_ID:
-      return Object.assign({}, state, {
-        [action.teamID]: fixtures(state[action.teamID], action)
         });
     default:
       return state;

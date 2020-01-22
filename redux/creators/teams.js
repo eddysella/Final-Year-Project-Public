@@ -1,7 +1,7 @@
 import {
   REQUEST_TEAM_BY_ID,
   RECEIVE_TEAM_BY_ID,
-  ADD_PLAYER_IDS_TO_TEAM,
+  ADD_PLAYER_IDS_TO_TEAM, // REMEMBER THIS FROM TEAM STATS
   REQUEST_LEAGUES_FOR_TEAM,
   RECEIVE_LEAGUES_FOR_TEAM,
   REQUEST_PAST_TEAM_FIXTURES,
@@ -109,7 +109,9 @@ function receivePastFixtures(teamID, fixtures){
   return {
     type: RECEIVE_PAST_TEAM_FIXTURES,
     teamID: teamID,
-    fixtures: fixtures,
+    leagueNames: fixtures[0],
+    fixturesInOrder: fixtures[1],
+    receivedAt: Date.now(),
   };
 }
 
@@ -134,7 +136,9 @@ function receiveFutureFixtures(teamID, fixtures){
   return {
     type: RECEIVE_FUTURE_TEAM_FIXTURES,
     teamID: teamID,
-    fixtures: fixtures,
+    leagueNames: fixtures[0],
+    fixturesInOrder: fixtures[1],
+    receivedAt: Date.now(),
   };
 }
 

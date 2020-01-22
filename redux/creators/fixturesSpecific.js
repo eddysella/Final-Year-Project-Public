@@ -42,25 +42,12 @@ export function setTab(tab){
   };
 }
 
-function shouldFetchSpecificFixture(state){
-  fixture = state.specificFixture
-  if(!fixture.receivedAt){
-    return true;
-  }else if(fixture.receivedAt < Date.now()){
-    return true;
-  }else if(fixture.fetching){
-    return false;
-  }
-}
-
 export function fetchSpecificFixture(id){
   return (dispatch, getState) => {
-    if(shouldFetchSpecificFixture(getState())){
-      dispatch(requestFixtureByID(id))
-      return getFixtureByID(id)
-        .then( data => processFixture(data))
-        .then( fixture => dispatch(receiveFixtureByID(id, fixture)))
-    }
+    dispatch(requestFixtureByID(id))
+    return getFixtureByID(id)
+    .then( data => processFixture(data))
+    .then( fixture => dispatch(receiveFixtureByID(id, fixture)))
   }
 }
 

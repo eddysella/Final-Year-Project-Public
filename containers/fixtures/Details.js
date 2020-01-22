@@ -6,10 +6,10 @@ import { TopBar } from '../../screens/fixtures/details/TopBar'
 import { Details }  from '../../screens/fixtures/details/Main'
 
 const mapStateToProps = state =>({
-  topBar: state.specificFixture['topBar'],
-  screen: state.specificFixture['screen'],
-  tabDisplayed: state.specificFixture['tabDisplayed'],
-  fetching: state.specificFixture['fetching'],
+  topBar: state.fixturesSpecific['topBar'],
+  screen: state.fixturesSpecific['screen'],
+  tabDisplayed: state.fixturesSpecific['tabDisplayed'],
+  fetching: state.fixturesSpecific['fetching'],
 })
 
 const mapDispatchToProps = dispatch => ({
