@@ -5,13 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import TabBarIcon from '../components/TabBarIcon';
 import StandingsContainer from '../containers/standings/Main';
 import StandingsDetailsContainer from '../containers/standings/Details';
-<<<<<<< HEAD
 import FixturesContainer from '../containers/fixtures/Main';
 import FixturesDetailsContainer from '../containers/fixtures/Details';
-=======
-import FixturesContainer from '../containers/fixtures/main/Main';
-import FixturesDetailsContainer from '../containers/fixtures/details/Main';
->>>>>>> 40d3f6f80047a8c6a5c3f2bda6ce062c4be29a3f
 import SearchScreen from '../screens/search/Search';
 // import FollowingScreen from '../screens/following/Following';
 
