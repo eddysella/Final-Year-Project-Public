@@ -2,8 +2,8 @@ import {
   REQUEST_LEAGUE_BY_ID,
   RECEIVE_LEAGUE_BY_ID,
   RECEIVE_MULTIPLE_LEAGUES,
-} from '../types/types'
-import { getAllSeasonsForLeague } from '../../../fetch/League'
+} from '../types'
+import { getAllSeasonsForLeague } from '../../fetch/League'
 
 export function fetchLeagues(leagueIDs){
   return (dispatch, getState) => {

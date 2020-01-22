@@ -3,8 +3,8 @@ import {
   RECEIVE_STANDINGS,
   ADD_LEAGUE_STANDINGS,
   REMOVE_LEAGUE_STANDINGS,
-} from '../types/types'
-import { getStandingsByLeague } from '../../../fetch/Standings';
+} from '../types'
+import { getStandingsByLeague } from '../../fetch/Standings';
 
 
 export function addLeagueToStandings(league){

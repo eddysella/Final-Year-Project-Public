@@ -3,8 +3,8 @@ import {
   RECEIVE_LEAGUE_SEARCH,
   REQUEST_TEAM_SEARCH,
   RECEIVE_TEAM_SEARCH,
-} from '../action/types/types'
-import { searchLeagueByCountryOrName, searchTeamByCountryOrName } from '../../../fetch/search'
+} from '../types'
+import { searchLeagueByCountryOrName, searchTeamByCountryOrName } from '../../fetch/search'
 import { receiveMultipleLeagues, processLeagues } from './leagues'
 import { receiveMultipleTeams, processTeams } from './teams'
 
@@ -25,7 +25,7 @@ export function searchForLeague(input){
   return (dispatch, getState) => {
       dispatch(requestLeagueSearch())
       return searchLeagueByCountryOrName(input)
-      .then( data => processLeagues(data));
+      .then( data => processLeagues(data))
       .then( processedData => receiveTeamSearchResult(processedData));
   }
 }
@@ -54,7 +54,7 @@ export function searchForTeam(input){
   return (dispatch, getState) => {
       dispatch(requestTeamSearch())
       return searchTeamByCountryOrName(input)
-      .then( data => processTeams(data));
+      .then( data => processTeams(data))
       .then( processedData => receiveTeamSearchResult(processedData));
   }
 }

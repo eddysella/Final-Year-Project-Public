@@ -9,8 +9,10 @@ import {
   REQUEST_FUTURE_TEAM_FIXTURES,
   RECEIVE_FUTURE_TEAM_FIXTURES,
   RECEIVE_MULTIPLE_TEAMS,
-} from '../action/types/types'
-import { getTeamByID, getLastTenFixtures, getNextTenFixtures, getAllLeaguesForTeam, getStatisticsForTeamInLeague, getPlayerStatisticsByTeamIDandSeason } from '../../../fetch/teams'
+} from '../types'
+import { getTeamByID, getLastTenFixtures, getNextTenFixtures,
+  getAllLeaguesForTeam, getStatisticsForTeamInLeague,
+  getPlayerStatisticsByTeamIDandSeason } from '../../fetch/teams'
 import { processFixtures } from './fixturesMain'
 import { processLeagues, receiveMultipleLeagues } from './leagues'
 
@@ -86,7 +88,7 @@ export function fetchLeaguesForTeam(teamID){
   return (dispatch, getState) => {
       dispatch(requestLeaguesForTeam())
       return getAllLeaguesForTeam(teamID)
-      .then( data => processLeagues(data));
+      .then( data => processLeagues(data))
       .then( processedData => receiveLeaguesForTeam(teamID, processedData));
   }
 }

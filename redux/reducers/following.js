@@ -3,7 +3,7 @@ import {
   REMOVE_LEAGUE_FROM_FOLLOWING,
   ADD_TEAM_TO_FOLLOWING,
   REMOVE_TEAM_FROM_FOLLOWING,
-} from '../action/types/types'
+} from '../types'
 
 
 export function followingLeagueIDs(state = [], action){

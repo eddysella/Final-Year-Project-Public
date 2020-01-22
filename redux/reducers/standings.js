@@ -3,7 +3,7 @@ import {
   RECEIVE_STANDINGS,
   ADD_LEAGUE_STANDINGS,
   REMOVE_LEAGUE_STANDINGS,
-} from '../action/types/types'
+} from '../types'
 
 export function standingsLeagueIDs(state = [], action){
   switch(action.type){

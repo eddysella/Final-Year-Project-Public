@@ -3,8 +3,8 @@ import {
   RECEIVE_FIXTURES_BY_DATE,
   SET_FIXTURE_DATES,
   SET_CURRENT_DATE,
-} from '../action/types/types'
-import { getAllFixturesByDate} from '../../../fetch/Fixtures';
+} from '../types'
+import { getAllFixturesByDate} from '../../fetch/Fixtures';
 
 function calculateToday(){
   start = new Date();
@@ -25,14 +25,14 @@ export function initCurrentDate(){
   }
 }
 
-export function setFixtureDates(){
+export function initFixtureDates(){
   return {
     type: SET_FIXTURE_DATES,
     dates: createDates(),
   }
 }
 
-export function setTodaysFixtures(){
+export function initTodaysFixtures(){
   return (dispatch, getState) => dispatch(fetchFixturesByDate(today))
 }
 
