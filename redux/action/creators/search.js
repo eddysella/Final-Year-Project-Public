@@ -23,7 +23,7 @@ function receiveLeagueIDs(leaguesIDs){
 
 export function searchForLeague(input){
   return (dispatch, getState) => {
-      dispatch(requestLeagueSearch());
+      dispatch(requestLeagueSearch())
       return searchLeagueByCountryOrName(input)
       .then( data => processLeagues(data));
       .then( processedData => receiveTeamSearchResult(processedData));

@@ -12,7 +12,7 @@ import {
 } from '../action/types/types'
 import { getTeamByID, getLastTenFixtures, getNextTenFixtures, getAllLeaguesForTeam, getStatisticsForTeamInLeague, getPlayerStatisticsByTeamIDandSeason } from '../../../fetch/teams'
 import { processFixtures } from './fixturesMain'
-import { processLeagues } from './leagues'
+import { processLeagues, receiveMultipleLeagues } from './leagues'
 
 function requestTeamByID(teamID){
   return {
@@ -84,13 +84,16 @@ function receiveLeaguesForTeam(teamID, leagueIDs){
 
 export function fetchLeaguesForTeam(teamID){
   return (dispatch, getState) => {
-      request = getAllLeaguesForTeam(teamID)
-      .then( data => processLeagues(data));
-
       dispatch(requestLeaguesForTeam())
-      .then( dispatch(receiveLeaguesForTeam(teamID, request[0])))
-      .then( dispatch(receiveMultipleLeagues(request[1])));
+      return getAllLeaguesForTeam(teamID)
+      .then( data => processLeagues(data));
+      .then( processedData => receiveLeaguesForTeam(teamID, processedData));
   }
+}
+
+function receiveLeaguesForTeam(teamID, result){
+  dispatch( receiveLeagueIDs(teamID, result[0]))
+  .then( dispatch( receiveMultipleLeagues(result[1])));
 }
 
 function requestPastFixtures(teamID){
