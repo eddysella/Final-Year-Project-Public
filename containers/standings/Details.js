@@ -1,6 +1,6 @@
 import React,{Component}from 'react';
 import { connect } from 'react-redux'
-import { Screen } from '../../../screens/standings/details/Details'
+import { View } from '../../screens/standings/details/Main'
 
 const mapStateToProps = state => ({
     standingsInOrder: state.specificStandings['standingsInOrder'],
@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 })
 
 const Screen = ({standingsInOrder, teamNames, ...props}) => (
-  <Screen standings={standingsInOrder} teamNames={teamNames} navigation={props.navigation}/>
+  <View standings={standingsInOrder} teamNames={teamNames} navigation={props.navigation}/>
 )
 
-export default connect(mapStateToProps,mapDispatchToProps)(Screen);
+export default connect(mapStateToProps)(Screen);

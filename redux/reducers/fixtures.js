@@ -8,7 +8,7 @@ import {
   REQUEST_FIXTURES_BY_TEAM_ID,
   RECEIVE_FIXTURES_BY_TEAM_ID,
   SET_TAB,
-} from '../action/types/types'
+} from '../types'
 
 export function fixturesSpecific(
   state = {

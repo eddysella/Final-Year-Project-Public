@@ -3,8 +3,7 @@ import {
   REMOVE_LEAGUE_FROM_FOLLOWING,
   ADD_TEAM_TO_FOLLOWING,
   REMOVE_TEAM_FROM_FOLLOWING,
-} from '../types/types'
-import { getStandingsByLeague } from '../../../fetch/Standings';
+} from '../types'
 
 
 export function addLeagueToFollowing(leagueID){

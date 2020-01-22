@@ -11,12 +11,12 @@ import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers/index'
-import { setFixtureDates, setTodaysFixtures, initFixtures, initCurrentDate, setTodaysStandings} from './redux/action/creators/creators'
+import { initFixtureDates, initTodaysFixtures, initCurrentDate} from './redux/creators/fixturesMain'
 import store from './redux/store'
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
-  store.dispatch(setFixtureDates());
+  store.dispatch(initFixtureDates());
   store.dispatch(initCurrentDate());
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
@@ -41,8 +41,8 @@ export default function App(props) {
 
 async function loadResourcesAsync() {
   await Promise.all([
-    store.dispatch(setTodaysFixtures()),
-    store.dispatch(setTodaysStandings()),
+    store.dispatch(initTodaysFixtures()),
+    // store.dispatch(setTodaysStandings()),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,

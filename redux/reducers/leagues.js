@@ -2,7 +2,7 @@ import {
   REQUEST_LEAGUE_BY_ID,
   RECEIVE_LEAGUE_BY_ID,
   RECEIVE_MULTIPLE_LEAGUES,
-} from '../action/types/types'
+} from '../types'
 
 function league(
   state = {

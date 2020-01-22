@@ -3,7 +3,7 @@ import {
   RECEIVE_LEAGUE_SEARCH,
   REQUEST_TEAM_SEARCH,
   RECEIVE_TEAM_SEARCH,
-} from '../action/types/types'
+} from '../types'
 
 export function searchTeam( state = {}, action ){
   switch(action.type){

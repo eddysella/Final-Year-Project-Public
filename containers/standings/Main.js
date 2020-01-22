@@ -1,7 +1,7 @@
 import React,{Component}from 'react';
-import { addLeagueToStandings, removeLeagueFromStandings } from '../../../redux/action/creators/creators'
+import { addLeagueToStandings, removeLeagueFromStandings } from '../../redux/creators/standings'
 import { connect } from 'react-redux'
-import { Screen } from '../../../screens/standings/main/Main'
+import { View } from '../../screens/standings/main/Main'
 
 const mapStateToProps = state => ({
     leagueIDs: state.standingsLeagueIDs,
@@ -14,7 +14,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const Screen = ({leagueIDs, leagues, addLeagues, removeLeagues, ...props}) => (
-  <Screen leagueIDs={leagueIDs} leagues={leagues} addLeagues={addLeagues} removeLeagues={removeLeagues} navigation={props.navigation}/>
+  <View leagueIDs={leagueIDs} leagues={leagues} addLeagues={addLeagues} removeLeagues={removeLeagues} navigation={props.navigation}/>
 )
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);

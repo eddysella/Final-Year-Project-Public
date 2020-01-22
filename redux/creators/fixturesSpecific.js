@@ -2,8 +2,8 @@ import {
   RECEIVE_FIXTURE_BY_ID,
   REQUEST_FIXTURE_BY_ID,
   SET_TAB,
-} from '../action/types/types'
-import { getFixtureByID } from '../../../fetch/Fixtures';
+} from '../types'
+import { getFixtureByID } from '../../fetch/Fixtures';
 
 function requestFixtureByID(id){
   return {

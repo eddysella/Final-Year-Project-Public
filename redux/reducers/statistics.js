@@ -3,7 +3,7 @@ import {
   RECEIVE_TEAM_STATISTICS_BY_ID,
   REQUEST_PLAYER_STATS_BY_ID,
   RECEIVE_PLAYER_STATS_BY_ID,
-} from '../action/types/types'
+} from '../types'
 
 function teamStats(
   state = {

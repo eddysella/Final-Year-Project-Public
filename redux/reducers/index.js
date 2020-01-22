@@ -2,9 +2,9 @@ import { combineReducers } from 'redux'
 import { fixturesByDate, fixturesTopbarDates, fixturesCurrentDate, fixturesSpecific, fixturesNextTenByTeam} from './fixtures'
 import { followingLeagueIDs, followingTeamIDs, } from './following'
 import { leaguesByID, } from './leagues'
-import { searchTeam, searchLeague, searchStatus} from './standings'
-import { standingsByLeague, standingsSpecific, } from './standings'
-import { teamStatsByLeague, playerStatsByPlayerID, } from './statistics'
+import { searchTeam, searchLeague, searchStatus} from './search'
+import { standingsLeagueIDs, standingsSpecific, } from './standings'
+import { teamStatsByLeague, playerStatsByID, } from './statistics'
 import { teamsByID, } from './teams'
 
 export default combineReducers({
@@ -19,9 +19,9 @@ export default combineReducers({
   searchTeam,
   searchLeague,
   searchStatus,
-  standingsByLeague,
+  standingsLeagueIDs,
   standingsSpecific,
   teamStatsByLeague,
-  playerStatsByPlayerID,
+  playerStatsByID,
   teamsByID,
 })

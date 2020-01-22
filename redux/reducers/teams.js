@@ -9,7 +9,7 @@ import {
   REQUEST_FUTURE_TEAM_FIXTURES,
   RECEIVE_FUTURE_TEAM_FIXTURES,
   RECEIVE_MULTIPLE_TEAMS,
-} from '../action/types/types'
+} from '../types'
 
 function team(
   state = {

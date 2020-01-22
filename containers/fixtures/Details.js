@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { View, ActivityIndicator  } from 'react-native'
-import { setTab } from '../../../redux/action/creators/creators'
+import { setTab } from '../../redux/creators/fixturesSpecific'
 import { connect } from 'react-redux'
-import { TopBar } from '../../../screens/fixtures/details/TopBar'
-import { Details }  from '../../../screens/fixtures/details/Details'
+import { TopBar } from '../../screens/fixtures/details/TopBar'
+import { Details }  from '../../screens/fixtures/details/Main'
 
 const mapStateToProps = state =>({
   topBar: state.specificFixture['topBar'],

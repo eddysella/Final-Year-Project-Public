@@ -1,9 +1,9 @@
-import React,{Component}from 'react';
-import { fetchFixturesByDate, fetchSpecificFixture } from '../../../redux/action/creators/creators'
+import React,{ Component }from 'react';
+import { fetchFixturesByDate, fetchSpecificFixture } from '../../redux/creators/fixturesMain'
 import { connect } from 'react-redux'
-import { View} from 'react-native'
-import { TopBar } from '../../../screens/fixtures/main/TopBar';
-import {Main} from '../../../screens/fixtures/main/Main';
+import { View } from 'react-native'
+import { TopBar } from '../../screens/fixtures/main/TopBar';
+import { Main } from '../../screens/fixtures/main/Main';
 
 const mapStateToProps = state => ({
     dates: state.fixturesTopbarDates,
