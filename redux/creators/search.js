@@ -8,6 +8,13 @@ import { searchLeagueByCountryOrName, searchTeamByCountryOrName } from '../../fe
 import { receiveMultipleLeagues, processLeagues } from './leagues'
 import { receiveMultipleTeams, processTeams } from './teams'
 
+export function search(input){
+  return (dispatch, getState) => {
+    dispatch( () => searchForLeague(input))
+    .then( () => dispatch( searchForTeam(input)));
+  }
+}
+
 function requestLeagueSearch(){
   return {
     type: REQUEST_LEAGUE_SEARCH
@@ -21,7 +28,7 @@ function receiveLeagueIDs(leaguesIDs){
   };
 }
 
-export function searchForLeague(input){
+function searchForLeague(input){
   return (dispatch, getState) => {
       dispatch(requestLeagueSearch())
       return searchLeagueByCountryOrName(input)
@@ -50,7 +57,7 @@ function receiveTeamIDs(teamIDs){
   };
 }
 
-export function searchForTeam(input){
+function searchForTeam(input){
   return (dispatch, getState) => {
       dispatch(requestTeamSearch())
       return searchTeamByCountryOrName(input)
