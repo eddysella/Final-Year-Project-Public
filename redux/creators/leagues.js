@@ -4,6 +4,25 @@ import {
   RECEIVE_MULTIPLE_LEAGUES,
 } from '../types'
 import { getAllSeasonsForLeague } from '../../fetch/League'
+import { getFixturesByLeague } from '../../fetch/Fixtures'
+import { processFixtures } from './fixturesMain'
+
+export function requestLeagueByID(leagueID){
+  return {
+    type: REQUEST_LEAGUE_BY_ID,
+    leagueID: leagueID,
+  };
+}
+
+export function receiveLeagueByID(league){
+  return {
+    type: RECEIVE_LEAGUE_BY_ID,
+    leagueID: league.leagueID,
+    leagueName: league.leagueName,
+    countryCode: league.countryCode,
+    logo: league.logo,
+  };
+}
 
 export function fetchLeagues(leagueIDs){
   return (dispatch, getState) => {
@@ -29,6 +48,30 @@ function processLeague(data){
   };
 }
 
+export function requestFixtures(leagueID){
+  return {
+    type: REQUEST_LEAGUE_BY_ID,
+    leagueID: leagueID,
+  };
+}
+
+export function receiveFixtures(fixtures){
+  return {
+    type: RECEIVE_LEAGUE_BY_ID,
+    fixtures: fixtures[1],
+  };
+}
+
+export function fetchFixtures(leagueID){
+  return (dispatch, getState) => {
+      dispatch(requestFixtures(leagueID))
+      return getFixturesByLeague(leagueID)
+        // get latest season
+      .then( data => processFixtures(data))
+      .then( processedData => dispatch(receiveFixtures(processedData)));
+    }
+}
+
 function processLeagues(data){
   collect = {};
   ids = [];
@@ -46,23 +89,6 @@ function processLeagues(data){
     }
   })
   return [ids,collect];
-}
-
-export function requestLeagueByID(leagueID){
-  return {
-    type: REQUEST_LEAGUE_BY_ID,
-    leagueID: leagueID,
-  };
-}
-
-export function receiveLeagueByID(league){
-  return {
-    type: RECEIVE_LEAGUE_BY_ID,
-    leagueID: league.leagueID,
-    leagueName: league.leagueName,
-    countryCode: league.countryCode,
-    logo: league.logo,
-  };
 }
 
 export function receiveMultipleLeagues(leagues){

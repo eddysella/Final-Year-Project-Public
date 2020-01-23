@@ -30,7 +30,9 @@ export function standingsSpecific(
   ){
   switch(action.type){
     case REQUEST_STANDINGS:
-      return Object.assign({}, state, {
+    // state is not included in the sources to reset it every time a new
+    // standings is fetched
+      return Object.assign({}, {
         leagueID: action.leagueID,
         isFetching:true,
       })
