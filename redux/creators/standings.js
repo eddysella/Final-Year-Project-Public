@@ -21,12 +21,6 @@ export function removeLeagueFromStandings(league){
   };
 }
 
-export function setStandings(leagueID){
-  return (dispatch,getState) => {
-    dispatch(fetchStandings(leagueID));
-  }
-}
-
 function receiveStandings(standings){
   return {
     type: RECEIVE_STANDINGS,
@@ -36,17 +30,16 @@ function receiveStandings(standings){
   };
 }
 
-function requestStandings(leagueID, leagueName){
+function requestStandings(leagueID){
   return {
     type: REQUEST_STANDINGS,
     leagueID: leagueID,
-    leagueName: leagueName,
   };
 }
 
-function fetchStandings(leagueID, leagueName){
+export function fetchStandings(leagueID){
   return (dispatch, getState) => {
-    dispatch(requestStandings(leagueID, leagueName))
+    dispatch(requestStandings(leagueID))
     return getStandingsByLeague(leagueID)
       .then( data => processStandings(data))
       .then( standings => dispatch(receiveStandings(standings)));
@@ -54,13 +47,14 @@ function fetchStandings(leagueID, leagueName){
 }
 
 function processStandings(data){
-  collect={};
+  names=[];
+  collect=[];
   data = data.api;
   standings = data.standings;
   standings.forEach( team => {
-      teamName = team.teamName;
+      names.push(team.teamName);
       stats = team.all;
-      collect[teamName].push({
+      collect.push({
           rank: team.rank,
           teamID: team.team_id,
           logo: team.logo,
@@ -73,11 +67,5 @@ function processStandings(data){
           conceded: stats.goalsAgainst,
       });
   });
-  collectNames=[];
-  collectFixtures=[];
-  for (team in collect) {
-      collectNames.push(team);
-      collectFixtures.push(collect[team]);
-  }
-  return [collectNames, collectFixtures];
+  return [names, collect]
 }

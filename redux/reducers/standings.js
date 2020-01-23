@@ -22,6 +22,7 @@ export function standingsLeagueIDs(state = [], action){
 export function standingsSpecific(
   state = {
     isFetching: false,
+    leagueID: "",
     teamNames: [],
     standingsInOrder: [],
   },
@@ -31,7 +32,6 @@ export function standingsSpecific(
     case REQUEST_STANDINGS:
       return Object.assign({}, state, {
         leagueID: action.leagueID,
-        leagueName: action.leagueName,
         isFetching:true,
       })
     case RECEIVE_STANDINGS:
