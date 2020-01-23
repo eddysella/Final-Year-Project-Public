@@ -1,7 +1,6 @@
 import {
   REQUEST_TEAM_STATISTICS_BY_ID,
   RECEIVE_TEAM_STATISTICS_BY_ID,
-  REQUEST_PLAYER_STATS_BY_ID,
   RECEIVE_PLAYER_STATS_BY_ID,
 } from '../types'
 
@@ -51,51 +50,28 @@ export function teamStatsByLeague(state={}, action){
   }
 }
 
-
 function playerStats(
-  state = {
-    isFetching: false,
-    playerID: "",
-    name: "",
-    position: "",
-    nationality: "",
-    injured: "",
-    captain: "",
-    shots: {},
-     goals: {},
-     passes: {},
-     tackles: {},
-     dribbles: {},
-     fouls: {},
-     cards: {},
-     penalties: {},
-     games: {},
-  },
-  action
-  ){
+  state = {},action){
   switch(action.type){
-    case REQUEST_PLAYER_STATS_BY_ID:
-      return Object.assign({}, state, {
-        isFetching: true,
-        playerID: action.playerID,
-      })
     case RECEIVE_PLAYER_STATS_BY_ID:
     return Object.assign({}, state, {
       isFetching: false,
+      playerID: action.playerID,
       name: action.name,
+      age: action.age,
       position: action.position,
       nationality: action.nationality,
       injured: action.injured,
       captain: action.captain,
       shots: action.shots,
-       goals: action.goals,
-       passes: action.passes,
-       tackles: action.tackles,
-       dribbles: action.dribbles,
-       fouls: action.fouls,
-       cards: action.cards,
-       penalties: action.penalties,
-       games: action.games,
+      goals: action.goals,
+      passes: action.passes,
+      tackles: action.tackles,
+      dribbles: action.dribbles,
+      fouls: action.fouls,
+      cards: action.cards,
+      penalties: action.penalties,
+      games: action.games,
     });
     default:
       return state;
@@ -104,10 +80,9 @@ function playerStats(
 
 export function playerStatsByID(state={}, action){
   switch(action.type){
-    case REQUEST_PLAYER_STATS_BY_ID:
     case RECEIVE_PLAYER_STATS_BY_ID:
       return Object.assign({}, state, {
-        [action.playerID]: playerStats(state[action.playerID], action)
+        [action.key]: playerStats(state[action.key], action)
         });
     default:
       return state;

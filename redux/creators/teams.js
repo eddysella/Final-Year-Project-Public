@@ -1,7 +1,8 @@
 import {
   REQUEST_TEAM_BY_ID,
   RECEIVE_TEAM_BY_ID,
-  ADD_PLAYER_IDS_TO_TEAM, // REMEMBER THIS FROM TEAM STATS
+  REQUEST_PLAYERS_FOR_TEAM,
+  RECEIVE_PLAYERS_FOR_TEAM,
   REQUEST_LEAGUES_FOR_TEAM,
   RECEIVE_LEAGUES_FOR_TEAM,
   REQUEST_PAST_TEAM_FIXTURES,
@@ -62,6 +63,7 @@ function processTeams(data){
   teams.forEach( team => {
       ids.push(team.team_id);
       collect[team.team_id] = {
+        id: team.team_id,
         teamName: team.name,
         logo: team.logo,
       };
@@ -76,7 +78,7 @@ function requestLeaguesForTeam(teamID){
   };
 }
 
-function receiveLeaguesForTeam(teamID, leagueIDs){
+export function receiveLeagueIDsForTeam(teamID, leagueIDs){
   return {
     type: RECEIVE_LEAGUE_FOR_TEAM,
     teamID: teamID,
@@ -150,4 +152,27 @@ export function fetchFutureFixtures(teamID){
     .then( data => processFixtures(data))
     .then( processedData => dispatch(receiveFutureFixtures(teamID, processedData)));
   }
+}
+
+function requestPlayersForTeam(teamID){
+  return {
+    type: REQUEST_LEAGUE_FOR_TEAM,
+    teamID: teamID,
+  };
+}
+
+export function receivePlayerIDsForTeam(teamID, playerIDs){
+  return {
+    type: RECEIVE_LEAGUE_FOR_TEAM,
+    teamID: teamID,
+    playerIDs: playerIDs,
+  };
+}
+
+
+export function receiveMultipleTeams(teams){
+  return {
+    type: RECEIVE_MULTIPLE_LEAGUES,
+    teams: teams,
+  };
 }
