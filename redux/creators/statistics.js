@@ -141,5 +141,9 @@ function processPlayerStatistics(data){
         games: player.games,
       });
   });
+<<<<<<< HEAD
   return [ids, collect];
+=======
+  return collect;
+>>>>>>> 7f60bee889d9423a386729528ef32b40ae69ee5c
 }
