@@ -26,14 +26,14 @@ export function searchForLeague(input){
       dispatch(requestLeagueSearch())
       return searchLeagueByCountryOrName(input)
       .then( data => processLeagues(data))
-      .then( processedData => receiveTeamSearchResult(processedData));
+      .then( processedData => receiveLeagueSearchResult(processedData));
   }
 }
 
 function receiveLeagueSearchResult(result){
   return (dispatch,getState) => {
     dispatch( receiveLeagueIDs(request[0]))
-    .then( dispatch( receiveMultipleLeagues(request[1])));
+    .then( () => dispatch( receiveMultipleLeagues(request[1])));
   }
 }
 
@@ -62,6 +62,6 @@ export function searchForTeam(input){
 function receiveTeamSearchResult(result){
   return (dispatch,getState) => {
     dispatch( receiveTeamIDs(result[0]))
-    .then( dispatch( receiveMultipleTeams(result[1])));
+    .then( () => dispatch( receiveMultipleTeams(result[1])));
   }
 }

@@ -37,12 +37,12 @@ function processLeagues(data){
   leagues.forEach( league => {
     if(league.is_current == 1){
         ids.push(league.league_id);
-        collect[league.league_id] = {
+        collect[league.league_id].push({
           leagueName: league.country + league.name,
           leagueName: leagueName,
           countryCode: league.country_code,
           logo: league.logo,
-        };
+        });
     }
   })
   return [ids,collect];

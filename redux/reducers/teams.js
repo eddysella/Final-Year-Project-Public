@@ -1,7 +1,8 @@
 import {
   REQUEST_TEAM_BY_ID,
   RECEIVE_TEAM_BY_ID,
-  ADD_PLAYER_IDS_TO_TEAM,
+  REQUEST_PLAYERS_FOR_TEAM,
+  RECEIVE_PLAYERS_FOR_TEAM,
   REQUEST_LEAGUES_FOR_TEAM,
   RECEIVE_LEAGUES_FOR_TEAM,
   REQUEST_PAST_TEAM_FIXTURES,
@@ -16,6 +17,7 @@ function team(
     fetchingTeam: false,
     fetchingLeagues: false,
     fetchingPastFixtures: false,
+    fetchingPlayers: false,
     fetchingFutureFixtures: false,
     teamName: '',
     logo: '',
@@ -37,8 +39,13 @@ function team(
       teamName: action.teamName,
       logo: action.logo,
     });
-    case ADD_PLAYER_IDS_TO_TEAM:
+    case REQUEST_PLAYERS_FOR_TEAM:
     return Object.assign({
+      fetchingPlayers: true,
+    });
+    case RECEIVE_PLAYERS_FOR_TEAM:
+    return Object.assign({
+      fetchingPlayers: false,
       playerIDs: action.playerIDs,
     });
     case REQUEST_LEAGUES_FOR_TEAM:
@@ -47,7 +54,7 @@ function team(
     });
     case RECEIVE_LEAGUES_FOR_TEAM:
     return Object.assign({
-      fetchLeagues: false,
+      fetchingLeagues: false,
       leagueIDs: action.leagueIDs,
     });
     case REQUEST_PAST_TEAM_FIXTURES:
@@ -77,7 +84,8 @@ export function teamsByID(state={}, action){
   switch(action.type){
     case REQUEST_TEAM_BY_ID:
     case RECEIVE_TEAM_BY_ID:
-    case ADD_PLAYER_IDS_TO_TEAM:
+    case REQUEST_PLAYERS_FOR_TEAM:
+    case RECEIVE_PLAYERS_FOR_TEAM:
     case REQUEST_LEAGUES_FOR_TEAM:
     case RECEIVE_LEAGUES_FOR_TEAM:
     case REQUEST_PAST_TEAM_FIXTURES:
