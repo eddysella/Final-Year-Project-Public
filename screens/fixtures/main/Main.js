@@ -78,7 +78,7 @@ export const Main = props => {
 
     if(props.isFetching){
       return (
-        <View>
+        <View style={{flex:1}}>
           <ActivityIndicator/>
         </View>
       );
