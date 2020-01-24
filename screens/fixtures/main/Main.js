@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { useEffect, } from 'react';
 import { ExpoConfigView } from '@expo/samples';
 import {TouchableHighlight, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import {Card} from 'react-native-elements';
@@ -8,6 +8,12 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 export const Main = props => {
+
+  let listRef = React.createRef();
+
+  useEffect(() => {
+    this.flatListRef.scrollToIndex({index:0});
+  })
 
     let itemWidth = screenWidth - scale(screenWidth/5);
     let itemHeight = scale(screenWidth/4);
@@ -49,12 +55,6 @@ export const Main = props => {
                 <ItemSeparator/>
             </View>
             );
-            // <Image>
-            // style={styles.image}
-            // resizeMode="cover"
-            // source={{ uri: u.avatar }}
-            // />
-            // <Text style={styles.name}>{u.name}</Text>
     };
 
     function renderCards(league) {
@@ -76,7 +76,7 @@ export const Main = props => {
         );
     };
 
-    if(!props.leagueNames){
+    if(props.isFetching){
       return (
         <View>
           <ActivityIndicator/>
@@ -88,6 +88,7 @@ export const Main = props => {
               <FlatList
               // showsVerticalScrollIndicator={false}
               // initialScrollIndex={4}
+              ref={(ref) => { this.flatListRef = ref; }}
               initialNumToRender={3}
               data={props.leagueFixtures}
               renderItem={renderCards}
