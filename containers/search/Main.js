@@ -2,10 +2,11 @@ import React,{ Component }from 'react';
 import { addLeagueToStandings, removeLeagueFromStandings } from '../../redux/creators/standings'
 import { addLeagueToFollowing, removeLeagueFromFollowing,
   addTeamToFollowing, removeTeamFromFollowing  } from '../../redux/creators/following'
-import { search, clear} from '../../redux/creators/search'
+import { search, clear, updateSearchInput} from '../../redux/creators/search'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
-import { Main } from '../../screens/search/Search';
+import { Main } from '../../screens/search/Main'
+import { TopBar } from '../../screens/search/TopBar'
 
 const mapStateToProps = state => ({
     followingTeamIDs: state.followingTeamIDs,
@@ -15,6 +16,7 @@ const mapStateToProps = state => ({
     leagueIDs: state.searchLeague,
     teams: state.teamsByID,
     leagues: state.leaguesByID,
+    input: state.searchInput,
     teamStatus: state.searchStatus['teamIsFetching'],
     leagueStatus: state.searchStatus['leagueIsFetching'],
 })
@@ -28,20 +30,22 @@ const mapDispatchToProps = dispatch => ({
   standingsRemoveLeague: input => dispatch(removeLeagueFromStandings(input)),
   search: input => dispatch(search(input)),
   clear: () => dispatch(clear()),
+  update: input => dispatch(updateSearchInput(input)),
 })
 
 const Screen = ({followingTeamIDs, followingLeagueIDs, standingsLeagueIDs, teamIDs,
    leagueIDs, teams, leagues, teamStatus, leagueStatus, followingAddTeam,
    followingRemoveTeam, followingAddLeague, followingRemoveLeague,
-   standingsAddLeague, standingsRemoveLeague, search, clear, ...props}) => (
+   standingsAddLeague, standingsRemoveLeague, search, clear, update, input, ...props}) => (
   <View style={{flex:1}}>
-    <Main screenFlex={9} topBarFlex={1} followingTeamIDs={followingTeamIDs}
+    <TopBar topBarFlex={2} search={search} clear={clear} update={update} input={input} navigation={props.navigation}/>
+    <Main screenFlex={5} followingTeamIDs={followingTeamIDs}
     followingLeagueIDs={followingLeagueIDs} standingsLeagueIDs={standingsLeagueIDs}
     teamIDs={teamIDs} leagueIDs={leagueIDs} teams={teams} leagues={leagues}
     teamStatus={teamStatus} leagueStatus={leagueStatus} followingAddTeam={followingAddTeam}
     followingRemoveTeam={followingRemoveTeam} followingAddLeague={followingAddLeague}
     followingRemoveLeague={followingRemoveLeague} standingsAddLeague={standingsAddLeague}
-    standingsRemoveLeague={standingsRemoveLeague} search={search} clear={clear}
+    standingsRemoveLeague={standingsRemoveLeague}
     navigation={props.navigation}/>
   </View>
 )

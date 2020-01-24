@@ -1,4 +1,5 @@
 import {
+  UPDATE_SEARCH_INPUT,
   CLEAR_LEAGUE_SEARCH,
   CLEAR_TEAM_SEARCH,
   REQUEST_LEAGUE_SEARCH,
@@ -6,6 +7,15 @@ import {
   REQUEST_TEAM_SEARCH,
   RECEIVE_TEAM_SEARCH,
 } from '../types'
+
+export function searchInput( state = "", action ){
+  switch(action.type){
+    case UPDATE_SEARCH_INPUT:
+      return action.input;
+    default:
+      return state;
+  }
+}
 
 export function searchTeam( state = {}, action ){
   switch(action.type){

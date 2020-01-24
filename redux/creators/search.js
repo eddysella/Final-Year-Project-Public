@@ -1,4 +1,5 @@
 import {
+  UPDATE_SEARCH_INPUT,
   CLEAR_LEAGUE_SEARCH,
   CLEAR_TEAM_SEARCH,
   REQUEST_LEAGUE_SEARCH,
@@ -6,7 +7,7 @@ import {
   REQUEST_TEAM_SEARCH,
   RECEIVE_TEAM_SEARCH,
 } from '../types'
-import { searchLeagueByCountryOrName, searchTeamByCountryOrName } from '../../fetch/search'
+import { searchLeagueByCodeOrName, searchTeamByCodeOrName } from '../../fetch/search'
 import { receiveMultipleLeagues, processLeagues } from './leagues'
 import { receiveMultipleTeams, processTeams } from './teams'
 
@@ -19,6 +20,13 @@ export function search(input){
       ])
     }
   }
+}
+
+export function updateSearchInput(input){
+  return {
+    type: UPDATE_SEARCH_INPUT,
+    input: input,
+  };
 }
 
 export function clear(){
@@ -56,7 +64,7 @@ function receiveLeagueIDs(leaguesIDs){
 function searchForLeague(input){
   return dispatch => {
       dispatch(requestLeagueSearch())
-      return searchLeagueByCountryOrName(input)
+      return searchLeagueByCodeOrName(input)
       .then( data => processLeagues(data))
       .then( processedData => receiveLeagueSearchResult(processedData));
   }
@@ -85,7 +93,7 @@ function receiveTeamIDs(teamIDs){
 function searchForTeam(input){
   return dispatch => {
       dispatch(requestTeamSearch())
-      return searchTeamByCountryOrName(input)
+      return searchTeamByCodeOrName(input)
       .then( data => processTeams(data))
       .then( processedData => receiveTeamSearchResult(processedData));
   }
