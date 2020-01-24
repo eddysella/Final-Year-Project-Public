@@ -1,4 +1,6 @@
 import {
+  CLEAR_LEAGUE_SEARCH,
+  CLEAR_TEAM_SEARCH,
   REQUEST_LEAGUE_SEARCH,
   RECEIVE_LEAGUE_SEARCH,
   REQUEST_TEAM_SEARCH,
@@ -7,6 +9,7 @@ import {
 
 export function searchTeam( state = {}, action ){
   switch(action.type){
+    case CLEAR_TEAM_SEARCH:
     case REQUEST_TEAM_SEARCH:
       return [];
     case RECEIVE_TEAM_SEARCH:
@@ -18,6 +21,7 @@ export function searchTeam( state = {}, action ){
 
 export function searchLeague( state = {}, action ){
   switch(action.type){
+    case CLEAR_LEAGUE_SEARCH:
     case REQUEST_LEAGUE_SEARCH:
       return [];
     case RECEIVE_LEAGUE_SEARCH:

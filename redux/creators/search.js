@@ -1,4 +1,6 @@
 import {
+  CLEAR_LEAGUE_SEARCH,
+  CLEAR_TEAM_SEARCH,
   REQUEST_LEAGUE_SEARCH,
   RECEIVE_LEAGUE_SEARCH,
   REQUEST_TEAM_SEARCH,
@@ -8,11 +10,32 @@ import { searchLeagueByCountryOrName, searchTeamByCountryOrName } from '../../fe
 import { receiveMultipleLeagues, processLeagues } from './leagues'
 import { receiveMultipleTeams, processTeams } from './teams'
 
-function search(input){
+export function search(input){
+  if(input.length > 3){
+    return dispatch => Promise.all([
+      dispatch( searchForLeague(input)),
+      dispatch( searchForTeam(input)),
+    ])
+  }
+}
+
+export function clear(){
   return dispatch => Promise.all([
-    dispatch( searchForLeague(input)),
-    dispatch( searchForTeam(input)),
+    dispatch( clearLeagueSearch()),
+    dispatch( clearTeamSearch()),
   ])
+}
+
+function clearLeagueSearch(){
+  return {
+    type: CLEAR_LEAGUE_SEARCH
+  };
+}
+
+function clearTeamSearch(){
+  return {
+    type: CLEAR_TEAM_SEARCH
+  };
 }
 
 function requestLeagueSearch(){
