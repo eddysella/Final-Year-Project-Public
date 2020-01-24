@@ -13,7 +13,7 @@ import {
 } from '../types'
 import { getTeamByID, getLastTenFixtures, getNextTenFixtures,
   getAllLeaguesForTeam, getStatisticsForTeamInLeague,
-  getPlayerStatisticsByTeamIDandSeason } from '../../fetch/teams'
+  getPlayerStatisticsByTeamIDandSeason } from '../../fetch/Team'
 import { processFixtures } from './fixturesMain'
 import { processLeagues, receiveMultipleLeagues } from './leagues'
 

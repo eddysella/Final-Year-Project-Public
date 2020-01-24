@@ -29,7 +29,7 @@ export function addTeamToFollowing(teamID){
 
 export function removeTeamFromFollowing(teamID){
   return {
-    type: REMOVE_TEAM _FROM_FOLLOWING,
+    type: REMOVE_TEAM_FROM_FOLLOWING,
     teamID: teamID,
   };
 }

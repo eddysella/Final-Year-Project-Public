@@ -11,11 +11,13 @@ import { receiveMultipleLeagues, processLeagues } from './leagues'
 import { receiveMultipleTeams, processTeams } from './teams'
 
 export function search(input){
-  if(input.length > 3){
-    return dispatch => Promise.all([
-      dispatch( searchForLeague(input)),
-      dispatch( searchForTeam(input)),
-    ])
+  return dispatch => {
+    if(input.length > 3){
+      Promise.all([
+        dispatch( searchForLeague(input)),
+        dispatch( searchForTeam(input)),
+      ])
+    }
   }
 }
 

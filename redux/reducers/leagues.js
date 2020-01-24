@@ -11,7 +11,7 @@ function league(
     fetchingLeague: false,
     fetchingFixtures: false,
     leagueID: '',
-    leagueName: '',
+    name: '',
     countryCode: '',
     logo: '',
     fixtures:{}
@@ -27,7 +27,7 @@ function league(
     case RECEIVE_LEAGUE_BY_ID:
     return Object.assign({}, state, {
       fetchingLeague: false,
-      leagueName: action.leagueName,
+      name: action.leagueName,
       countryCode: action.countryCode,
       logo: action.logo,
     });

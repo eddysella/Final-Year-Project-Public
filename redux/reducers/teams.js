@@ -19,7 +19,7 @@ function team(
     fetchingPastFixtures: false,
     fetchingPlayers: false,
     fetchingFutureFixtures: false,
-    teamName: '',
+    name: '',
     logo: '',
   },
   action
@@ -32,7 +32,7 @@ function team(
     case RECEIVE_TEAM_BY_ID:
     return Object.assign({
       fetchingTeam: false,
-      teamName: action.teamName,
+      name: action.teamName,
       logo: action.logo,
     });
     case REQUEST_PLAYERS_FOR_TEAM:
