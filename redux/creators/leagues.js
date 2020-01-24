@@ -85,7 +85,7 @@ export function fetchFixtures(leagueID){
     }
 }
 
-function processLeagues(data){
+export function processLeagues(data){
   collect = {};
   ids = [];
   data = data.api;

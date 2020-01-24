@@ -67,7 +67,7 @@ export function fetchTeam(teamID){
   }
 }
 
-function processTeams(data){
+export function processTeams(data){
   collect = {};
   ids = [];
   data = data.api;
