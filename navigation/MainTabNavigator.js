@@ -7,12 +7,13 @@ import StandingsContainer from '../containers/standings/Main';
 import StandingsDetailsContainer from '../containers/standings/Details';
 import FixturesContainer from '../containers/fixtures/Main';
 import FixturesDetailsContainer from '../containers/fixtures/Details';
-import SearchScreen from '../screens/search/Search';
+import SearchContainer from '../containers/search/Main';
+import Sample from '../screens/sample';
 // import FollowingScreen from '../screens/following/Following';
 
 const StandingsStack = createStackNavigator({
-  Standings: SearchScreen, // TODO: Change to real screen
-  Inner: SearchScreen,
+  Standings: Sample, // TODO: Change to real screen
+  // Inner: Sample,
 }, {headerLayoutPreset: 'center'});
 
 const FixturesStack = createStackNavigator({
@@ -21,11 +22,11 @@ const FixturesStack = createStackNavigator({
 }, {headerLayoutPreset: 'center'});
 
 const SearchStack = createStackNavigator({
-  Search: SearchScreen,
+  Search: SearchContainer,
 }, {headerLayoutPreset: 'center'});
 
 const FollowingStack = createStackNavigator({
-  Following: SearchScreen,
+  Following: Sample,
 }, {headerLayoutPreset: 'center'});
 
 const MainTabNavigator = createBottomTabNavigator(
