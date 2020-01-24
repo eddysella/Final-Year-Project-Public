@@ -43,7 +43,7 @@ export function setTab(tab){
 }
 
 export function fetchSpecificFixture(id){
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch(requestFixtureByID(id))
     return getFixtureByID(id)
     .then( data => processFixture(data))

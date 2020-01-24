@@ -8,11 +8,11 @@ import { searchLeagueByCountryOrName, searchTeamByCountryOrName } from '../../fe
 import { receiveMultipleLeagues, processLeagues } from './leagues'
 import { receiveMultipleTeams, processTeams } from './teams'
 
-export function search(input){
-  return (dispatch, getState) => {
-    dispatch( () => searchForLeague(input))
-    .then( () => dispatch( searchForTeam(input)));
-  }
+function search(input){
+  return dispatch => Promise.all([
+    dispatch( searchForLeague(input)),
+    dispatch( searchForTeam(input)),
+  ])
 }
 
 function requestLeagueSearch(){
@@ -29,7 +29,7 @@ function receiveLeagueIDs(leaguesIDs){
 }
 
 function searchForLeague(input){
-  return (dispatch, getState) => {
+  return dispatch => {
       dispatch(requestLeagueSearch())
       return searchLeagueByCountryOrName(input)
       .then( data => processLeagues(data))
@@ -38,10 +38,10 @@ function searchForLeague(input){
 }
 
 function receiveLeagueSearchResult(result){
-  return (dispatch,getState) => {
-    dispatch( receiveLeagueIDs(request[0]))
-    .then( () => dispatch( receiveMultipleLeagues(request[1])));
-  }
+  return dispatch => Promise.all([
+    dispatch( receiveLeagueIDs(request[0])),
+    dispatch( receiveMultipleLeagues(request[1])),
+  ])
 }
 
 function requestTeamSearch(){
@@ -58,7 +58,7 @@ function receiveTeamIDs(teamIDs){
 }
 
 function searchForTeam(input){
-  return (dispatch, getState) => {
+  return dispatch => {
       dispatch(requestTeamSearch())
       return searchTeamByCountryOrName(input)
       .then( data => processTeams(data))
@@ -67,8 +67,8 @@ function searchForTeam(input){
 }
 
 function receiveTeamSearchResult(result){
-  return (dispatch,getState) => {
-    dispatch( receiveTeamIDs(result[0]))
-    .then( () => dispatch( receiveMultipleTeams(result[1])));
-  }
+  return dispatch => Promise.all([
+    dispatch( receiveTeamIDs(result[0])),
+    dispatch( receiveMultipleTeams(result[1])),
+  ])
 }

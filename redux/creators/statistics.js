@@ -104,14 +104,15 @@ export function fetchPlayerStatistics(teamID){
   }
 }
 
-function receivePlayerStats(teamID, statistics){
+export function receivePlayerStats(teamID, statistics){
+  promises = statistics[1].map( player => {
+    dispatch( receivePlayerStats(teamID, player))
+  });
   return (dispatch, getState) => {
-    dispatch( receivePlayerIDsForTeam(teamID, statistics[0]))
-    .then( () => {
-      for (player in statistics[1]){
-        dispatch( receivePlayerStats(teamID, player));
-      }
-    });
+    Promise.all([
+      dispatch( receivePlayerIDsForTeam(teamID, statistics[0])),
+      promises,
+    ]);
   }
 }
 

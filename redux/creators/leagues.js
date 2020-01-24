@@ -24,15 +24,28 @@ export function receiveLeagueByID(league){
   };
 }
 
+function shouldFetchLeague(state, leagueID){
+  league = state.leaguesByID[leagueID]
+  if(!league){
+    return true;
+  }else if(fixtures.fetchingLeague){
+    return false;
+  }
+}
+
 export function fetchLeagues(leagueIDs){
-  return (dispatch, getState) => {
-    for (leagueID in leagueIDs){
+  promises = leagueIDs.map( leagueID => {
+    if(shouldFetchLeague(getState(), leagueID)){
       dispatch(requestLeagueByID(leagueID))
       return getAllSeasonsForLeague(leagueID)
         // get latest season
       .then( data => processLeague(data))
       .then( processedData => dispatch(receiveLeagueByID(processedData)));
     }
+  });
+  return (dispatch, getState) => {
+    Promise.all(promises);
+  }
 }
 
 function processLeague(data){

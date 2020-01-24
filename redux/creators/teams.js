@@ -45,13 +45,25 @@ function processTeam(data){
   };
 }
 
+function shouldFetchTeam(team){
+  if(!team){
+    return true;
+  }else if(team.fetchingTeam){
+    return false;
+  }else{
+    return false;
+  }
+}
+
 export function fetchTeam(teamID){
   return (dispatch, getState) => {
-    dispatch(requestTeamByID(teamID))
-    return getTeamByID(teamID)
-      // get latest season
-    .then( data => processTeam(data))
-    .then( processedData => dispatch(receiveTeamByID(processedData)));
+    if(shouldFetchTeam(getState().teamsByID[teamID])){
+      dispatch(requestTeamByID(teamID))
+      return getTeamByID(teamID)
+        // get latest season
+      .then( data => processTeam(data))
+      .then( processedData => dispatch(receiveTeamByID(processedData)));
+    }
   }
 }
 
@@ -86,18 +98,32 @@ export function receiveLeagueIDsForTeam(teamID, leagueIDs){
   };
 }
 
+function shouldFetchLeagues(team){
+  if("leagueIDs" in team){
+    return false;
+  }else if(team.fetchingLeagues){
+    return false;
+  }else{
+    return true;
+  }
+}
+
 export function fetchLeaguesForTeam(teamID){
   return (dispatch, getState) => {
+    if(shouldFetchLeagues(getState().teamsByID[teamID])){
       dispatch(requestLeaguesForTeam())
       return getAllLeaguesForTeam(teamID)
       .then( data => processLeagues(data))
       .then( processedData => receiveLeaguesForTeam(teamID, processedData));
+    }
   }
 }
 
 function receiveLeaguesForTeam(teamID, result){
-  dispatch( receiveLeagueIDs(teamID, result[0]))
-  .then( dispatch( receiveMultipleLeagues(result[1])));
+  return dispatch => Promise.all([
+    dispatch( receiveLeagueIDs(teamID, result[0])),
+    dispatch( receiveMultipleLeagues(result[1]))
+  ])
 }
 
 function requestPastFixtures(teamID){
@@ -168,7 +194,6 @@ export function receivePlayerIDsForTeam(teamID, playerIDs){
     playerIDs: playerIDs,
   };
 }
-
 
 export function receiveMultipleTeams(teams){
   return {

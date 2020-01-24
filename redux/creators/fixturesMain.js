@@ -33,7 +33,7 @@ export function initFixtureDates(){
 }
 
 export function initTodaysFixtures(){
-  return (dispatch, getState) => dispatch(fetchFixturesByDate(today))
+  return dispatch => dispatch(fetchFixturesByDate(today))
 }
 
 function setCurrentDate(date){
@@ -60,11 +60,8 @@ function receiveFixturesByDate(date, fixtures){
   };
 }
 
-function shouldFetchFixtures(state, date){
-  fixtures = state.fixturesByDate[date]
-  if(!state.fixturesByDate[date]){
-    return true;
-  }else if(!fixtures.leagueNames.length){
+function shouldFetchFixtures(fixtures){
+  if(!fixtures){
     return true;
   }else if(fixtures.isFetching){
     return false;
@@ -80,7 +77,7 @@ export function fetchFixturesByDate(passedDate){
     passedDate = year + '-' + passedDate.split('/').join('-');
   }
   return (dispatch, getState) => {
-    if(shouldFetchFixtures(getState(), passedDate)){
+    if(shouldFetchFixtures(getState().fixturesByDate[passedDate])){
         dispatch(requestFixturesByDate(passedDate))
         return getAllFixturesByDate(passedDate)
           .then( data => processFixtures(data))
@@ -113,6 +110,7 @@ function processFixtureStatus(data){
 }
 
 export function processFixtures(data){
+  names=[]
   collect={};
   data = data.api;
   fixtures = data.fixtures;
@@ -129,6 +127,7 @@ export function processFixtures(data){
       leagueName = league.country + " " + league.name;
       if (!(leagueName in collect)) {
           collect[leagueName] = [];
+          names.push(leagueName);
       }
       collect[leagueName].push({
           flag:league.logo,
@@ -142,13 +141,7 @@ export function processFixtures(data){
           goalsAway:String(fixture.goalsAwayTeam),
       });
   });
-  collectNames=[];
-  collectFixtures=[];
-  for (league in collect) {
-      collectNames.push(league);
-      collectFixtures.push(collect[league]);
-  }
-  return [collectNames, collectFixtures];
+  return [names,Object.values(collect)];
 }
 
 function createDates(){

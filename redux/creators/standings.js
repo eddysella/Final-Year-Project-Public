@@ -38,7 +38,7 @@ function requestStandings(leagueID){
 }
 
 export function fetchStandings(leagueID){
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch(requestStandings(leagueID))
     return getStandingsByLeague(leagueID)
       .then( data => processStandings(data))
