@@ -10,6 +10,7 @@ const mapStateToProps = state => ({
     dates: state.fixturesTopbarDates,
     leagueNames: state.fixturesByDate[state.fixturesCurrentDate]['leagueNames'],
     fixturesInOrder: state.fixturesByDate[state.fixturesCurrentDate]['fixturesInOrder'],
+    isFetching: state.fixturesByDate[state.fixturesCurrentDate]['isFetching'],
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -17,10 +18,11 @@ const mapDispatchToProps = dispatch => ({
   fetchSpecificFixture: id => dispatch(fetchSpecificFixture(id)),
 })
 
-const Screen = ({fetchSpecificFixture, setFixtures, dates, leagueNames, fixturesInOrder, ...props}) => (
+const Screen = ({fetchSpecificFixture, setFixtures, dates, leagueNames, fixturesInOrder, isFetching, ...props}) => (
   <View style={{flex:1}}>
     <TopBar topBarFlex={1} setFixtures={setFixtures} dates={dates} navigation={props.navigation}/>
-    <Main screenFlex={8} fetchSpecificFixture={fetchSpecificFixture} leagueNames={leagueNames} leagueFixtures={fixturesInOrder} navigation={props.navigation}/>
+    <Main screenFlex={8} fetchSpecificFixture={fetchSpecificFixture} isFetching={isFetching}
+    leagueNames={leagueNames} leagueFixtures={fixturesInOrder} navigation={props.navigation}/>
   </View>
 )
 
