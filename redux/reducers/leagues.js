@@ -5,6 +5,7 @@ import {
   RECEIVE_FIXTURES_BY_LEAGUE,
   RECEIVE_MULTIPLE_LEAGUES,
 } from '../types'
+
 function league(
   state = {
     fetchingLeague: false,

@@ -7,15 +7,7 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 export const TopBar = props => {
-
-    itemWidth = screenWidth/3;
     fixture = props.data;
-    status = fixture.status;
-    homeLogo=fixture.homeLogo;
-    homeName=fixture.homeName;
-    awayLogo=fixture.awayLogo;
-    awayName=fixture.awayName;
-
     statsBorder=0;
     eventsBorder=0;
     lineupBorder=0;
@@ -40,22 +32,22 @@ export const TopBar = props => {
                     <Image
                     style={{flex:2}}
                     resizeMode={"contain"}
-                    source={{ uri: homeLogo }}
+                    source={{ uri: fixture.homeLogo }}
                     />
-                    <Text style={{flex:1, textAlign:'center'}}>{homeName}</Text>
+                    <Text style={{flex:1, textAlign:'center'}}>{fixture.homeName}</Text>
                 </View>
 
                 <View style={{flex:1, margin: 5, alignItems:'center', justifyContent:'center'}}>
-                    <Text>{status}</Text>
+                    <Text>{fixture.status}</Text>
                 </View>
 
                 <View style={{flex:1, margin: 5}}>
                     <Image
                     style={{flex:2}}
                     resizeMode={"contain"}
-                    source={{ uri: awayLogo}}
+                    source={{ uri: fixture.awayLogo}}
                     />
-                    <Text style={{flex:1, textAlign:'center'}}>{awayName}</Text>
+                    <Text style={{flex:1, textAlign:'center'}}>{fixture.awayName}</Text>
                 </View>
             </View>
             <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>

@@ -21,10 +21,6 @@ function team(
     fetchingFutureFixtures: false,
     teamName: '',
     logo: '',
-    leagueIDs: [],
-    playerIDs: [],
-    pastFixtures: [],
-    futureFixtures: [],
   },
   action
   ){
