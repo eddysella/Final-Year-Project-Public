@@ -18,8 +18,8 @@ const mapDispatchToProps = dispatch => ({
 
 const Screen = ({topBar, screen, tabDisplayed, setTab, fetching, ...props}) => (
   <View style={{ flex: 1}}>
-      <TopBar TopBarFlex={1} currentTab={tabDisplayed} setTab={setTab} data={topBar}/>
-      <Details ScreenFlex={3} currentTab={tabDisplayed} data={screen}/>
+      <TopBar TopBarFlex={2} currentTab={tabDisplayed} setTab={setTab} data={topBar}/>
+      <Details ScreenFlex={5} currentTab={tabDisplayed} data={screen}/>
   </View>
 )
 
