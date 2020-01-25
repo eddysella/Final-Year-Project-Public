@@ -39,7 +39,7 @@ function processTeam(data){
   team = teams[0]
   return {
       teamID: team.team_id,
-      teamName: team.name,
+      name: team.name,
       country: team.country,
       logo: team.logo,
   };
@@ -73,12 +73,18 @@ export function processTeams(data){
   data = data.api;
   teams = data.teams;
   teams.forEach( team => {
-      ids.push(team.team_id);
-      collect[team.team_id] = {
-        id: team.team_id,
-        teamName: team.name,
-        logo: team.logo,
-      };
+    ids.push(team.team_id);
+    collect[team.team_id] = {
+      fetchingTeam: false,
+      fetchingLeagues: false,
+      fetchingPastFixtures: false,
+      fetchingPlayers: false,
+      fetchingFutureFixtures: false,
+      teamID: team.team_id,
+      name: team.name,
+      logo: team.logo,
+      country: team.country,
+    }
   })
   return [ids,collect];
 }
@@ -197,7 +203,7 @@ export function receivePlayerIDsForTeam(teamID, playerIDs){
 
 export function receiveMultipleTeams(teams){
   return {
-    type: RECEIVE_MULTIPLE_LEAGUES,
+    type: RECEIVE_MULTIPLE_TEAMS,
     teams: teams,
   };
 }

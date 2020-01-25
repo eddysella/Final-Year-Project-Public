@@ -17,34 +17,12 @@ export function searchInput( state = "", action ){
   }
 }
 
-export function searchTeam( state = {}, action ){
-  switch(action.type){
-    case CLEAR_TEAM_SEARCH:
-    case REQUEST_TEAM_SEARCH:
-      return [];
-    case RECEIVE_TEAM_SEARCH:
-      return [...state, ...action.teamIDs]
-    default:
-      return state;
-  }
-}
-
-export function searchLeague( state = {}, action ){
-  switch(action.type){
-    case CLEAR_LEAGUE_SEARCH:
-    case REQUEST_LEAGUE_SEARCH:
-      return [];
-    case RECEIVE_LEAGUE_SEARCH:
-      return [...state, ...action.leagueIDs];
-    default:
-      return state;
-  }
-}
-
-export function searchStatus(
+export function search(
   state = {
     teamIsFetching: false,
+    teamIDs: [],
     leagueIsFetching: false,
+    leagueIDs: [],
   },
   action
   ){
@@ -52,18 +30,30 @@ export function searchStatus(
     case REQUEST_LEAGUE_SEARCH:
       return Object.assign({}, state, {
         leagueIsFetching: true,
+        leagueIDs: [],
       })
     case RECEIVE_LEAGUE_SEARCH:
       return Object.assign({}, state, {
         leagueIsFetching: false,
+        leagueIDs: action.leagueIDs,
+    });
+    case CLEAR_LEAGUE_SEARCH:
+      return Object.assign({}, state, {
+        leagueIDs: [],
     });
     case REQUEST_TEAM_SEARCH:
       return Object.assign({}, state, {
         teamIsFetching: true,
+        teamIDs: [],
       })
     case RECEIVE_TEAM_SEARCH:
       return Object.assign({}, state, {
         teamIsFetching: false,
+        teamIDs: action.teamIDs,
+    });
+    case CLEAR_TEAM_SEARCH:
+      return Object.assign({}, state, {
+        teamIDs: [],
     });
     default:
       return state;

@@ -54,7 +54,7 @@ function requestLeagueSearch(){
   };
 }
 
-function receiveLeagueIDs(leaguesIDs){
+function receiveLeagueIDs(leagueIDs){
   return {
     type: RECEIVE_LEAGUE_SEARCH,
     leagueIDs: leagueIDs,
@@ -63,18 +63,14 @@ function receiveLeagueIDs(leaguesIDs){
 
 function searchForLeague(input){
   return dispatch => {
-      dispatch(requestLeagueSearch())
-      return searchLeagueByCodeOrName(input)
-      .then( data => processLeagues(data))
-      .then( processedData => receiveLeagueSearchResult(processedData));
+    dispatch(requestLeagueSearch());
+    return searchLeagueByCodeOrName(input)
+    .then( data => processLeagues(data))
+    .then( result => {
+      dispatch( receiveMultipleLeagues(result[1]));
+      dispatch( receiveLeagueIDs(result[0]));
+    })
   }
-}
-
-function receiveLeagueSearchResult(result){
-  return dispatch => Promise.all([
-    dispatch( receiveLeagueIDs(request[0])),
-    dispatch( receiveMultipleLeagues(request[1])),
-  ])
 }
 
 function requestTeamSearch(){
@@ -92,16 +88,12 @@ function receiveTeamIDs(teamIDs){
 
 function searchForTeam(input){
   return dispatch => {
-      dispatch(requestTeamSearch())
-      return searchTeamByCodeOrName(input)
-      .then( data => processTeams(data))
-      .then( processedData => receiveTeamSearchResult(processedData));
+    dispatch(requestTeamSearch());
+    return searchTeamByCodeOrName(input)
+    .then( data => processTeams(data))
+    .then( result => {
+      dispatch( receiveMultipleTeams(result[1]));
+      dispatch( receiveTeamIDs(result[0]));
+    })
   }
-}
-
-function receiveTeamSearchResult(result){
-  return dispatch => Promise.all([
-    dispatch( receiveTeamIDs(result[0])),
-    dispatch( receiveMultipleTeams(result[1])),
-  ])
 }

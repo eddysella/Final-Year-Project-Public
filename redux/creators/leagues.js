@@ -52,10 +52,9 @@ function processLeague(data){
   data = data.api;
   leagues = data.leagues;
   league = leagues[leagues.length-1]
-  leagueName = league.country + league.name;
   return {
       leagueID: league.league_id,
-      leagueName: leagueName,
+      leagueName: league.country + " " + league.name,
       countryCode: league.country_code,
       logo: league.logo,
   };
@@ -91,14 +90,16 @@ export function processLeagues(data){
   data = data.api;
   leagues = data.leagues;
   leagues.forEach( league => {
-    if(league.is_current == 1){
+    if(league.is_current){
         ids.push(league.league_id);
-        collect[league.league_id].push({
-          leagueName: league.country + league.name,
-          leagueName: leagueName,
+        collect[league.league_id] = {
+          fetchingLeague: false,
+          fetchingFixtures: false,
+          leagueID: league.league_id,
+          name: league.country + " " + league.name,
           countryCode: league.country_code,
           logo: league.logo,
-        });
+        };
     }
   })
   return [ids,collect];

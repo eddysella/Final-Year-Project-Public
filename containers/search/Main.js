@@ -12,13 +12,13 @@ const mapStateToProps = state => ({
     followingTeamIDs: state.followingTeamIDs,
     followingLeagueIDs: state.followingLeagueIDs,
     standingsLeagueIDs: state.standingsLeagueIDs,
-    teamIDs: state.searchTeam,
-    leagueIDs: state.searchLeague,
+    teamIDs: state.search['teamIDs'],
+    leagueIDs: state.search['leagueIDs'],
     teams: state.teamsByID,
     leagues: state.leaguesByID,
     input: state.searchInput,
-    teamStatus: state.searchStatus['teamIsFetching'],
-    leagueStatus: state.searchStatus['leagueIsFetching'],
+    teamStatus: state.search['teamIsFetching'],
+    leagueStatus: state.search['leagueIsFetching'],
 })
 
 const mapDispatchToProps = dispatch => ({
