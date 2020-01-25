@@ -1,6 +1,6 @@
 import React, { useEffect, } from 'react';
 import { ExpoConfigView } from '@expo/samples';
-import {TouchableHighlight, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
+import {TouchableHighlight, SectionList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import {Card, Avatar} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import SquareGrid from "react-native-square-grid";
@@ -10,13 +10,28 @@ const screenHeight = Math.round(Dimensions.get('window').height);
 
 export const Main = props => {
 
-  count = 0;
-  count1 = 0;
+  function ItemSeparator(){
+    return (
+      <View
+        style={{
+          height: scale(2),
+          width: '100%',
+          backgroundColor: "#000",
+        }}
+      />
+    );
+  };
 
+count = 0
   function renderLeague(item, index) {
-    league = props.leagues[item];
+    if(count == 0){
+    console.log(item)
+    count++;
+    }
+
+    league = props.leagues[item.item];
       return (
-          <View style={{borderWidth: 3, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
+          <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
             <Avatar
                 size = 'medium'
                 source={{ uri: `${league.logo}`}}
@@ -30,9 +45,9 @@ export const Main = props => {
   }
 
   function renderTeam(item, index) {
-    team = props.teams[item];
+    team = props.teams[item.item];
       return (
-          <View style={{borderWidth: 3, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
+          <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
             <Avatar
                 size = 'medium'
                 source={{ uri: `${team.logo}`}}
@@ -57,19 +72,32 @@ export const Main = props => {
       </View>
     );
   }else{
-    return (
+    return(
       <View style={{flex:props.screenFlex}}>
-          <SquareGrid
-              rows={0}
-              columns={3}
-              items={props.teamIDs}
-              renderItem={renderTeam}
+          <SectionList
+          ItemSeparatorComponent={ItemSeparator}
+          // showsVerticalScrollIndicator={false}
+          // initialScrollIndex={4}
+          ref={(ref) => { this.leagueList = ref; }}
+          sections={[{title: 'Leagues', data:props.leagueIDs}]}
+          renderItem={renderLeague}
+          keyExtractor={(item,index) => index.toString()}
+          initialNumToRender={10}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text>{title}</Text>
+          )}
           />
-          <SquareGrid
-              rows={0}
-              columns={3}
-              items={props.leagueIDs}
-              renderItem={renderLeague}
+          <SectionList
+          ItemSeparatorComponent={ItemSeparator}
+          // showsVerticalScrollIndicator={false}
+          // initialScrollIndex={4}
+          ref={(ref) => { this.leagueList = ref; }}
+          sections={[{title: 'Teams', data:props.teamIDs}]}
+          renderItem={renderTeam}
+          keyExtractor={(item,index) => index.toString()}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text>{title}</Text>
+          )}
           />
       </View>
     );

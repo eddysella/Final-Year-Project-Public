@@ -38,8 +38,8 @@ const Screen = ({followingTeamIDs, followingLeagueIDs, standingsLeagueIDs, teamI
    followingRemoveTeam, followingAddLeague, followingRemoveLeague,
    standingsAddLeague, standingsRemoveLeague, search, clear, update, input, ...props}) => (
   <View style={{flex:1}}>
-    <TopBar topBarFlex={2} search={search} clear={clear} update={update} input={input} navigation={props.navigation}/>
-    <Main screenFlex={5} followingTeamIDs={followingTeamIDs}
+    <TopBar topBarFlex={1} search={search} clear={clear} update={update} input={input} navigation={props.navigation}/>
+    <Main screenFlex={6} followingTeamIDs={followingTeamIDs}
     followingLeagueIDs={followingLeagueIDs} standingsLeagueIDs={standingsLeagueIDs}
     teamIDs={teamIDs} leagueIDs={leagueIDs} teams={teams} leagues={leagues}
     teamStatus={teamStatus} leagueStatus={leagueStatus} followingAddTeam={followingAddTeam}
