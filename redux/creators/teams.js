@@ -72,6 +72,7 @@ export function processTeams(data){
   ids = [];
   data = data.api;
   teams = data.teams;
+  teams.length = 10;
   teams.forEach( team => {
     ids.push(team.team_id);
     collect[team.team_id] = {
