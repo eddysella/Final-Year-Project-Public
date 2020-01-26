@@ -15,17 +15,27 @@ const itemVerticalPadding = scale(15);
 export const Main = props => {
 
   currentTab = 0;
+  fetched[0,0,0];
 
   useEffect(() => {
     switch(currentTab){
-      case '0':
-        props.fetchFixtures(leagueID)
+      case 0:
+        if(!fetched[0]){
+          props.fetchFixtures(leagueID);
+          fetched[0]=1;
+        }
         break;
-      case '1':
-        props.fetchTeams(leagueID)
+      case 1:
+        if(!fetched[1]){
+          props.fetchTeams(leagueID)
+          fetched[1]=1;
+        }
         break;
-      case '2':
-        props.fetchStandings(leagueID)
+      case 2:
+        if(!fetched[1]){
+          props.fetchStandings(leagueID)
+          fetched[1]=1;
+        }
         break;
     }
   })
@@ -183,11 +193,8 @@ export const Main = props => {
     currentTab = tab;
   }
 
-  console.log(props.navigation.getParam('id'))
   leagueID = JSON.stringify(props.navigation.getParam('id'));
-  console.log(leagueID)
   league = props.leaguesByID[leagueID];
-  console.log(league)
 
   if(currentTab == 0){
       return (
