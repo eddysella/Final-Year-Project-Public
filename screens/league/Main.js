@@ -4,7 +4,7 @@ import {TouchableHighlight, SectionList, BackHandler, AsyncStorage, FlatList, Vi
 import {Card} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component'
-
+import { MaterialIndicator,} from 'react-native-indicators';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 const itemWidth = screenWidth - scale(screenWidth/5);
@@ -76,7 +76,7 @@ export const Main = props => {
     standings = item.props;
       if(!standings.standingsInOrder){
         <View style={{flex:1}}>
-          <ActivityIndicator/>
+          <MaterialIndicator/>
         </View>
       }
       return (
@@ -113,7 +113,7 @@ export const Main = props => {
     teamIDs = item.props;
       if(!teamIDs){
         <View style={{flex:1}}>
-          <ActivityIndicator/>
+          <MaterialIndicator/>
         </View>
       }
       return (
@@ -149,7 +149,7 @@ export const Main = props => {
     fixtures = item.props;
       if(!fixtures){
         <View style={{flex:1}}>
-          <ActivityIndicator/>
+          <MaterialIndicator/>
         </View>
       }
       // add date dropdown

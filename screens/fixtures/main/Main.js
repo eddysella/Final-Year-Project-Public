@@ -3,7 +3,7 @@ import { ExpoConfigView } from '@expo/samples';
 import {TouchableHighlight, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import {Card} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
-
+import { MaterialIndicator,} from 'react-native-indicators';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
@@ -76,7 +76,7 @@ export const Main = props => {
     if(props.isFetching){
       return (
         <View style={{flex:1}}>
-          <ActivityIndicator/>
+          <MaterialIndicator/>
         </View>
       );
     }else{

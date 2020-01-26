@@ -4,6 +4,7 @@ import {TouchableHighlight, SectionList, View, ActivityIndicator, Text, Dimensio
 import {Card, Avatar} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import SquareGrid from "react-native-square-grid";
+import { MaterialIndicator,} from 'react-native-indicators';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
@@ -58,12 +59,12 @@ export const Main = props => {
   if(props.teamStatus || props.leagueStatus){
     return (
       <View style={{flex:props.screenFlex}}>
-        <ActivityIndicator size="large" color="#00ff00"/>
+        <MaterialIndicator size="large" color="#00ff00"/>
       </View>
     );
   }else if(!props.teamIDs.length && !props.leagueIDs.length){
     return (
-      <View style={{flex:props.screenFlex}}>
+      <View style={{flex:props.screenFlex, justifyContent: 'center'}}>
       </View>
     );
   }else{
