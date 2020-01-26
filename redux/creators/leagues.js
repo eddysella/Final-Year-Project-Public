@@ -1,11 +1,17 @@
 import {
   REQUEST_LEAGUE_BY_ID,
   RECEIVE_LEAGUE_BY_ID,
+  REQUEST_FIXTURES_BY_LEAGUE,
+  RECEIVE_FIXTURES_BY_LEAGUE,
+  REQUEST_TEAMS_FOR_LEAGUE,
+  RECEIVE_TEAMS_FOR_LEAGUE,
   RECEIVE_MULTIPLE_LEAGUES,
 } from '../types'
 import { getAllSeasonsForLeague } from '../../fetch/League'
-import { getFixturesByLeague } from '../../fetch/Fixtures'
+import { getFixturesByLeagueAndDate } from '../../fetch/Fixtures'
+import { getTeamsByLeagueID } from '../../fetch/Team'
 import { processFixtures } from './fixturesMain'
+import { processTeams } from './teams'
 
 export function requestLeagueByID(leagueID){
   return {
@@ -24,18 +30,17 @@ export function receiveLeagueByID(league){
   };
 }
 
-function shouldFetchLeague(state, leagueID){
-  league = state.leaguesByID[leagueID]
+function shouldFetchLeague(league){
   if(!league){
     return true;
-  }else if(fixtures.fetchingLeague){
+  }else if(league.fetchingLeague){
     return false;
   }
 }
 
 export function fetchLeagues(leagueIDs){
   promises = leagueIDs.map( leagueID => {
-    if(shouldFetchLeague(getState(), leagueID)){
+    if(shouldFetchLeague(getState().leaguesByID[leagueID])){
       dispatch(requestLeagueByID(leagueID))
       return getAllSeasonsForLeague(leagueID)
         // get latest season
@@ -62,14 +67,14 @@ function processLeague(data){
 
 export function requestFixtures(leagueID){
   return {
-    type: REQUEST_LEAGUE_BY_ID,
+    type: REQUEST_FIXTURES_BY_LEAGUE,
     leagueID: leagueID,
   };
 }
 
 export function receiveFixtures(fixtures){
   return {
-    type: RECEIVE_LEAGUE_BY_ID,
+    type: RECEIVE_FIXTURES_BY_LEAGUE,
     fixtures: fixtures[1],
   };
 }
@@ -77,11 +82,45 @@ export function receiveFixtures(fixtures){
 export function fetchFixtures(leagueID){
   return (dispatch, getState) => {
       dispatch(requestFixtures(leagueID))
-      return getFixturesByLeague(leagueID)
+      return getFixturesByLeagueAndDate(leagueID)
         // get latest season
       .then( data => processFixtures(data))
       .then( processedData => dispatch(receiveFixtures(processedData)));
     }
+}
+
+export function requestTeamsByID(leagueID){
+  return {
+    type: REQUEST_TEAMS_FOR_LEAGUE,
+    leagueID: leagueID,
+  };
+}
+
+export function receiveTeamsByID(teamIDs){
+  return {
+    type: RECEIVE_TEAMS_FOR_LEAGUE,
+    teamIDs: teamIDs,
+  };
+}
+
+function shouldFetchTeams(league){
+  if(!league.teamIDs){
+    return true;
+  }else if(league.fetchingTeams){
+    return false;
+  }
+}
+
+export function fetchTeams(leagueID){
+  if(shouldFetchTeams(getState().leaguesByID[leagueID])){
+    dispatch(requestTeamsByID(leagueID))
+    return getTeamsByLeagueID(leagueID)
+    .then( data => processTeams(data))
+    .then( processedData => {
+        dispatch(receiveTeamsByID(processedData[0]));
+        dispatch(receiveMultipleTeams(processedData[1]));
+    })
+  }
 }
 
 export function processLeagues(data){

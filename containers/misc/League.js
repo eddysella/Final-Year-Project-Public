@@ -2,7 +2,7 @@ import React,{ Component }from 'react';
 import { connect } from 'react-redux'
 import { View } from 'react-native'
 import { fetchStandings, } from '../../redux/creators/standings'
-import { fetchFixtures, } from '../../redux/creators/leagues'
+import { fetchFixtures, fetchTeams } from '../../redux/creators/leagues'
 import { Main } from '../../screens/following/Following';
 
 const mapStateToProps = state => ({
@@ -13,6 +13,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchStandings: input => dispatch(fetchStandings(input)),
   fetchFixtures: input => dispatch(fetchFixtures(input)),
+  fetchTeams: input => dispatch(fetchTeams(input)),
 })
 
 const Screen = ({leaguesByID, standings, fetchStandings, fetchFixtures, ...props}) => (
