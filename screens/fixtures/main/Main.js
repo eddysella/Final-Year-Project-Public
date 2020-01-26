@@ -38,7 +38,6 @@ export const Main = props => {
         status = fixture.status;
 
         return (
-            <View>
             <TouchableHighlight onPress={ () =>
                 {
                   props.fetchSpecificFixture(fixture.id);
@@ -52,8 +51,6 @@ export const Main = props => {
                         <Text style={{flex:1,   textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
                     </View>
                 </TouchableHighlight>
-                <ItemSeparator/>
-            </View>
             );
     };
 
@@ -86,6 +83,7 @@ export const Main = props => {
       return (
           <View style={{flex:props.screenFlex}}>
               <FlatList
+              ItemSeparatorComponent={ItemSeparator}
               // showsVerticalScrollIndicator={false}
               // initialScrollIndex={4}
               ref={(ref) => { this.flatListRef = ref; }}
