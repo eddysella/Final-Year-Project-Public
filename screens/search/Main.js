@@ -41,7 +41,7 @@ export const Main = props => {
     leagueID = item.item;
     league = props.leagues[leagueID];
     return(
-      <TouchableHighlight onPress={ () => props.navigation.navigate('League', {id: league.leagueID})}>
+      <TouchableHighlight onPress={ () => props.navigation.navigate('League', {id: item.item})}>
           <RenderItem props={league}/>
         </TouchableHighlight>
     );
@@ -51,7 +51,7 @@ export const Main = props => {
     teamID = item.item;
     team = props.teams[teamID];
     return(
-      <TouchableHighlight onPress={ () => props.navigation.navigate('Team', {id: team.teamID})}>
+      <TouchableHighlight onPress={ () => props.navigation.navigate('Team', {id: item.item})}>
           <RenderItem props={team}/>
         </TouchableHighlight>
     );
