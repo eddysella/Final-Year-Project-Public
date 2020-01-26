@@ -1,25 +1,28 @@
 import React,{ Component }from 'react';
 import { connect } from 'react-redux'
 import { View } from 'react-native'
-import { fetchStandings, } from '../../redux/creators/standings'
 import { fetchFixtures, fetchTeams } from '../../redux/creators/leagues'
-import { Main } from '../../screens/following/Following';
+import { fetchStandings, } from '../../redux/creators/standings'
+import { Main } from '../../screens/league/Main';
+import { TopBar } from '../../screens/league/TopBar';
 
 const mapStateToProps = state => ({
     leaguesByID: state.leaguesByID,
+    teams: state.teamsByID,
     standings: state.standingsSpecific,
 )};
 
 const mapDispatchToProps = dispatch => ({
-  fetchStandings: input => dispatch(fetchStandings(input)),
   fetchFixtures: input => dispatch(fetchFixtures(input)),
   fetchTeams: input => dispatch(fetchTeams(input)),
+  fetchStandings: input => dispatch(fetchStandings(input)),
 })
 
-const Screen = ({leaguesByID, standings, fetchStandings, fetchFixtures, ...props}) => (
+const Screen = ({leaguesByID, teams, standings, fetchStandings, fetchTeams, fetchFixtures, ...props}) => (
   <View style={{flex:1}}>
-    <Main screenFlex={9} topBarFlex={1} leaguesByID={leaguesByID} standings={standings}
-    fetchStandings={fetchStandings} fetchFixtures={fetchFixtures} navigation={props.navigation}/>
+    <Main screenFlex={8} topBarFlex={1} leaguesByID={leaguesByID} teams={teams}
+    standings={standings} fetchStandings={fetchStandings} fetchTeams={fetchTeams}
+    fetchFixtures={fetchFixtures} navigation={props.navigation}/>
   </View>
 )
 
