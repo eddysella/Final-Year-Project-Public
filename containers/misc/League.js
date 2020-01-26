@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => ({
 
 const Screen = ({leaguesByID, teams, standings, fetchStandings, fetchTeams, fetchFixtures, ...props}) => (
   <View style={{flex:1}}>
-    <Main screenFlex={8} topBarFlex={1} leaguesByID={leaguesByID} teams={teams}
+    <Main screenFlex={7} topBarFlex={1} leaguesByID={leaguesByID} teams={teams}
     standings={standings} fetchStandings={fetchStandings} fetchTeams={fetchTeams}
     fetchFixtures={fetchFixtures} navigation={props.navigation}/>
   </View>
