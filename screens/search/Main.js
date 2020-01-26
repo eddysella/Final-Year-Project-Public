@@ -22,29 +22,39 @@ export const Main = props => {
     );
   };
 
-  function renderItem(item){
+  const RenderItem = (props) => {
     return (
         <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
           <Avatar
               size = 'medium'
-              source={{ uri: `${item.logo}`}}
+              source={{ uri: `${props.props.logo}`}}
               rounded
           />
           <Text h3>
-              {item.name}
+              {props.props.name}
           </Text>
         </View>
     );
   }
 
   function renderLeague(item) {
-    league = props.leagues[item.item];
-    return renderItem(league);
+    leagueID = item.item;
+    league = props.leagues[leagueID];
+    return(
+      <TouchableHighlight onPress={ leagueID => props.navigation.navigate('League', {id: leagueID});}>
+          <RenderItem props={league}/>
+        </TouchableHighlight>
+    );
   }
 
-  function renderTeam(item, index) {
-    team = props.teams[item.item];
-    return renderItem(team);
+  function renderTeam(item) {
+    teamID = item.item;
+    team = props.teams[teamID];
+    return(
+      <TouchableHighlight onPress={ teamID => props.navigation.navigate('Team', {id: teamID});}>
+          <RenderItem props={team}/>
+        </TouchableHighlight>
+    );
   }
 
   if(props.teamStatus || props.leagueStatus){
@@ -67,7 +77,7 @@ export const Main = props => {
           sections={[{title: 'Leagues', data:props.leagueIDs, renderItem:renderLeague},
                       {title: 'Teams', data:props.teamIDs, renderItem:renderTeam}
                     ]}
-          keyExtractor={(item,index) => item.name + index}
+          keyExtractor={(item,index) => index.toString()}
           renderSectionHeader={({ section: { title } }) => (
             <Text>{title}</Text>
           )}

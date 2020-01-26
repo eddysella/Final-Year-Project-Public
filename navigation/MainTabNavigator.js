@@ -8,6 +8,8 @@ import StandingsDetailsContainer from '../containers/standings/Details';
 import FixturesContainer from '../containers/fixtures/Main';
 import FixturesDetailsContainer from '../containers/fixtures/Details';
 import SearchContainer from '../containers/search/Main';
+import LeagueContainer from '../containers/misc/League';
+import TeamContainer from '../containers/misc/Team';
 import Sample from '../screens/sample';
 // import FollowingScreen from '../screens/following/Following';
 
@@ -23,6 +25,8 @@ const FixturesStack = createStackNavigator({
 
 const SearchStack = createStackNavigator({
   Search: SearchContainer,
+  League: LeagueContainer,
+  Team: TeamContainer,
 }, {headerLayoutPreset: 'center'});
 
 const FollowingStack = createStackNavigator({
@@ -64,8 +68,8 @@ const MainTabNavigator = createBottomTabNavigator(
                                 fontWeight: 'bold',
                               },
                 }),
-        // lazy: false, TODO: Change to true in final version
-        initialRouteName: 'Fixtures',
+        lazy: true,
+        initialRouteName: 'Search',
 
     }
 );

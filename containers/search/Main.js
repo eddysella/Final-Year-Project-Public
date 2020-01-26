@@ -45,8 +45,7 @@ const Screen = ({followingTeamIDs, followingLeagueIDs, standingsLeagueIDs, teamI
     teamStatus={teamStatus} leagueStatus={leagueStatus} followingAddTeam={followingAddTeam}
     followingRemoveTeam={followingRemoveTeam} followingAddLeague={followingAddLeague}
     followingRemoveLeague={followingRemoveLeague} standingsAddLeague={standingsAddLeague}
-    standingsRemoveLeague={standingsRemoveLeague}
-    navigation={props.navigation}/>
+    standingsRemoveLeague={standingsRemoveLeague} navigation={props.navigation}/>
   </View>
 )
 
