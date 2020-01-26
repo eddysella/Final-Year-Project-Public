@@ -15,30 +15,6 @@ const itemVerticalPadding = scale(15);
 export const Main = props => {
 
   currentTab = 0;
-  fetched[0,0,0];
-
-  useEffect(() => {
-    switch(currentTab){
-      case 0:
-        if(!fetched[0]){
-          props.fetchFixtures(leagueID);
-          fetched[0]=1;
-        }
-        break;
-      case 1:
-        if(!fetched[1]){
-          props.fetchTeams(leagueID)
-          fetched[1]=1;
-        }
-        break;
-      case 2:
-        if(!fetched[1]){
-          props.fetchStandings(leagueID)
-          fetched[1]=1;
-        }
-        break;
-    }
-  })
 
   function ItemSeparator(){
     return (
@@ -52,8 +28,9 @@ export const Main = props => {
     );
   };
 
-  const RenderTopBar = (props) => {
-    league = props.props;
+  const RenderTopBar = (league) => {
+    console.log(league)
+    league = league.props;
     fixturesBorder=0;
     teamsBorder=0;
     standingsBorder=0;
@@ -95,8 +72,8 @@ export const Main = props => {
     );
   }
 
-  const RenderStandings = (props) =>{
-    standings = props.props;
+  const RenderStandings = (item) =>{
+    standings = item.props;
       if(!standings.standingsInOrder){
         <View style={{flex:1}}>
           <ActivityIndicator/>
@@ -132,8 +109,8 @@ export const Main = props => {
           );
   };
 
-  const RenderTeams = (props) => {
-    teamIDs = props.props;
+  const RenderTeams = (item) => {
+    teamIDs = item.props;
       if(!teamIDs){
         <View style={{flex:1}}>
           <ActivityIndicator/>
@@ -168,8 +145,8 @@ export const Main = props => {
           );
   };
 
-  const RenderFixtures = (props) => {
-    fixtures = props.props;
+  const RenderFixtures = (item) => {
+    fixtures = item.props;
       if(!fixtures){
         <View style={{flex:1}}>
           <ActivityIndicator/>
@@ -195,26 +172,40 @@ export const Main = props => {
 
   leagueID = JSON.stringify(props.navigation.getParam('id'));
   league = props.leaguesByID[leagueID];
+  fetched = [0,0,0]
+// add isFetching
 
   if(currentTab == 0){
-      return (
-        <View style={{flex:1}}>
-          <RenderTopBar props={league}/>
-          <RenderFixtures props={league.fixtures}/>
-        </View>
-      );
+    if(!fetched[0]){
+      props.fetchFixtures(leagueID);
+      fetched[0]=1
+    }
+    return (
+      <View style={{flex:1}}>
+        <RenderTopBar item={league}/>
+        <RenderFixtures item={league.fixtures}/>
+      </View>
+    );
   }else if(currentTab == 1){
+    if(!fetched[1]){
+      props.fetchTeams(leagueID)
+      fetched[1]=1
+    }
     return(
       <View style={{flex:1}}>
-        <RenderTopBar props={league}/>
-        <RenderTeams props={league.teamIDs}/>
+        <RenderTopBar item={league}/>
+        <RenderTeams item={league.teamIDs}/>
       </View>
     );
   }else if(currentTab == 2){
+    if(!fetched[2]){
+      props.fetchStandings(leagueID)
+      fetched[2]=1
+    }
     return(
       <View style={{flex:1}}>
-        <RenderTopBar props={league}/>
-        <RenderStandings props={props.standings}/>
+        <RenderTopBar item={league}/>
+        <RenderStandings item={props.standings}/>
       </View>
     );
   }
