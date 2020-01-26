@@ -27,6 +27,7 @@ const SearchStack = createStackNavigator({
   Search: SearchContainer,
   League: LeagueContainer,
   Team: TeamContainer,
+  Fixture: FixturesDetailsContainer,
 }, {headerLayoutPreset: 'center'});
 
 const FollowingStack = createStackNavigator({

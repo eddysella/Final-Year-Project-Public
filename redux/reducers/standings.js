@@ -24,7 +24,7 @@ export function standingsSpecific(
     isFetching: false,
     leagueID: "",
     titles:[
-      "Rank"
+      "Rank",
       " ",
       " ",
       "Games",

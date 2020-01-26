@@ -4,13 +4,12 @@ import { View } from 'react-native'
 import { fetchFixtures, fetchTeams } from '../../redux/creators/leagues'
 import { fetchStandings, } from '../../redux/creators/standings'
 import { Main } from '../../screens/league/Main';
-import { TopBar } from '../../screens/league/TopBar';
 
 const mapStateToProps = state => ({
     leaguesByID: state.leaguesByID,
     teams: state.teamsByID,
     standings: state.standingsSpecific,
-)};
+});
 
 const mapDispatchToProps = dispatch => ({
   fetchFixtures: input => dispatch(fetchFixtures(input)),

@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
     teams: state.teamsByID,
     teamStats: state.teamStatsByLeague,
     playerStats: state.playerStatsByID,
-)};
+});
 
 const mapDispatchToProps = dispatch => ({
   fetchLeagues: input => dispatch(fetchLeaguesForTeam(input)),

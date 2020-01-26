@@ -36,12 +36,12 @@ export const Main = props => {
         </View>
     );
   }
-
+//
   function renderLeague(item) {
     leagueID = item.item;
     league = props.leagues[leagueID];
     return(
-      <TouchableHighlight onPress={ leagueID => props.navigation.navigate('League', {id: leagueID});}>
+      <TouchableHighlight onPress={ () => props.navigation.navigate('League', {id: league.leagueID})}>
           <RenderItem props={league}/>
         </TouchableHighlight>
     );
@@ -51,7 +51,7 @@ export const Main = props => {
     teamID = item.item;
     team = props.teams[teamID];
     return(
-      <TouchableHighlight onPress={ teamID => props.navigation.navigate('Team', {id: teamID});}>
+      <TouchableHighlight onPress={ () => props.navigation.navigate('Team', {id: team.teamID})}>
           <RenderItem props={team}/>
         </TouchableHighlight>
     );
@@ -77,7 +77,7 @@ export const Main = props => {
           sections={[{title: 'Leagues', data:props.leagueIDs, renderItem:renderLeague},
                       {title: 'Teams', data:props.teamIDs, renderItem:renderTeam}
                     ]}
-          keyExtractor={(item,index) => index.toString()}
+          keyExtractor={(item,index) => item.toString()}
           renderSectionHeader={({ section: { title } }) => (
             <Text>{title}</Text>
           )}

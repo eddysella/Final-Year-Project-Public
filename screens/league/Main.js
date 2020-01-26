@@ -14,6 +14,8 @@ const itemVerticalPadding = scale(15);
 
 export const Main = props => {
 
+  currentTab = 0;
+
   useEffect(() => {
     switch(currentTab){
       case '0':
@@ -104,7 +106,7 @@ export const Main = props => {
       team = teams[teamID.item];
       return (
           <TouchableHighlight onPress={ () =>{
-                props.navigation.navigate('');
+                props.navigation.navigate('Team', {id: teamID});
             }}>
             <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
               <Avatar
@@ -145,7 +147,7 @@ export const Main = props => {
       status = fixture.status;
       return (
           <TouchableHighlight onPress={ () =>{
-                props.navigation.navigate('');
+                props.navigation.navigate('Fixture', {id: fixture.fixtureID});
             }}>
             <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
               <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
@@ -177,13 +179,15 @@ export const Main = props => {
       );
   }
 
-  leagueID = props.navigation.getParam('id');
-  league = props.leaguesByID[leagueID];
-  currentTab = 0
-
-  setTab(tab){
+  function setTab(tab){
     currentTab = tab;
   }
+
+  console.log(props.navigation.getParam('id'))
+  leagueID = JSON.stringify(props.navigation.getParam('id'));
+  console.log(leagueID)
+  league = props.leaguesByID[leagueID];
+  console.log(league)
 
   if(currentTab == 0){
       return (
