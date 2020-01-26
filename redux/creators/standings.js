@@ -24,8 +24,7 @@ export function removeLeagueFromStandings(league){
 function receiveStandings(standings){
   return {
     type: RECEIVE_STANDINGS,
-    teamNames: standings[0],
-    standingsInOrder: standings[1],
+    standingsInOrder: standings,
     lastUpdated: Date.now(),
   };
 }
@@ -47,25 +46,20 @@ export function fetchStandings(leagueID){
 }
 
 function processStandings(data){
-  names=[];
   collect=[];
   data = data.api;
   standings = data.standings;
   standings.forEach( team => {
-      names.push(team.teamName);
       stats = team.all;
-      collect.push({
-          rank: team.rank,
-          teamID: team.team_id,
-          logo: team.logo,
-          totPoints: team.points,
-          played: stats.matchsPlayed,
-          gamesWon: stats.win,
-          gamesDrawn: stats.draw,
-          gamesLost: stats.lose,
-          scored: stats.goalsFor,
-          conceded: stats.goalsAgainst,
-      });
+      collect.push([
+          team.rank,
+          team.logo,
+          team.teamName,
+          stats.matchsPlayed,
+          stats.goalsFor, + ":" + stats.goalsAgainst,
+          stats.goalsFor - stats.goalsAgainst,
+          team.points,
+      ]);
   });
-  return [names, collect]
+  return collect
 }

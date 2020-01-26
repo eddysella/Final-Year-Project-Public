@@ -23,7 +23,15 @@ export function standingsSpecific(
   state = {
     isFetching: false,
     leagueID: "",
-    teamNames: [],
+    titles:[
+      "Rank"
+      " ",
+      " ",
+      "Games",
+      "S/C",
+      "GoalD",
+      "Points"
+    ],
     standingsInOrder: [],
   },
   action
@@ -35,11 +43,11 @@ export function standingsSpecific(
       return Object.assign({}, {
         leagueID: action.leagueID,
         isFetching:true,
+        standingsInOrder:[],
       })
     case RECEIVE_STANDINGS:
     return Object.assign({}, state, {
       isFetching: false,
-      teamNames: action.teamNames,
       standingsInOrder: action.standingsInOrder,
       lastUpdated: action.receivedAt,
     });

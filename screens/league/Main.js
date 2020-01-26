@@ -85,7 +85,7 @@ export const Main = props => {
 
   const RenderStandings = (props) =>{
     standings = props.props;
-      if(!standings.teamNames){
+      if(!standings.standingsInOrder){
         <View style={{flex:1}}>
           <ActivityIndicator/>
         </View>
@@ -94,7 +94,7 @@ export const Main = props => {
           <View style={{flex:props.ScreenFlex}}>
             <Table borderStyle={{borderWidth: 2}}>
               <Row data={standings.titles}/>
-              <Rows data={standings.data}/>
+              <Rows data={standings.standingsInOrder}/>
             </Table>
           </View>
       );
