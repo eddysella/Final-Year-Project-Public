@@ -12,11 +12,11 @@ const mapStateToProps = state => ({
 )};
 
 const mapDispatchToProps = dispatch => ({
-  fetchLeagues: fetchLeaguesForTeam,
-  fetchPastFixtures: fetchPastFixtures,
-  fetchFutureFixtures: fetchFutureFixtures,
-  fetchStatistics: fetchTeamStatistics,
-  fetchPlayers: fetchPlayerStatistics,
+  fetchLeagues: input => dispatch(fetchLeaguesForTeam(input)),
+  fetchPastFixtures: input => dispatch(fetchPastFixtures(input)),
+  fetchFutureFixtures: input => dispatch(fetchFutureFixtures(input)),
+  fetchStatistics: input => dispatch(fetchTeamStatistics(input)),
+  fetchPlayers: input => dispatch(fetchPlayerStatistics(input)),
 })
 
 const Screen = ({teams, teamStats, playerStats, fetchLeagues, fetchPastFixtures,
