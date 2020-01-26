@@ -13,6 +13,18 @@ import { getTeamsByLeagueID } from '../../fetch/Team'
 import { processFixtures } from './fixturesMain'
 import { processTeams } from './teams'
 
+function calculateToday(){
+  start = new Date();
+  start.setDate(start.getDate());
+  date = new Date(start);
+  var dd = String(date.getDate()).padStart(2, '0');
+  var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var year = String(date.getFullYear());
+  return String(year + '-' + mm + '-' + dd);
+}
+
+const today = calculateToday();
+
 export function requestLeagueByID(leagueID){
   return {
     type: REQUEST_LEAGUE_BY_ID,
@@ -82,7 +94,7 @@ export function receiveFixtures(fixtures){
 export function fetchFixtures(leagueID){
   return (dispatch, getState) => {
       dispatch(requestFixtures(leagueID))
-      return getFixturesByLeagueAndDate(leagueID)
+      return getFixturesByLeagueAndDate(leagueID, today)
         // get latest season
       .then( data => processFixtures(data))
       .then( processedData => dispatch(receiveFixtures(processedData)));
