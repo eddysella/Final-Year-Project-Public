@@ -89,8 +89,11 @@ export function processLeagues(data){
   ids = [];
   data = data.api;
   leagues = data.leagues;
-  leagues.forEach( league => {
+  count = 0;
+  for (leagueID in leagues){
+    league = leagues[leagueID];
     if(league.is_current){
+        count++;
         ids.push(league.league_id);
         collect[league.league_id] = {
           fetchingLeague: false,
@@ -101,7 +104,10 @@ export function processLeagues(data){
           logo: league.logo,
         };
     }
-  })
+    if(count == 9){
+      break;
+    }
+  }
   return [ids,collect];
 }
 

@@ -22,42 +22,29 @@ export const Main = props => {
     );
   };
 
-count = 0
-  function renderLeague(item, index) {
-    if(count == 0){
-    console.log(item)
-    count++;
-    }
+  function renderItem(item){
+    return (
+        <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
+          <Avatar
+              size = 'medium'
+              source={{ uri: `${item.logo}`}}
+              rounded
+          />
+          <Text h3>
+              {item.name}
+          </Text>
+        </View>
+    );
+  }
 
+  function renderLeague(item) {
     league = props.leagues[item.item];
-      return (
-          <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
-            <Avatar
-                size = 'medium'
-                source={{ uri: `${league.logo}`}}
-                rounded
-            />
-            <Text h3>
-                {league.name}
-            </Text>
-          </View>
-      );
+    return renderItem(league);
   }
 
   function renderTeam(item, index) {
     team = props.teams[item.item];
-      return (
-          <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
-            <Avatar
-                size = 'medium'
-                source={{ uri: `${team.logo}`}}
-                rounded
-            />
-            <Text h3>
-                {team.name}
-            </Text>
-          </View>
-      );
+    return renderItem(team);
   }
 
   if(props.teamStatus || props.leagueStatus){
@@ -76,25 +63,11 @@ count = 0
       <View style={{flex:props.screenFlex}}>
           <SectionList
           ItemSeparatorComponent={ItemSeparator}
-          // showsVerticalScrollIndicator={false}
-          // initialScrollIndex={4}
           ref={(ref) => { this.leagueList = ref; }}
-          sections={[{title: 'Leagues', data:props.leagueIDs}]}
-          renderItem={renderLeague}
-          keyExtractor={(item,index) => index.toString()}
-          initialNumToRender={10}
-          renderSectionHeader={({ section: { title } }) => (
-            <Text>{title}</Text>
-          )}
-          />
-          <SectionList
-          ItemSeparatorComponent={ItemSeparator}
-          // showsVerticalScrollIndicator={false}
-          // initialScrollIndex={4}
-          ref={(ref) => { this.leagueList = ref; }}
-          sections={[{title: 'Teams', data:props.teamIDs}]}
-          renderItem={renderTeam}
-          keyExtractor={(item,index) => index.toString()}
+          sections={[{title: 'Leagues', data:props.leagueIDs, renderItem:renderLeague},
+                      {title: 'Teams', data:props.teamIDs, renderItem:renderTeam}
+                    ]}
+          keyExtractor={(item,index) => item.name + index}
           renderSectionHeader={({ section: { title } }) => (
             <Text>{title}</Text>
           )}
