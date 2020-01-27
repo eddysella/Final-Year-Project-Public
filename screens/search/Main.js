@@ -59,7 +59,7 @@ export const Main = props => {
   if(props.teamStatus || props.leagueStatus){
     return (
       <View style={{flex:props.screenFlex}}>
-        <MaterialIndicator size="large" color="#00ff00"/>
+        <MaterialIndicator/>
       </View>
     );
   }else if(!props.teamIDs.length && !props.leagueIDs.length){
