@@ -9,6 +9,7 @@ const mapStateToProps = state => ({
     teams: state.teamsByID,
     teamStats: state.teamStatsByLeague,
     playerStats: state.playerStatsByID,
+    leagues: state.leaguesByID
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -19,11 +20,12 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const Screen = ({teams, teamStats, playerStats, fetchLeagues, fetchPastFixtures,
-  fetchFutureFixtures, fetchPlayers, ...props}) => (
+  fetchFutureFixtures, fetchPlayers, leagues ...props}) => (
   <View style={{flex:1}}>
     <Main screenFlex={9} topBarFlex={1} teams={teams} teamStats={teamStats}
     playerStats={playerStats} fetchLeagues={fetchLeagues} fetchPastFixtures={fetchPastFixtures}
-    fetchFutureFixtures={fetchFutureFixtures} fetchPlayers={fetchPlayers} navigation={props.navigation}/>
+    fetchFutureFixtures={fetchFutureFixtures} fetchPlayers={fetchPlayers} leagues={leagues}
+    navigation={props.navigation}/>
   </View>
 )
 

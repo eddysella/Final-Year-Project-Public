@@ -40,6 +40,7 @@ function team(
     case REQUEST_PLAYERS_FOR_TEAM:
     return Object.assign({
       fetchingPlayers: true,
+      playerIDs:[],
     });
     case RECEIVE_PLAYERS_FOR_TEAM:
     return Object.assign({
@@ -49,6 +50,7 @@ function team(
     case REQUEST_LEAGUES_FOR_TEAM:
     return Object.assign({
       fetchingLeagues: true,
+      leagueIDs:[],
     });
     case RECEIVE_LEAGUES_FOR_TEAM:
     return Object.assign({
