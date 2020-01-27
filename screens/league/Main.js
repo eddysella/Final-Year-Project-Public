@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component, useState } from 'react';
 import { ExpoConfigView } from '@expo/samples';
 import {TouchableHighlight, SectionList, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import {Card} from 'react-native-elements';
@@ -14,8 +14,6 @@ const itemVerticalPadding = scale(15);
 
 export const Main = props => {
 
-  currentTab = 0;
-
   function ItemSeparator(){
     return (
       <View
@@ -28,9 +26,8 @@ export const Main = props => {
     );
   };
 
-  const RenderTopBar = (league) => {
-    console.log(league)
-    league = league.props;
+  const RenderTopBar = (item) => {
+    league = item.item;
     fixturesBorder=0;
     teamsBorder=0;
     standingsBorder=0;
@@ -49,21 +46,21 @@ export const Main = props => {
     }
     return (
         <View style={{flex:props.TopBarFlex}}>
-            <View style={{flex:3, justifyContent: 'space-around'}}>
+            <View style={{flex:1, justifyContent: 'space-around'}}>
               <Text style={{flex:1, textAlign:'center'}}>{league.name}</Text>
             </View>
             <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
-                <TouchableHighlight onPress={() => props.setTab(0)}
+                <TouchableHighlight onPress={() => setTab(0)}
                 style={{flex:1, borderBottomWidth:fixturesBorder}}>
                 <Text style={{textAlign: 'center'}}>Fixtures</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight onPress={() => props.setTab(1)}
+                <TouchableHighlight onPress={() => setTab(1)}
                     style={{flex:1, alignItems: 'center', borderBottomWidth:teamsBorder}}>
                 <Text style={{textAlign:'center'}}>Teams</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight onPress={() => props.setTab(2)}
+                <TouchableHighlight onPress={() => setTab(2)}
                 style={{flex:1, borderBottomWidth:standingsBorder}}>
                 <Text style={{textAlign: 'center'}}>Standings</Text>
                 </TouchableHighlight>
@@ -73,11 +70,19 @@ export const Main = props => {
   }
 
   const RenderStandings = (item) =>{
-    standings = item.props;
-      if(!standings.standingsInOrder){
-        <View style={{flex:1}}>
-          <MaterialIndicator/>
-        </View>
+    standings = item.item;
+      if(standings.isFetching){
+        return(
+          <View style={{flex:props.ScreenFlex}}>
+            <MaterialIndicator/>
+          </View>
+        );
+      }else if(!standings.standingsInOrder){
+        return(
+          <View style={{flex:props.ScreenFlex}}>
+            <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Standings Available</Text>
+          </View>
+        );
       }
       return (
           <View style={{flex:props.ScreenFlex}}>
@@ -110,18 +115,26 @@ export const Main = props => {
   };
 
   const RenderTeams = (item) => {
-    teamIDs = item.props;
-      if(!teamIDs){
-        <View style={{flex:1}}>
-          <MaterialIndicator/>
-        </View>
+    league = item.item;
+      if(league.fetchingTeams){
+        return(
+          <View style={{flex:props.ScreenFlex}}>
+            <MaterialIndicator/>
+          </View>
+        );
+      }else if(!league.teamIDs){
+        return(
+          <View style={{flex:props.ScreenFlex}}>
+            <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Teams Available</Text>
+          </View>
+        );
       }
       return (
-        <View style={{flex:props.screenFlex}}>
+        <View style={{flex:props.ScreenFlex}}>
             <FlatList
             ItemSeparatorComponent={ItemSeparator}
             ref={(ref) => { this.teamList = ref; }}
-            data={teamIDs}
+            data={league.teamIDs}
             renderItem={renderTeamsItem}
             keyExtractor={(item,index) => index.toString()}
             />
@@ -146,19 +159,26 @@ export const Main = props => {
   };
 
   const RenderFixtures = (item) => {
-    fixtures = item.props;
-      if(!fixtures){
-        <View style={{flex:1}}>
-          <MaterialIndicator/>
-        </View>
+    league = item.item;
+      if(league.fetchingFixtures){
+        return(
+          <View style={{flex:props.ScreenFlex}}>
+            <MaterialIndicator/>
+          </View>
+        );
+      }else if(!league.fixtures){
+        return(
+          <View style={{flex:props.ScreenFlex}}>
+            <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Fixtures Available</Text>
+          </View>
+        );
       }
-      // add date dropdown
       return (
-        <View style={{flex:props.screenFlex}}>
+        <View style={{flex:props.ScreenFlex}}>
             <FlatList
             ItemSeparatorComponent={ItemSeparator}
             ref={(ref) => { this.fixturesList = ref; }}
-            data={fixtures}
+            data={league.fixtures}
             renderItem={renderFixturesItem}
             keyExtractor={(item,index) => index.toString()}
             />
@@ -166,41 +186,39 @@ export const Main = props => {
       );
   }
 
-  function setTab(tab){
-    currentTab = tab;
-  }
-
   leagueID = JSON.stringify(props.navigation.getParam('id'));
-  league = props.leaguesByID[leagueID];
-  fetched = [0,0,0]
-// add isFetching
+  league = props.leagues[leagueID];
+  [currentTab, setTab] = useState(0);
+  [fixturesFetched, setFixturesFetched] = useState(false);
+  [teamsFetched, setTeamsFetched] = useState(false);
+  [standingsFetched, setStandingsFetched] = useState(false);
 
   if(currentTab == 0){
-    if(!fetched[0]){
+    if(!fixturesFetched){
       props.fetchFixtures(leagueID);
-      fetched[0]=1
+      setFixturesFetched(true);
     }
     return (
       <View style={{flex:1}}>
         <RenderTopBar item={league}/>
-        <RenderFixtures item={league.fixtures}/>
+        <RenderFixtures item={league}/>
       </View>
     );
   }else if(currentTab == 1){
-    if(!fetched[1]){
+    if(!teamsFetched){
       props.fetchTeams(leagueID)
-      fetched[1]=1
+      setTeamsFetched(true);
     }
     return(
       <View style={{flex:1}}>
         <RenderTopBar item={league}/>
-        <RenderTeams item={league.teamIDs}/>
+        <RenderTeams item={league}/>
       </View>
     );
   }else if(currentTab == 2){
-    if(!fetched[2]){
+    if(!standingsFetched){
       props.fetchStandings(leagueID)
-      fetched[2]=1
+      setStandingsFetched(true);
     }
     return(
       <View style={{flex:1}}>
