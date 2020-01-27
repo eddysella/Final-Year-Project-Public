@@ -11,7 +11,7 @@ import {
   RECEIVE_FUTURE_TEAM_FIXTURES,
   RECEIVE_MULTIPLE_TEAMS,
 } from '../types'
-import { getTeamByID, getLastTenFixtures, getNextTenFixtures,
+import { getTeamByID, getLastTwentyFixtures, getNextTenFixtures,
   getAllLeaguesForTeam, getStatisticsForTeamInLeague,
   getPlayerStatisticsByTeamIDandSeason } from '../../fetch/Team'
 import { processFixtures } from './fixturesMain'
@@ -153,7 +153,7 @@ function receivePastFixtures(teamID, fixtures){
 export function fetchPastFixtures(teamID){
   return (dispatch, getState) => {
     dispatch(requestPastFixtures(teamID))
-    return getLastTenFixtures(teamID)
+    return getLastTwentyFixtures(teamID)
       // get latest season
     .then( data => processFixtures(data))
     .then( processedData => dispatch(receivePastFixtures(teamID, processedData)));

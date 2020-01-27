@@ -21,6 +21,8 @@ function team(
     fetchingFutureFixtures: false,
     name: '',
     logo: '',
+    pastFixtures: [],
+    futureFixtures: [],
   },
   action
   ){
