@@ -15,17 +15,15 @@ const mapDispatchToProps = dispatch => ({
   fetchLeagues: input => dispatch(fetchLeaguesForTeam(input)),
   fetchPastFixtures: input => dispatch(fetchPastFixtures(input)),
   fetchFutureFixtures: input => dispatch(fetchFutureFixtures(input)),
-  fetchStatistics: input => dispatch(fetchTeamStatistics(input)),
   fetchPlayers: input => dispatch(fetchPlayerStatistics(input)),
 })
 
 const Screen = ({teams, teamStats, playerStats, fetchLeagues, fetchPastFixtures,
-  fetchFutureFixtures, fetchStatistics, fetchPlayers, ...props}) => (
+  fetchFutureFixtures, fetchPlayers, ...props}) => (
   <View style={{flex:1}}>
     <Main screenFlex={9} topBarFlex={1} teams={teams} teamStats={teamStats}
     playerStats={playerStats} fetchLeagues={fetchLeagues} fetchPastFixtures={fetchPastFixtures}
-    fetchFutureFixtures={fetchFutureFixtures} fetchStatistics={fetchStatistics}
-    fetchPlayers={fetchPlayers} navigation={props.navigation}/>
+    fetchFutureFixtures={fetchFutureFixtures} fetchPlayers={fetchPlayers} navigation={props.navigation}/>
   </View>
 )
 
