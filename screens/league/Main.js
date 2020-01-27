@@ -71,13 +71,7 @@ export const Main = props => {
 
   const RenderStandings = (item) =>{
     standings = item.item;
-      if(standings.isFetching){
-        return(
-          <View style={{flex:props.ScreenFlex}}>
-            <MaterialIndicator/>
-          </View>
-        );
-      }else if(!standings.standingsInOrder){
+      if(!standings.standingsInOrder){
         return(
           <View style={{flex:props.ScreenFlex}}>
             <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Standings Available</Text>
@@ -116,13 +110,7 @@ export const Main = props => {
 
   const RenderTeams = (item) => {
     league = item.item;
-      if(league.fetchingTeams){
-        return(
-          <View style={{flex:props.ScreenFlex}}>
-            <MaterialIndicator/>
-          </View>
-        );
-      }else if(!league.teamIDs){
+      if(!league.teamIDs){
         return(
           <View style={{flex:props.ScreenFlex}}>
             <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Teams Available</Text>
@@ -160,13 +148,7 @@ export const Main = props => {
 
   const RenderFixtures = (item) => {
     league = item.item;
-      if(league.fetchingFixtures){
-        return(
-          <View style={{flex:props.ScreenFlex}}>
-            <MaterialIndicator/>
-          </View>
-        );
-      }else if(!league.fixtures){
+    if(!league.fixtures){
         return(
           <View style={{flex:props.ScreenFlex}}>
             <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Fixtures Available</Text>
@@ -193,9 +175,18 @@ export const Main = props => {
   [teamsFetched, setTeamsFetched] = useState(false);
   [standingsFetched, setStandingsFetched] = useState(false);
 
-  if(currentTab == 0){
+  if(league.fetchingFixtures || league.fetchingTeams || standings.isFetching){
+    return(
+      <View style={{flex:1}}>
+        <RenderTopBar item={league}/>
+        <View style={{flex:props.ScreenFlex}}>
+          <MaterialIndicator/>
+        </View>
+      </View>
+    );
+  }else if(currentTab == 0){
     if(!fixturesFetched){
-      props.fetchFixtures(leagueID);
+      // props.fetchFixtures(leagueID);
       setFixturesFetched(true);
     }
     return (
@@ -206,7 +197,7 @@ export const Main = props => {
     );
   }else if(currentTab == 1){
     if(!teamsFetched){
-      props.fetchTeams(leagueID)
+      // props.fetchTeams(leagueID)
       setTeamsFetched(true);
     }
     return(
@@ -217,7 +208,7 @@ export const Main = props => {
     );
   }else if(currentTab == 2){
     if(!standingsFetched){
-      props.fetchStandings(leagueID)
+      // props.fetchStandings(leagueID)
       setStandingsFetched(true);
     }
     return(
