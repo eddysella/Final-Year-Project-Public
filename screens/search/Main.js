@@ -11,6 +11,8 @@ const screenHeight = Math.round(Dimensions.get('window').height);
 
 export const Main = props => {
 
+  console.log(props.teams)
+
   function ItemSeparator(){
     return (
       <View
@@ -37,11 +39,11 @@ export const Main = props => {
         </View>
     );
   }
-//
+
   function renderLeague(item) {
     league = props.leagues[item.item];
     return(
-      <TouchableHighlight onPress={ () => props.navigation.navigate('League', {id: item.item})}>
+      <TouchableHighlight onPress={ () => props.navigation.push('League', {id: item.item})}>
           <RenderItem props={league}/>
         </TouchableHighlight>
     );
@@ -50,7 +52,7 @@ export const Main = props => {
   function renderTeam(item) {
     team = props.teams[item.item];
     return(
-      <TouchableHighlight onPress={ () => props.navigation.navigate('Team', {id: item.item})}>
+      <TouchableHighlight onPress={ () => props.navigation.push('Team', {id: item.item})}>
           <RenderItem props={team}/>
         </TouchableHighlight>
     );
