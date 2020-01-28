@@ -94,7 +94,7 @@ export const Main = props => {
 
   const RenderPlayers = (item) =>{
     playerIDs = item.item;
-      if(!playerIDs or playerIDs == null){
+      if(!playerIDs || playerIDs == null){
         return(
           <View style={{flex:props.ScreenFlex}}>
             <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Players Available</Text>
@@ -136,7 +136,7 @@ export const Main = props => {
 
   const RenderLeagues = (item) => {
     leagueIDs = item.item;
-      if(!leagueIDs or leagueIDs == null){
+      if(!leagueIDs || leagueIDs == null){
         return(
           <View style={{flex:props.ScreenFlex}}>
             <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Leagues Available</Text>
@@ -160,15 +160,17 @@ export const Main = props => {
   function renderFixturesItem(fixture) {
       fixture = fixture.item;
       status = fixture.status;
+      outcome = '';
       if(fixture.goalsHome > fixture.goalsAway){
-        outcome = <Text>W<Text>
+        outcome = 'W';
       }else if(fixture.goalsHome < fixture.goalsAway){
-        outcome = <Text>L<Text>
+        outcome = 'L';
       }else if(fixture.goalsHome == fixture.goalsAway){
-        outcome = <Text>D<Text>
+        outcome = 'D';
       }else if(fixture.statusShort == 'NS'){
-        outcome = <Text>NS<Text>
+        outcome = 'NS';
       }
+      date = new Date(fixture.timeStamp).toLocaleDateString();
       return (
           <TouchableHighlight onPress={ () =>{
                 props.navigation.navigate('Fixture', {id: fixture.fixtureID});
@@ -177,6 +179,8 @@ export const Main = props => {
               <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
               <Text style={{flex:1,   textAlign:'center'}}>{status}</Text>
               <Text style={{flex:1,   textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
+              <Text style={{flex:1,   textAlign:'center'}}>{date}</Text>
+              <Text style={{flex:1,   textAlign:'center'}}>{outcome}</Text>
             </View>
           </TouchableHighlight>
           );
@@ -184,7 +188,7 @@ export const Main = props => {
 
   const RenderFixtures = (item) => {
     team = item.item;
-    if(!team.fixtures){
+    if(!team.pastFixtures){
         return(
           <View style={{flex:props.ScreenFlex}}>
             <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Fixtures Available</Text>
@@ -196,7 +200,7 @@ export const Main = props => {
             <FlatList
             ItemSeparatorComponent={ItemSeparator}
             ref={(ref) => { this.fixturesList = ref; }}
-            data={team.fixtures}
+            data={team.pastFixtures}
             renderItem={renderFixturesItem}
             keyExtractor={(item,index) => index.toString()}
             />
@@ -211,8 +215,7 @@ export const Main = props => {
   [leaguesFetched, setLeaguesFetched] = useState(false);
   [playersFetched, setPlayersFetched] = useState(false);
 
-  if(team.fetchingLeagues || team.fetchingPastFixtures
-    || team.fetchingFutureFixtures || team.isFetching){
+  if(props.fetching){
     return(
       <View style={{flex:1}}>
         <RenderTopBar item={team}/>
@@ -233,8 +236,8 @@ export const Main = props => {
       </View>
     );
   }else if(currentTab == 1){
-    if(!teamsFetched){
-      props.fetchLeagues(leagueID)
+    if(!leaguesFetched){
+      props.fetchLeagues(teamID)
       setLeaguesFetched(true);
     }
     return(
@@ -244,8 +247,8 @@ export const Main = props => {
       </View>
     );
   }else if(currentTab == 2){
-    if(!standingsFetched){
-      props.fetchPlayers(leagueID)
+    if(!playersFetched){
+      props.fetchPlayers(teamID)
       setPlayersFetched(true);
     }
     return(

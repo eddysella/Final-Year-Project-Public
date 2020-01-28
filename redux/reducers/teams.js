@@ -32,68 +32,78 @@ function team(
         fetchingTeam: true,
       })
     case RECEIVE_TEAM_BY_ID:
-    return Object.assign({
+    return Object.assign({}, state, {
       fetchingTeam: false,
       name: action.teamName,
       logo: action.logo,
     });
     case REQUEST_PLAYERS_FOR_TEAM:
-    return Object.assign({
+    return Object.assign({}, state, {
       fetchingPlayers: true,
       playerIDs:[],
     });
     case RECEIVE_PLAYERS_FOR_TEAM:
-    return Object.assign({
+    return Object.assign({}, state, {
       fetchingPlayers: false,
       playerIDs: action.playerIDs,
     });
     case REQUEST_LEAGUES_FOR_TEAM:
-    return Object.assign({
+    return Object.assign({}, state, {
       fetchingLeagues: true,
       leagueIDs:[],
     });
     case RECEIVE_LEAGUES_FOR_TEAM:
-    return Object.assign({
+    return Object.assign({}, state, {
       fetchingLeagues: false,
       leagueIDs: action.leagueIDs,
     });
     case REQUEST_PAST_TEAM_FIXTURES:
-    return Object.assign({
+    return Object.assign({}, state, {
       fetchingPastFixtures: true,
     });
     case RECEIVE_PAST_TEAM_FIXTURES:
-    return Object.assign({
+    return Object.assign({}, state, {
       fetchingPastFixtures: false,
-      pastFixtures: action.fixtures,
+      pastFixtures: action.fixturesInOrder,
     });
     case REQUEST_FUTURE_TEAM_FIXTURES:
-    return Object.assign({
+    return Object.assign({}, state, {
       fetchingFutureFixtures: true,
     });
     case RECEIVE_FUTURE_TEAM_FIXTURES:
-    return Object.assign({
+    return Object.assign({}, state, {
       fetchingFutureFixtures: false,
-      futureFixtures: action.fixtures,
+      futureFixtures: action.fixturesInOrder,
     });
     default:
       return state;
   }
 }
 
-export function teamsByID(state={}, action){
+export function teamsByID(state={
+  fetching:false,
+}, action){
   switch(action.type){
     case REQUEST_TEAM_BY_ID:
     case RECEIVE_TEAM_BY_ID:
-    case REQUEST_PLAYERS_FOR_TEAM:
-    case RECEIVE_PLAYERS_FOR_TEAM:
-    case REQUEST_LEAGUES_FOR_TEAM:
-    case RECEIVE_LEAGUES_FOR_TEAM:
-    case REQUEST_PAST_TEAM_FIXTURES:
-    case RECEIVE_PAST_TEAM_FIXTURES:
-    case REQUEST_FUTURE_TEAM_FIXTURES:
-    case RECEIVE_FUTURE_TEAM_FIXTURES:
       return Object.assign({}, state, {
         [action.teamID]: team(state[action.teamID], action)
+      });
+    case REQUEST_PLAYERS_FOR_TEAM:
+    case REQUEST_LEAGUES_FOR_TEAM:
+    case REQUEST_PAST_TEAM_FIXTURES:
+    case REQUEST_FUTURE_TEAM_FIXTURES:
+    return Object.assign({}, state, {
+      fetching: true,
+      [action.teamID]: team(state[action.teamID], action),
+    });
+    case RECEIVE_PLAYERS_FOR_TEAM:
+    case RECEIVE_LEAGUES_FOR_TEAM:
+    case RECEIVE_PAST_TEAM_FIXTURES:
+    case RECEIVE_FUTURE_TEAM_FIXTURES:
+      return Object.assign({}, state, {
+        fetching: false,
+        [action.teamID]: team(state[action.teamID], action),
         });
     case RECEIVE_MULTIPLE_TEAMS:
       return Object.assign({}, state, action.teams);

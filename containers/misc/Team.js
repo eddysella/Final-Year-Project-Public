@@ -3,13 +3,15 @@ import { connect } from 'react-redux'
 import { View } from 'react-native'
 import { fetchLeaguesForTeam, fetchPastFixtures, fetchFutureFixtures, } from '../../redux/creators/teams'
 import { fetchTeamStatistics, fetchPlayerStatistics} from '../../redux/creators/statistics'
-import { Main } from '../../screens/following/Following';
+import { Main } from '../../screens/team/Main';
 
 const mapStateToProps = state => ({
     teams: state.teamsByID,
     teamStats: state.teamStatsByLeague,
     playerStats: state.playerStatsByID,
-    leagues: state.leaguesByID
+    leagues: state.leaguesByID,
+    standings: state.standingsSpecific,
+    fetching: state.teamsByID['fetching'],
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -20,12 +22,12 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const Screen = ({teams, teamStats, playerStats, fetchLeagues, fetchPastFixtures,
-  fetchFutureFixtures, fetchPlayers, leagues ...props}) => (
+  fetchFutureFixtures, fetchPlayers, leagues, standings, fetching, ...props}) => (
   <View style={{flex:1}}>
-    <Main screenFlex={9} topBarFlex={1} teams={teams} teamStats={teamStats}
+    <Main ScreenFlex={9} TopBarFlex={1} teams={teams} teamStats={teamStats}
     playerStats={playerStats} fetchLeagues={fetchLeagues} fetchPastFixtures={fetchPastFixtures}
     fetchFutureFixtures={fetchFutureFixtures} fetchPlayers={fetchPlayers} leagues={leagues}
-    navigation={props.navigation}/>
+    standings={standings} fetching={fetching} navigation={props.navigation}/>
   </View>
 )
 
