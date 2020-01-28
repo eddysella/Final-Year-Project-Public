@@ -160,13 +160,22 @@ export const Main = props => {
   function renderFixturesItem(fixture) {
       fixture = fixture.item;
       status = fixture.status;
+      if(fixture.goalsHome > fixture.goalsAway){
+        outcome = <Text>W<Text>
+      }else if(fixture.goalsHome < fixture.goalsAway){
+        outcome = <Text>L<Text>
+      }else if(fixture.goalsHome == fixture.goalsAway){
+        outcome = <Text>D<Text>
+      }else if(fixture.statusShort == 'NS'){
+        outcome = <Text>NS<Text>
+      }
       return (
           <TouchableHighlight onPress={ () =>{
                 props.navigation.navigate('Fixture', {id: fixture.fixtureID});
             }}>
             <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
               <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
-              <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{status}</Text>
+              <Text style={{flex:1,   textAlign:'center'}}>{status}</Text>
               <Text style={{flex:1,   textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
             </View>
           </TouchableHighlight>

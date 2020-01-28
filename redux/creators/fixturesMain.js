@@ -115,6 +115,10 @@ export function processFixtures(data){
   data = data.api;
   fixtures = data.fixtures;
 
+  if(!fixtures){
+    return[[],[]]
+  }
+
   fixtures.forEach( fixture => {
       status = processFixtureStatus([
         fixture.statusShort,
@@ -139,6 +143,7 @@ export function processFixtures(data){
           awayTeam:fixture.awayTeam,
           goalsHome:String(fixture.goalsHomeTeam),
           goalsAway:String(fixture.goalsAwayTeam),
+          statusShort: fixture.statusShort,
       });
   });
   return [names,Object.values(collect)];
