@@ -18,7 +18,7 @@ function league(
     countryCode: '',
     logo: '',
     teamIDs: [],
-    fixtures:{}
+    fixtures:[],
   },
   action
   ){
@@ -51,22 +51,32 @@ function league(
     case RECEIVE_TEAMS_FOR_LEAGUE:
       return Object.assign({}, state, {
         fetchingTeams: false,
-        teamsIDs: action.teamIDs,
+        teamIDs: action.teamIDs,
       })
     default:
       return state;
   }
 }
 
-export function leaguesByID(state={}, action){
+export function leaguesByID(state={
+  fetching:false,
+}, action){
   switch(action.type){
     case REQUEST_LEAGUE_BY_ID:
     case RECEIVE_LEAGUE_BY_ID:
-    case REQUEST_FIXTURES_BY_LEAGUE:
-    case RECEIVE_FIXTURES_BY_LEAGUE:
-    case REQUEST_TEAMS_FOR_LEAGUE:
-    case RECEIVE_TEAMS_FOR_LEAGUE:
       return Object.assign({}, state, {
+        [action.leagueID]: league(state[action.leagueID], action)
+        });
+    case REQUEST_FIXTURES_BY_LEAGUE:
+    case REQUEST_TEAMS_FOR_LEAGUE:
+      return Object.assign({}, state, {
+        fetching: true,
+        [action.leagueID]: league(state[action.leagueID], action)
+        });
+    case RECEIVE_TEAMS_FOR_LEAGUE:
+    case RECEIVE_FIXTURES_BY_LEAGUE:
+      return Object.assign({}, state, {
+        fetching:false,
         [action.leagueID]: league(state[action.leagueID], action)
         });
     case RECEIVE_MULTIPLE_LEAGUES:
