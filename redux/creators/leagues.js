@@ -11,7 +11,7 @@ import { getAllSeasonsForLeague } from '../../fetch/League'
 import { getFixturesByLeagueAndDate } from '../../fetch/Fixtures'
 import { getTeamsByLeagueID } from '../../fetch/Team'
 import { processFixtures } from './fixturesMain'
-import { processTeams } from './teams'
+import { processTeams, receiveMultipleTeams } from './teams'
 
 function calculateToday(){
   start = new Date();
@@ -51,16 +51,16 @@ function shouldFetchLeague(league){
 }
 
 export function fetchLeagues(leagueIDs){
-  promises = leagueIDs.map( leagueID => {
-    if(shouldFetchLeague(getState().leaguesByID[leagueID])){
-      dispatch(requestLeagueByID(leagueID))
-      return getAllSeasonsForLeague(leagueID)
-        // get latest season
-      .then( data => processLeague(data))
-      .then( processedData => dispatch(receiveLeagueByID(processedData)));
-    }
-  });
   return (dispatch, getState) => {
+    promises = leagueIDs.map( leagueID => {
+      if(shouldFetchLeague(getState().leaguesByID[leagueID])){
+        dispatch(requestLeagueByID(leagueID))
+        return getAllSeasonsForLeague(leagueID)
+          // get latest season
+        .then( data => processLeague(data))
+        .then( processedData => dispatch(receiveLeagueByID(processedData)));
+      }
+    });
     Promise.all(promises);
   }
 }
@@ -95,7 +95,6 @@ export function fetchFixtures(leagueID){
   return (dispatch, getState) => {
       dispatch(requestFixtures(leagueID))
       return getFixturesByLeagueAndDate(leagueID, today)
-        // get latest season
       .then( data => processFixtures(data))
       .then( processedData => dispatch(receiveFixtures(processedData)));
     }
@@ -108,10 +107,11 @@ export function requestTeamsByID(leagueID){
   };
 }
 
-export function receiveTeamsByID(teamIDs){
+export function receiveTeamsByID(teamIDs, leagueID){
   return {
     type: RECEIVE_TEAMS_FOR_LEAGUE,
     teamIDs: teamIDs,
+    leagueID: leagueID,
   };
 }
 
@@ -124,14 +124,16 @@ function shouldFetchTeams(league){
 }
 
 export function fetchTeams(leagueID){
-  if(shouldFetchTeams(getState().leaguesByID[leagueID])){
-    dispatch(requestTeamsByID(leagueID))
-    return getTeamsByLeagueID(leagueID)
-    .then( data => processTeams(data))
-    .then( processedData => {
-        dispatch(receiveTeamsByID(processedData[0]));
-        dispatch(receiveMultipleTeams(processedData[1]));
-    })
+  return (dispatch, getState) => {
+    if(shouldFetchTeams(getState().leaguesByID[leagueID])){
+      dispatch(requestTeamsByID(leagueID))
+      return getTeamsByLeagueID(leagueID)
+      .then( data => processTeams(data))
+      .then( processedData => {
+          dispatch(receiveMultipleTeams(processedData[1]));
+          dispatch(receiveTeamsByID(processedData[0], leagueID));
+      })
+}
   }
 }
 
