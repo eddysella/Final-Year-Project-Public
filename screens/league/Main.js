@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import { ExpoConfigView } from '@expo/samples';
 import {TouchableHighlight, SectionList, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
-import {Card} from 'react-native-elements';
+import { Card, Avatar} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component'
 import { MaterialIndicator,} from 'react-native-indicators';
@@ -89,10 +89,10 @@ export const Main = props => {
   }
 
   function renderTeamsItem(teamID) {
-      team = teams[teamID.item];
+      team = props.teams[teamID.item];
       return (
           <TouchableHighlight onPress={ () =>{
-                props.navigation.navigate('Team', {id: teamID});
+                props.navigation.navigate('Team', {id: teamID.item});
             }}>
             <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
               <Avatar
@@ -175,7 +175,7 @@ export const Main = props => {
   [teamsFetched, setTeamsFetched] = useState(false);
   [standingsFetched, setStandingsFetched] = useState(false);
 
-  if(league.fetchingFixtures || league.fetchingTeams || standings.isFetching){
+  if(props.fetchingExtraLeagueData || props.fetchingStandings){
     return(
       <View style={{flex:1}}>
         <RenderTopBar item={league}/>

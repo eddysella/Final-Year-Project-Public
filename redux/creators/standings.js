@@ -56,8 +56,8 @@ function processStandings(data){
           team.logo,
           team.teamName,
           stats.matchsPlayed,
-          stats.goalsFor, + ":" + stats.goalsAgainst,
-          stats.goalsFor - stats.goalsAgainst,
+          (stats.goalsFor + ":" + stats.goalsAgainst),
+          (stats.goalsFor - stats.goalsAgainst),
           team.points,
       ]);
   });
