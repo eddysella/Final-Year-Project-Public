@@ -27,6 +27,18 @@ export const Main = props => {
     );
   };
 
+  function VItemSeparator(){
+    return (
+      <View
+      style={{
+        width: scale(2),
+        height: '100%',
+        backgroundColor: "#000",
+      }}
+      />
+    );
+  };
+
   const RenderTopBar = (item) => {
     league = item.item;
     teamsBorder=0;
@@ -58,9 +70,35 @@ export const Main = props => {
     );
   }
 
+  function renderStandingsItem(standing) {
+      team = standing.item
+      return (
+            <View flexDirection={'row'} style={{maxWidth:screenWidth, flex: 1, margin: 5, padding: 10}}>
+              <Text h3>{team[0]}</Text>
+              <Avatar
+                  size = 'small'
+                  source={{ uri: `${team[1]}`}}
+                  rounded
+              />
+              <Text h3>{team[2]} </Text>
+              <View style={{flex:1, flexDirection:'row', justifyContent: 'flex-end'}}>
+                <VItemSeparator/>
+                <Text h3>{team[3]} </Text>
+                <VItemSeparator/>
+                <Text h3>{team[4]} </Text>
+                <VItemSeparator/>
+                <Text h3>{team[5]} </Text>
+                <VItemSeparator/>
+                <Text h3>{team[6]} </Text>
+                <VItemSeparator/>
+              </View>
+            </View>
+          );
+  };
   const RenderStandings = (item) =>{
     standings = item.item;
-      if(!standings.standingsInOrder){
+    console.log(standings)
+      if(!standings.tableData){
         return(
           <View style={{flex:props.ScreenFlex}}>
             <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Standings Available</Text>
@@ -68,11 +106,26 @@ export const Main = props => {
         );
       }
       return (
-          <View style={{flex:props.ScreenFlex}}>
-            <Table borderStyle={{borderWidth: 2}}>
-              <Row data={standings.titles}/>
-              <Rows data={standings.standingsInOrder}/>
-            </Table>
+          <View style={{flex:props.ScreenFlex, maxWidth:screenWidth}}>
+            <Text>{standings.titles[0]} </Text>
+            <View style={{flex:1, flexDirection:'row', justifyContent: 'flex-end'}}>
+              <VItemSeparator/>
+              <Text h3>{standings.titles[3]} </Text>
+              <VItemSeparator/>
+              <Text h3>{standings.titles[4]} </Text>
+              <VItemSeparator/>
+              <Text h3>{standings.titles[5]} </Text>
+              <VItemSeparator/>
+              <Text h3>{standings.titles[6]} </Text>
+              <VItemSeparator/>
+            </View>
+            <FlatList
+            ItemSeparatorComponent={ItemSeparator}
+            ref={(ref) => { this.teamList = ref; }}
+            data={standings.tableData}
+            renderItem={renderStandingsItem}
+            keyExtractor={(item,index) => index.toString()}
+            />
           </View>
       );
   }
@@ -134,7 +187,7 @@ export const Main = props => {
         </View>
       </View>
     );
-  }if(currentTab == 0){
+  }if(currentTab == 1){
     if(!teamsFetched){
       props.fetchTeams(leagueID)
       setTeamsFetched(true);
@@ -145,7 +198,7 @@ export const Main = props => {
         <RenderTeams item={league}/>
       </View>
     );
-  }else if(currentTab == 1){
+  }else if(currentTab == 0){
     if(!standingsFetched){
       props.fetchStandings(leagueID)
       setStandingsFetched(true);

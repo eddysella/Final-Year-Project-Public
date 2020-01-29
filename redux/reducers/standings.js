@@ -32,7 +32,6 @@ export function standingsSpecific(
       "GoalD",
       "Points"
     ],
-    standingsInOrder: [],
   },
   action
   ){
@@ -40,7 +39,7 @@ export function standingsSpecific(
     case REQUEST_STANDINGS:
     // state is not included in the sources to reset it every time a new
     // standings is fetched
-      return Object.assign({}, {
+      return Object.assign({}, state, {
         leagueID: action.leagueID,
         isFetching:true,
         standingsInOrder:[],
@@ -48,7 +47,7 @@ export function standingsSpecific(
     case RECEIVE_STANDINGS:
     return Object.assign({}, state, {
       isFetching: false,
-      standingsInOrder: action.standingsInOrder,
+      tableData: action.tableData,
       lastUpdated: action.receivedAt,
     });
     default:
