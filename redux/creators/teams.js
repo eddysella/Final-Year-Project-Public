@@ -13,8 +13,9 @@ import {
 } from '../types'
 import { getTeamByID, getLastTwentyFixtures, getNextTenFixtures,
   getAllLeaguesForTeam, getStatisticsForTeamInLeague,
-  getPlayerStatisticsByTeamIDandSeason } from '../../fetch/Team'
+  getPlayersByTeamID } from '../../fetch/Team'
 import { processLeagues, receiveMultipleLeagues } from './leagues'
+import { processPlayers, receivePlayer } from './players'
 
 function requestTeamByID(teamID){
   return {
@@ -89,14 +90,14 @@ export function processTeams(data){
   return [ids,collect];
 }
 
-function requestLeaguesForTeam(teamID){
+function requestLeagues(teamID){
   return {
     type: REQUEST_LEAGUES_FOR_TEAM,
     teamID: teamID,
   };
 }
 
-export function receiveLeagueIDsForTeam(teamID, leagueIDs){
+export function receiveLeagueIDs(teamID, leagueIDs){
   return {
     type: RECEIVE_LEAGUES_FOR_TEAM,
     teamID: teamID,
@@ -117,12 +118,12 @@ function shouldFetchLeagues(team){
 export function fetchLeaguesForTeam(teamID){
   return (dispatch, getState) => {
     if(shouldFetchLeagues(getState().teamsByID[teamID])){
-      dispatch(requestLeaguesForTeam())
+      dispatch(requestLeagues())
       return getAllLeaguesForTeam(teamID)
       .then( data => processLeagues(data))
       .then( processedData => {
-        dispatch( receiveLeagueIDs(teamID, processedData[0]));
         dispatch( receiveMultipleLeagues(processedData[1]));
+        dispatch( receiveLeagueIDs(teamID, processedData[0]));
       })
     }
   }
@@ -235,16 +236,32 @@ export function fetchFutureFixtures(teamID){
   }
 }
 
-function requestPlayersForTeam(teamID){
+export function requestPlayersForTeam(teamID){
   return {
-    type: REQUEST_LEAGUE_FOR_TEAM,
+    type: REQUEST_PLAYERS_FOR_TEAM,
     teamID: teamID,
   };
 }
 
+export function fetchPlayers(teamID){
+  return (dispatch, getState) => {
+    dispatch( requestPlayersForTeam(teamID))
+    return getPlayersByTeamID(teamID)
+      .then( data => processPlayers(data))
+      .then( processedData => {
+        Promise.all([
+          processedData[1].map( player => {
+            dispatch( receivePlayer(player))
+          }),
+          dispatch( receivePlayerIDsForTeam(teamID, processedData[0])),
+        ]);
+      });
+  }
+}
+
 export function receivePlayerIDsForTeam(teamID, playerIDs){
   return {
-    type: RECEIVE_LEAGUE_FOR_TEAM,
+    type: RECEIVE_PLAYERS_FOR_TEAM,
     teamID: teamID,
     playerIDs: playerIDs,
   };

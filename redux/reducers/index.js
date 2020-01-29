@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import { fixturesByDate, fixturesTopbarDates, fixturesCurrentDate, fixturesSpecific} from './fixtures'
 import { followingLeagueIDs, followingTeamIDs, } from './following'
 import { leaguesByID, } from './leagues'
+import { playersByID, } from './players'
 import { search, searchInput} from './search'
 import { standingsLeagueIDs, standingsSpecific, } from './standings'
 import { teamStatsByLeague, playerStatsByID, } from './statistics'
@@ -15,6 +16,7 @@ export default combineReducers({
   followingLeagueIDs,
   followingTeamIDs,
   leaguesByID,
+  playersByID,
   searchInput,
   search,
   standingsLeagueIDs,

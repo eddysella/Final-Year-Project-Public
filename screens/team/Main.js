@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import { ExpoConfigView } from '@expo/samples';
 import {TouchableHighlight, SectionList, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
-import {Card} from 'react-native-elements';
+import {Card, Avatar} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component'
 import { MaterialIndicator,} from 'react-native-indicators';
@@ -13,7 +13,7 @@ const itemHorizontalPadding = (itemWidth/5);
 const itemVerticalPadding = scale(15);
 
 export const Main = props => {
-
+  
   function ItemSeparator(){
     return (
       <View
@@ -70,22 +70,14 @@ export const Main = props => {
   }
 
   function renderPlayersItem(playerID) {
-    player = playerStats[playerID.item];
-    if(player.captain){
-      position = <Text h3>  {player.position}  Captain</Text>;
-    } else {
-      position = <Text h3>  {player.position}  </Text>
-    }
+    player = props.players[playerID.item];
     return (
         <TouchableHighlight onPress={ () =>{
               props.navigation.navigate('Player', {id: playerID.item});
           }}>
           <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
           <Text h3>
-              {player.name}
-          </Text>
-          <Text h3>
-              {position}
+              {player.position}  {player.name}
           </Text>
           </View>
         </TouchableHighlight>
@@ -115,7 +107,7 @@ export const Main = props => {
   }
 
   function renderLeaguesItem(leagueID) {
-      league = leagues[leagueID.item];
+      league = props.leagues[leagueID.item];
       return (
           <TouchableHighlight onPress={ () =>{
                 props.navigation.navigate('League', {id: leagueID.item});
