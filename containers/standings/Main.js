@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import { View } from '../../screens/standings/main/Main'
 
 const mapStateToProps = state => ({
-    leagueIDs: state.standingsLeagueIDs,
-    leagues: state.leaguesByID,
+  leagueIDs: state.standingsLeagueIDs,
+  leagues: state.leaguesByID,
 })
 
 const mapDispatchToProps = dispatch => ({

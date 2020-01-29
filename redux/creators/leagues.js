@@ -48,7 +48,7 @@ export function fetchLeagues(leagueIDs){
         .then( processedData => dispatch(receiveLeagueByID(processedData)));
       }
     });
-    Promise.all(promises);
+    return Promise.all(promises);
   }
 }
 

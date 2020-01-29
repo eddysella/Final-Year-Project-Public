@@ -54,16 +54,31 @@ function shouldFetchTeam(team){
     return false;
   }
 }
+// removed cause not used?
+// export function fetchTeam(teamID){
+//   return (dispatch, getState) => {
+//     if(shouldFetchTeam(getState().teamsByID[teamID])){
+//       dispatch(requestTeamByID(teamID))
+//       return getTeamByID(teamID)
+//         // get latest season
+//       .then( data => processTeam(data))
+//       .then( processedData => dispatch(receiveTeamByID(processedData)));
+//     }
+//   }
+// }
 
-export function fetchTeam(teamID){
+export function fetchTeams(teamIDs){
   return (dispatch, getState) => {
-    if(shouldFetchTeam(getState().teamsByID[teamID])){
-      dispatch(requestTeamByID(teamID))
-      return getTeamByID(teamID)
-        // get latest season
-      .then( data => processTeam(data))
-      .then( processedData => dispatch(receiveTeamByID(processedData)));
-    }
+    promises = teamIDs.map( teamID => {
+      if(shouldFetchTeam(getState().teamsByID[teamID])){
+        dispatch(requestTeamByID(teamID))
+        return getTeamByID(teamID)
+          // get latest season
+        .then( data => processTeams(data))
+        .then( processedData => dispatch(receiveTeamByID(processedData)));
+      }
+    });
+    return Promise.all(promises);
   }
 }
 

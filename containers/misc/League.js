@@ -19,12 +19,12 @@ const mapDispatchToProps = dispatch => ({
   fetchStandings: input => dispatch(fetchStandings(input)),
 })
 
-const Screen = ({leagues, teams, standings, fetchingExtraLeagueData, fetchingStandings, fetchStandings, fetchTeams, fetchFixtures, ...props}) => (
-  <View style={{flex:1}}>
-    <Main ScreenFlex={7} TopBarFlex={1} leagues={leagues} teams={teams} fetchingExtraLeagueData={fetchingExtraLeagueData}
-    fetchingStandings={fetchingStandings} standings={standings} fetchStandings={fetchStandings} fetchTeams={fetchTeams}
-    fetchFixtures={fetchFixtures} navigation={props.navigation}/>
-  </View>
+const Screen = ({leagues, teams, standings, fetchingExtraLeagueData, fetchingStandings,
+  fetchStandings, fetchTeams, fetchFixtures, ...props}) => (
+  <Main screenFlex={7} topBarFlex={1} leagues={leagues} teams={teams}
+  fetchingExtraLeagueData={fetchingExtraLeagueData} fetchingStandings={fetchingStandings}
+  standings={standings} fetchStandings={fetchStandings} fetchTeams={fetchTeams}
+  fetchFixtures={fetchFixtures} navigation={props.navigation}/>
 )
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);

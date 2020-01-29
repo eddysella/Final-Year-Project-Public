@@ -4,10 +4,8 @@ import {TouchableHighlight, BackHandler, AsyncStorage, FlatList, View, ActivityI
 import {Card, SearchBar} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import SquareGrid from "react-native-square-grid";
-
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
-let input = '';
 
 export const TopBar = props => {
 

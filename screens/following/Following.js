@@ -4,8 +4,7 @@ import { Button, TouchableHighlight, SectionList, View, ActivityIndicator, Text,
 import {Card, Avatar} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import SquareGrid from "react-native-square-grid";
-import { MaterialIndicator,} from 'react-native-indicators';
-
+import { MaterialIndicator,} from 'react-native-indicators'
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
@@ -65,7 +64,7 @@ export const Main = props => {
     );
   }else{
     return(
-      <View style={{flex:props.screenFlex}}>
+      <View style={{flex:1}}>
           <SectionList
           ItemSeparatorComponent={ItemSeparator}
           ref={(ref) => { this.leagueList = ref; }}

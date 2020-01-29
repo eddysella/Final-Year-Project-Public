@@ -6,12 +6,12 @@ import { fetchTeamStatistics, fetchPlayerStatistics} from '../../redux/creators/
 import { Main } from '../../screens/team/Main';
 
 const mapStateToProps = state => ({
-    teams: state.teamsByID,
-    teamStats: state.teamStatsByLeague,
-    players: state.playersByID,
-    leagues: state.leaguesByID,
-    standings: state.standingsSpecific,
-    fetching: state.teamsByID['fetching'],
+  teams: state.teamsByID,
+  teamStats: state.teamStatsByLeague,
+  players: state.playersByID,
+  leagues: state.leaguesByID,
+  standings: state.standingsSpecific,
+  fetching: state.teamsByID['fetching'],
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -23,12 +23,10 @@ const mapDispatchToProps = dispatch => ({
 
 const Screen = ({teams, teamStats, players, fetchLeagues, fetchPastFixtures,
   fetchFutureFixtures, fetchPlayers, leagues, standings, fetching, ...props}) => (
-  <View style={{flex:1}}>
-    <Main ScreenFlex={9} TopBarFlex={1} teams={teams} teamStats={teamStats}
-    players={players} fetchLeagues={fetchLeagues} fetchPastFixtures={fetchPastFixtures}
-    fetchFutureFixtures={fetchFutureFixtures} fetchPlayers={fetchPlayers} leagues={leagues}
-    standings={standings} fetching={fetching} navigation={props.navigation}/>
-  </View>
+  <Main screenFlex={8} topBarFlex={1} teams={teams} teamStats={teamStats}
+  players={players} fetchLeagues={fetchLeagues} fetchPastFixtures={fetchPastFixtures}
+  fetchFutureFixtures={fetchFutureFixtures} fetchPlayers={fetchPlayers} leagues={leagues}
+  standings={standings} fetching={fetching} navigation={props.navigation}/>
 )
 
 

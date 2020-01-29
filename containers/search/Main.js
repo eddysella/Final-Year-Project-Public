@@ -9,16 +9,16 @@ import { Main } from '../../screens/search/Main'
 import { TopBar } from '../../screens/search/TopBar'
 
 const mapStateToProps = state => ({
-    followingTeamIDs: state.followingTeamIDs,
-    followingLeagueIDs: state.followingLeagueIDs,
-    standingsLeagueIDs: state.standingsLeagueIDs,
-    teamIDs: state.search['teamIDs'],
-    leagueIDs: state.search['leagueIDs'],
-    teams: state.teamsByID,
-    leagues: state.leaguesByID,
-    input: state.searchInput,
-    teamStatus: state.search['teamIsFetching'],
-    leagueStatus: state.search['leagueIsFetching'],
+  followingTeamIDs: state.followingTeamIDs,
+  followingLeagueIDs: state.followingLeagueIDs,
+  standingsLeagueIDs: state.standingsLeagueIDs,
+  teamIDs: state.search['teamIDs'],
+  leagueIDs: state.search['leagueIDs'],
+  teams: state.teamsByID,
+  leagues: state.leaguesByID,
+  input: state.searchInput,
+  teamStatus: state.search['teamIsFetching'],
+  leagueStatus: state.search['leagueIsFetching'],
 })
 
 const mapDispatchToProps = dispatch => ({
