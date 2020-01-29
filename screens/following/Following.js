@@ -1,58 +1,83 @@
-import React, {Component} from 'react';
+import React, { useEffect, } from 'react';
 import { ExpoConfigView } from '@expo/samples';
-import {TouchableHighlight, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions, Button } from 'react-native';
+import { Button, TouchableHighlight, SectionList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import {Card, Avatar} from 'react-native-elements';
-import SquareGrid from "react-native-square-grid";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import SquareGrid from "react-native-square-grid";
+import { MaterialIndicator,} from 'react-native-indicators';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
-export const Screen = props => {
-
-    function renderItem(item, index) {
-        return (
-            <View style={{borderWidth: 3, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
-                <Avatar
-                    size = 'large'
-                    source={{ uri: `${item.logo}`}}
-                    rounded
-                />
-                <Text h3>
-                    {item.name}
-                </Text>
-            </View>
-        );
-    }
-
-  function renderCards(data) {
-      return (
-          <Card title={data.title}>
-          {
-              <View key={data.title} style={{justifyContent: 'center', alignItems: 'center'}}>
-                <SquareGrid
-                    rows={0}
-                    columns={3}
-                    items={data.items}
-                    renderItem={renderItem}
-                />
-              </View>
-          }
-          </Card>
-      );
+export const Main = props => {
+  function ItemSeparator(){
+    return (
+      <View
+        style={{
+          height: scale(2),
+          width: '100%',
+          backgroundColor: "#000",
+        }}
+      />
+    );
   };
 
+  const RenderItem = (props) => {
     return (
-        <View style={{flex:1}}>
-          <FlatList
-          // showsVerticalScrollIndicator={false}
-          data={props.leaguesAndTeams}
-          renderItem={renderCards}
-          keyExtractor={(item,index) =>  index.toString()}
+        <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
+          <Avatar
+              size = 'medium'
+              source={{ uri: `${props.props.logo}`}}
+              rounded
           />
+          <Text h3>
+              {props.props.name}
+          </Text>
         </View>
     );
-}
+  }
 
+  function renderLeague(item) {
+    league = props.leagues[item.item];
+    return(
+      <TouchableHighlight style={{width:'33%'}} onPress={ () => props.navigation.push('League', {id: item.item})}>
+        <RenderItem props={league}/>
+      </TouchableHighlight>
+    );
+  }
 
-//get seasons available from leagueID then get newest one
+  function renderTeam(item) {
+    team = props.teams[item.item];
+    return(
+      <TouchableHighlight style={{width:'33%'}} onPress={ () => props.navigation.push('Team', {id: item.item})}>
+        <RenderItem props={team}/>
+      </TouchableHighlight>
+    );
+  }
+
+  if(!props.teamIDs.length && !props.leagueIDs.length){
+    return (
+      <View style={{flex:props.screenFlex}}>
+        <Button title="Follow a League /n or Team"
+          onPress={() => props.navigation.navigate('Search')}
+        />
+      </View>
+    );
+  }else{
+    return(
+      <View style={{flex:props.screenFlex}}>
+          <SectionList
+          ItemSeparatorComponent={ItemSeparator}
+          ref={(ref) => { this.leagueList = ref; }}
+          sections={[{title: 'Leagues', data:props.leagueIDs, renderItem:renderLeague},
+                      {title: 'Teams', data:props.teamIDs, renderItem:renderTeam}
+                    ]}
+          keyExtractor={(item,index) => item.toString()}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text>{title}</Text>
+          )}
+          />
+      </View>
+    );
+  }
+};

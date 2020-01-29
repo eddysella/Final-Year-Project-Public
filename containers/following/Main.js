@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => ({
 const Screen = ({teamIDs, leagueIDs, teams, leagues, removeTeam,
   removeLeague, ...props}) => (
   <View style={{flex:1}}>
-    <Main screenFlex={9} topBarFlex={1} teamIDs={teamIDs} leagueIDs={leagueIDs}
+    <Main teamIDs={teamIDs} leagueIDs={leagueIDs}
     teams={teams} leagues={leagues} removeTeam={removeTeam}
     removeLeague={removeLeague} navigation={props.navigation}/>
   </View>

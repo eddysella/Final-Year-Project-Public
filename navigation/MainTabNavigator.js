@@ -10,6 +10,7 @@ import FixturesDetailsContainer from '../containers/fixtures/Details';
 import SearchContainer from '../containers/search/Main';
 import LeagueContainer from '../containers/misc/League';
 import TeamContainer from '../containers/misc/Team';
+import FollowingContainer from '../containers/containers/following/Main';
 import Sample from '../screens/sample';
 // import FollowingScreen from '../screens/following/Following';
 
@@ -31,7 +32,10 @@ const SearchStack = createStackNavigator({
 }, {headerLayoutPreset: 'center'});
 
 const FollowingStack = createStackNavigator({
-  Following: Sample,
+  Following: FollowingContainer,
+  League: LeagueContainer,
+  Team: TeamContainer,
+  Fixture: FixturesDetailsContainer,
 }, {headerLayoutPreset: 'center'});
 
 const MainTabNavigator = createBottomTabNavigator(

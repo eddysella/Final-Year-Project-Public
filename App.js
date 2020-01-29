@@ -12,6 +12,8 @@ import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers/index'
 import { initFixtureDates, initTodaysFixtures, initCurrentDate} from './redux/creators/fixturesMain'
+import { fetchTeams } from './redux/creators/teams'
+import { fetchLeagues } from './redux/creators/leagues'
 import store from './redux/store'
 
 export default function App(props) {
@@ -41,8 +43,10 @@ export default function App(props) {
 
 async function loadResourcesAsync() {
   await Promise.all([
+    //store.hydrate
     store.dispatch(initTodaysFixtures()),
-    // store.dispatch(setTodaysStandings()),
+    // store.dispatch(fetchTeams(store.getState().followingTeamIDs)),
+    // store.dispatch(fetchLeagues(store.getState().followingLeagueIDs))
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,
