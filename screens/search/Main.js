@@ -10,9 +10,6 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 export const Main = props => {
-
-  console.log(props.teams)
-
   function ItemSeparator(){
     return (
       <View
