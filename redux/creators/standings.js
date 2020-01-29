@@ -48,7 +48,7 @@ export function fetchStandings(leagueID){
 function processStandings(data){
   collect=[];
   data = data.api;
-  standings = data.standings;
+  standings = data.standings[0];
   standings.forEach( team => {
       stats = team.all;
       collect.push([
