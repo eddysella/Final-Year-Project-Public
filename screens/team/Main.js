@@ -13,7 +13,7 @@ const itemHorizontalPadding = (itemWidth/5);
 const itemVerticalPadding = scale(15);
 
 export const Main = props => {
-  
+
   function ItemSeparator(){
     return (
       <View
@@ -73,7 +73,7 @@ export const Main = props => {
     player = props.players[playerID.item];
     return (
         <TouchableHighlight onPress={ () =>{
-              props.navigation.navigate('Player', {id: playerID.item});
+              props.navigation.push('Player', {id: playerID.item});
           }}>
           <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
           <Text h3>
@@ -110,7 +110,7 @@ export const Main = props => {
       league = props.leagues[leagueID.item];
       return (
           <TouchableHighlight onPress={ () =>{
-                props.navigation.navigate('League', {id: leagueID.item});
+                props.navigation.push('League', {id: leagueID.item});
             }}>
             <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
               <Avatar
@@ -165,7 +165,7 @@ export const Main = props => {
       date = new Date(fixture.timeStamp).toLocaleDateString();
       return (
           <TouchableHighlight onPress={ () =>{
-                props.navigation.navigate('Fixture', {id: fixture.fixtureID});
+                props.navigation.push('Fixture', {id: fixture.fixtureID});
             }}>
             <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
               <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>

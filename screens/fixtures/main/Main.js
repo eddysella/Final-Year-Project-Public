@@ -41,7 +41,7 @@ export const Main = props => {
             <TouchableHighlight onPress={ () =>
                 {
                   props.fetchSpecificFixture(fixture.id);
-                  props.navigation.navigate('Inner');
+                  props.navigation.push('Inner');
               }
             }>
 

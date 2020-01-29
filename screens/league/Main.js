@@ -81,7 +81,7 @@ export const Main = props => {
       team = props.teams[teamID.item];
       return (
           <TouchableHighlight onPress={ () =>{
-                props.navigation.navigate('Team', {id: teamID.item});
+                props.navigation.push('Team', {id: teamID.item});
             }}>
             <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
               <Avatar
