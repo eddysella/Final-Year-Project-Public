@@ -187,7 +187,7 @@ export const Main = props => {
         </View>
       </View>
     );
-  }if(currentTab == 1){
+  }if(currentTab == 0){
     if(!teamsFetched){
       props.fetchTeams(leagueID)
       setTeamsFetched(true);
@@ -198,7 +198,7 @@ export const Main = props => {
         <RenderTeams item={league}/>
       </View>
     );
-  }else if(currentTab == 0){
+  }else if(currentTab == 1){
     if(!standingsFetched){
       props.fetchStandings(leagueID)
       setStandingsFetched(true);
