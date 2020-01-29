@@ -11,6 +11,7 @@ const itemWidth = screenWidth - scale(screenWidth/5);
 const itemHeight = scale(screenWidth/4);
 const itemHorizontalPadding = (itemWidth/5);
 const itemVerticalPadding = scale(15);
+import { Switcher, SegmentedControlButton } from 'nachos-ui'
 
 export const Main = props => {
 
@@ -28,19 +29,12 @@ export const Main = props => {
 
   const RenderTopBar = (item) => {
     league = item.item;
-    fixturesBorder=0;
     teamsBorder=0;
     standingsBorder=0;
     if(currentTab == 0){
-        fixturesBorder=2;
-        teamsBorder=0;
-        standingsBorder=0;
-    }else if(currentTab == 1){
-        fixturesBorder=0;
         teamsBorder=2;
         standingsBorder=0;
-    }else if(currentTab == 2){
-        fixturesBorder=0;
+    }else if(currentTab == 1){
         teamsBorder=0;
         standingsBorder=2;
     }
@@ -51,16 +45,11 @@ export const Main = props => {
             </View>
             <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
                 <TouchableHighlight onPress={() => setTab(0)}
-                style={{flex:1, borderBottomWidth:fixturesBorder}}>
-                <Text style={{textAlign: 'center'}}>Fixtures</Text>
-                </TouchableHighlight>
-
-                <TouchableHighlight onPress={() => setTab(1)}
                     style={{flex:1, alignItems: 'center', borderBottomWidth:teamsBorder}}>
                 <Text style={{textAlign:'center'}}>Teams</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight onPress={() => setTab(2)}
+                <TouchableHighlight onPress={() => setTab(1)}
                 style={{flex:1, borderBottomWidth:standingsBorder}}>
                 <Text style={{textAlign: 'center'}}>Standings</Text>
                 </TouchableHighlight>
@@ -130,48 +119,9 @@ export const Main = props => {
       );
   }
 
-  function renderFixturesItem(fixture) {
-      fixture = fixture.item;
-      status = fixture.status;
-      return (
-          <TouchableHighlight onPress={ () =>{
-                props.navigation.navigate('Fixture', {id: fixture.fixtureID});
-            }}>
-            <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
-              <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
-              <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{status}</Text>
-              <Text style={{flex:1,   textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
-            </View>
-          </TouchableHighlight>
-          );
-  };
-
-  const RenderFixtures = (item) => {
-    league = item.item;
-    if(!league.fixtures){
-        return(
-          <View style={{flex:props.ScreenFlex}}>
-            <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Fixtures Available</Text>
-          </View>
-        );
-      }
-      return (
-        <View style={{flex:props.ScreenFlex}}>
-            <FlatList
-            ItemSeparatorComponent={ItemSeparator}
-            ref={(ref) => { this.fixturesList = ref; }}
-            data={league.fixtures}
-            renderItem={renderFixturesItem}
-            keyExtractor={(item,index) => index.toString()}
-            />
-        </View>
-      );
-  }
-
   leagueID = JSON.stringify(props.navigation.getParam('id'));
   league = props.leagues[leagueID];
   [currentTab, setTab] = useState(0);
-  [fixturesFetched, setFixturesFetched] = useState(false);
   [teamsFetched, setTeamsFetched] = useState(false);
   [standingsFetched, setStandingsFetched] = useState(false);
 
@@ -184,18 +134,7 @@ export const Main = props => {
         </View>
       </View>
     );
-  }else if(currentTab == 0){
-    if(!fixturesFetched){
-      props.fetchFixtures(leagueID);
-      setFixturesFetched(true);
-    }
-    return (
-      <View style={{flex:1}}>
-        <RenderTopBar item={league}/>
-        <RenderFixtures item={league}/>
-      </View>
-    );
-  }else if(currentTab == 1){
+  }if(currentTab == 0){
     if(!teamsFetched){
       props.fetchTeams(leagueID)
       setTeamsFetched(true);
@@ -206,7 +145,7 @@ export const Main = props => {
         <RenderTeams item={league}/>
       </View>
     );
-  }else if(currentTab == 2){
+  }else if(currentTab == 1){
     if(!standingsFetched){
       props.fetchStandings(leagueID)
       setStandingsFetched(true);
@@ -219,3 +158,43 @@ export const Main = props => {
     );
   }
 };
+  //
+  // [fixturesFetched, setFixturesFetched] = useState(false);
+  //
+  // function renderFixturesItem(fixture) {
+  //     fixture = fixture.item;
+  //     status = fixture.status;
+  //     return (
+  //         <TouchableHighlight onPress={ () =>{
+  //               props.navigation.navigate('Fixture', {id: fixture.fixtureID});
+  //           }}>
+  //           <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
+  //             <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
+  //             <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{status}</Text>
+  //             <Text style={{flex:1,   textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
+  //           </View>
+  //         </TouchableHighlight>
+  //         );
+  // };
+  //
+  // const RenderFixtures = (item) => {
+  //   league = item.item;
+  //   if(!league.fixtures){
+  //       return(
+  //         <View style={{flex:props.ScreenFlex}}>
+  //           <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Fixtures Available</Text>
+  //         </View>
+  //       );
+  //     }
+  //     return (
+  //       <View style={{flex:props.ScreenFlex}}>
+  //           <FlatList
+  //           ItemSeparatorComponent={ItemSeparator}
+  //           ref={(ref) => { this.fixturesList = ref; }}
+  //           data={league.fixtures}
+  //           renderItem={renderFixturesItem}
+  //           keyExtractor={(item,index) => index.toString()}
+  //           />
+  //       </View>
+  //     );
+  // }
