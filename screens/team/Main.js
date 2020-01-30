@@ -39,7 +39,7 @@ export const Main = props => {
       playersBorder=2;
     }
     return (
-      <View>
+      <View style={{flex:1}}>
         <View style={{flex:1, justifyContent: 'space-around'}}>
           <Text style={{textAlign:'center'}}>{team.name}</Text>
         </View>
@@ -71,7 +71,7 @@ export const Main = props => {
             props.navigation.push('Player', {id: playerID.item});
         }}>
         <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
-          <Text h3>{player.position}{player.name}</Text>
+          <Text h3>{player.name}</Text>
         </View>
       </TouchableHighlight>
       );
@@ -79,20 +79,29 @@ export const Main = props => {
 
   const RenderPlayers = (item) =>{
     playerIDs = item.item;
-      if(!playerIDs || playerIDs == null){
-        return(
-          <Text style={{alignSelf: 'center',  textAlign:'center'}}>No Players Available</Text>
-        );
-      }
-      return (
-        <FlatList
-        ItemSeparatorComponent={ItemSeparator}
-        ref={(ref) => { this.teamList = ref; }}
-        data={playerIDs}
-        renderItem={renderPlayersItem}
-        keyExtractor={(item,index) => index.toString()}
-        />
+    if(!playerIDs || playerIDs == null){
+      return(
+        <Text style={{alignSelf: 'center',  textAlign:'center'}}>No Players Available</Text>
       );
+    }
+    console.log(playerIDs)
+    return (
+      <SectionList
+      ItemSeparatorComponent={ItemSeparator}
+      ref={(ref) => { this.leagueList = ref; }}
+      sections={[
+        {title: 'Attackers', data:playerIDs['Attacker']},
+        {title: 'Midfielders', data:playerIDs['Midfielder']},
+        {title: 'Defenders', data:playerIDs['Defender']},
+        {title: 'Goalkeepers', data:playerIDs['Goalkeeper']},
+      ]}
+      renderItem={renderPlayersItem}
+      keyExtractor={(item,index) => item.toString()}
+      renderSectionHeader={({ section: { title } }) => (
+        <Text>{title}</Text>
+      )}
+      />
+    );
   }
 
   function renderLeaguesItem(leagueID) {
@@ -145,12 +154,12 @@ export const Main = props => {
       }else if(fixture.statusShort == 'NS'){
         outcome = 'NS';
       }
-      date = new Date(fixture.timeStamp).toLocaleDateString();
+      date = new Date(fixture.timeStamp * 1000).toLocaleDateString();
       return (
         <TouchableHighlight onPress={ () =>{
               props.navigation.push('Fixture', {id: fixture.fixtureID});
           }}>
-          <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
+          <View flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
             <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
             <Text style={{flex:1,   textAlign:'center'}}>{status}</Text>
             <Text style={{flex:1,   textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
@@ -181,14 +190,14 @@ export const Main = props => {
 
   teamID = JSON.stringify(props.navigation.getParam('id'));
   team = props.teams[teamID];
-  [currentTab, setTab] = useState(0);
-  [fixturesFetched, setFixturesFetched] = useState(false);
-  [leaguesFetched, setLeaguesFetched] = useState(false);
-  [playersFetched, setPlayersFetched] = useState(false);
+  const [currentTab, setTab] = useState(0);
+  const [fixturesFetched, setFixturesFetched] = useState(false);
+  const [leaguesFetched, setLeaguesFetched] = useState(false);
+  const [playersFetched, setPlayersFetched] = useState(false);
 
   if(props.fetching){
     return(
-      <View>
+      <View style={{flex:1}}>
         <View style={{flex:props.topBarFlex}}>
           <RenderTopBar item={team}/>
         </View>
@@ -201,30 +210,36 @@ export const Main = props => {
     bottomPage = null;
     switch(currentTab){
       case 0:
-        props.fetchPastFixtures(teamID);
-        setFixturesFetched(true);
+        if(!fixturesFetched){
+          props.fetchPastFixtures(teamID);
+          setFixturesFetched(true);
+        }
         bottomPage = <RenderFixtures item={team}/>;
         break;
       case 1:
-        props.fetchLeagues(teamID)
-        setLeaguesFetched(true);
+        if(!leaguesFetched){
+          props.fetchLeagues(teamID)
+          setLeaguesFetched(true);
+        }
         bottomPage = <RenderLeagues item={team.leagueIDs}/>;
         break;
       case 2:
-        props.fetchPlayers(teamID)
-        setPlayersFetched(true);
+        if(!playersFetched){
+          props.fetchPlayers(teamID)
+          setPlayersFetched(true);
+        }
         bottomPage = <RenderPlayers item={team.playerIDs}/>;
         break;
     }
-      return (
-      <View>
-        <View style={{flex:props.topBarFlex}}>
-          <RenderTopBar item={team}/>
-        </View>
-        <View style={{flex:props.screenFlex}}>
-          <RenderPlayers item={team.playerIDs}/>
-        </View>
+    return (
+    <View style={{flex:1}}>
+      <View style={{flex:props.topBarFlex}}>
+        <RenderTopBar item={team}/>
       </View>
-      );
+      <View style={{flex:props.screenFlex}}>
+        {bottomPage}
+      </View>
+    </View>
+    );
   }
 }
