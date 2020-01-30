@@ -15,18 +15,25 @@ export function receivePlayer(stats){
 
 export function processPlayers(data){
   collect=[];
-  ids=[];
+  ids={
+    'Attacker': [],
+    'Midfielder': [],
+    'Defender': [],
+    'Goalkeeper': [],
+  };
   data = data.api;
   players = data.players;
   players.forEach( player => {
-    ids.push(player.player_id);
-    collect.push({
-      playerID:player.player_id,
-      name: player.player_name,
-      age: player.age,
-      position: player.position,
-      nationality: player.nationality,
-    });
+    if(player.position != null){
+      ids[player.position].push(player.player_id);
+      collect.push({
+        playerID:player.player_id,
+        name: player.player_name,
+        age: player.age,
+        position: player.position,
+        nationality: player.nationality,
+      });
+    }
   });
   return [ids, collect];
 }
