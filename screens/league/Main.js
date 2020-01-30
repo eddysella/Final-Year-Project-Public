@@ -46,7 +46,7 @@ export const Main = props => {
       standingsBorder=2;
     }
     return (
-      <View>
+      <View style={{flex:1}}>
         <View style={{flex:1, justifyContent: 'space-around'}}>
           <Text style={{flex:1, textAlign:'center'}}>{league.name}</Text>
         </View>
@@ -167,13 +167,13 @@ export const Main = props => {
 
   leagueID = JSON.stringify(props.navigation.getParam('id'));
   league = props.leagues[leagueID];
-  [currentTab, setTab] = useState(0);
-  [teamsFetched, setTeamsFetched] = useState(false);
-  [standingsFetched, setStandingsFetched] = useState(false);
+  const [currentTab, setTab] = useState(0);
+  const [teamsFetched, setTeamsFetched] = useState(false);
+  const [standingsFetched, setStandingsFetched] = useState(false);
 
   if(props.fetchingExtraLeagueData || props.fetchingStandings){
     return(
-      <View>
+      <View style={{flex:1}}>
         <View style={{flex:props.topBarFlex}}>
           <RenderTopBar item={team}/>
         </View>
@@ -186,18 +186,22 @@ export const Main = props => {
       bottomPage = null;
       switch(currentTab){
         case 0:
-          props.fetchTeams(leagueID)
-          setTeamsFetched(true);
+          if(!teamsFetched){
+            props.fetchTeams(leagueID)
+            setTeamsFetched(true);
+          }
           bottomPage = <RenderTeams item={league}/>
           break;
         case 1:
-          props.fetchStandings(leagueID)
-          setStandingsFetched(true);
+          if(!standingsFetched){
+            props.fetchStandings(leagueID)
+            setStandingsFetched(true);
+          }
           bottomPage = <RenderStandings item={props.standings}/>
           break;
       }
       return (
-        <View>
+        <View style={{flex:1}}>
           <View style={{flex:props.topBarFlex}}>
             <RenderTopBar item={team}/>
           </View>
