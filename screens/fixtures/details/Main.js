@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component, useState } from 'react';
 import { ExpoConfigView } from '@expo/samples';
-import {TouchableHighlight, SectionList, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
+import {Image, TouchableHighlight, SectionList, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import {Card} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import { MaterialIndicator,} from 'react-native-indicators';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 const itemWidth = screenWidth - scale(screenWidth/5);
@@ -24,6 +25,81 @@ export const Details = props => {
     );
   };
 
+
+  const RenderTopBar = (item) => {
+    fixture = item.item;
+    statsBorder=0;
+    eventsBorder=0;
+    lineupBorder=0;
+    if(currentTab == 0){
+      statsBorder=2;
+      eventsBorder=0;
+      lineupBorder=0;
+    }else if(currentTab == 1){
+      statsBorder=0;
+      eventsBorder=2;
+      lineupBorder=0;
+    }else if(currentTab == 2){
+      statsBorder=0;
+      eventsBorder=0;
+      lineupBorder=2;
+    }
+
+    return (
+      <View style={{flex:1}}>
+        <View flexDirection={'row'} style={{flex:3, justifyContent: 'space-around'}}>
+          <View style={{flex:1, margin: 5}}>
+            <Image
+            style={{flex:2}}
+            resizeMode={"contain"}
+            source={{ uri: fixture.homeLogo }}
+            />
+            <Text style={{flex:1, textAlign:'center'}}>{fixture.homeName}</Text>
+          </View>
+
+          <View style={{flex:1, margin: 5, alignItems:'center', justifyContent:'center'}}>
+            <Text>{fixture.status}</Text>
+          </View>
+
+          <View style={{flex:1, margin: 5}}>
+            <Image
+            style={{flex:2}}
+            resizeMode={"contain"}
+            source={{ uri: fixture.awayLogo}}
+            />
+            <Text style={{flex:1, textAlign:'center'}}>{fixture.awayName}</Text>
+          </View>
+        </View>
+        <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
+          <TouchableHighlight onPress={() => setTab(0)}
+          style={{flex:1, borderBottomWidth:statsBorder}}>
+          <Text style={{textAlign: 'center'}}>Stats</Text>
+          </TouchableHighlight>
+
+          <TouchableHighlight onPress={() => setTab(1)}
+            style={{flex:1, alignItems: 'center', borderBottomWidth:eventsBorder}}>
+          <Text style={{textAlign:'center'}}>Events</Text>
+          </TouchableHighlight>
+
+          <TouchableHighlight onPress={() => setTab(2)}
+          style={{flex:1, borderBottomWidth:lineupBorder}}>
+          <Text style={{textAlign: 'center'}}>Line-Up</Text>
+          </TouchableHighlight>
+        </View>
+      </View>
+    );
+  }
+
+  function renderNoData(data) {
+    title="There are no " + data + " available";
+    return (
+      <Card title={title} >
+        <View>
+        </View>
+      </Card>
+    );
+  }
+
   function renderStatItem(stat) {
     stat=stat.item
     return (
@@ -35,35 +111,20 @@ export const Details = props => {
     );
   };
 
-  function renderStats(stats, homeTeam, awayTeam) {
+  const RenderStats = (item) => {
+    stats = item.item;
     if(!stats){
         return renderNoData('Stats');
     }
     return (
-      <View style={{flex:props.ScreenFlex}}>
-        <Card>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={stats}
-            renderItem={renderStatItem}
-            keyExtractor={(item,index) => index.toString()}
-          />
-        </Card>
-      </View>
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={stats}
+        renderItem={renderStatItem}
+        keyExtractor={(item,index) => index.toString()}
+      />
     );
   };
-
-  function renderNoData(data){
-    title="There are no " + data + " available";
-    return (
-      <View style={{flex:props.ScreenFlex}}>
-        <Card title={title} >
-          <View>
-          </View>
-        </Card>
-      </View>
-    );
-  }
 
   function renderEventItem(ev) {
     ev=ev.item;
@@ -74,23 +135,19 @@ export const Details = props => {
     );
   };
 
-  function renderEvents(events){
+  const RenderEvents = (item) => {
+    events = item.item;
     if(!events){
       return renderNoData('Events');
     }
     return (
-      //title={ () => renderStatsCardTitle(homeTeam,awayTeam)}
-      <View style={{flex:props.ScreenFlex}}>
-        <Card>
-            <FlatList
-            showsVerticalScrollIndicator={false}
-            // initialScrollIndex={4}
-            data={events}
-            renderItem={renderEventItem}
-            keyExtractor={(item,index) => index.toString()}
-          />
-        </Card>
-      </View>
+        <FlatList
+        showsVerticalScrollIndicator={false}
+        // initialScrollIndex={4}
+        data={events}
+        renderItem={renderEventItem}
+        keyExtractor={(item,index) => index.toString()}
+      />
     );
   }
 
@@ -120,30 +177,58 @@ export const Details = props => {
     );
   };
 
-  function renderLineups(lineups){
+  const RenderLineups = (item) => {
+    lineups = item.item
     if(!lineups){
       return renderNoData('Lineups');
     }
     return (
-      <View style={{flex:props.ScreenFlex}}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          // initialScrollIndex={4}
-          data={lineups}
-          renderItem={renderLineupCards}
-          keyExtractor={(item,index) => index.toString()}
-        />
-      </View>
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={lineups}
+        renderItem={renderLineupCards}
+        keyExtractor={(item,index) => index.toString()}
+      />
     );
   }
 
-  fixture = props.data;
+  fixture = props.screen
+  const [currentTab, setTab] = useState(0);
+  console.log(props.fetching)
 
-  if(props.currentTab == 0){
-    return renderStats(fixture.stats, fixture.homeTeam, fixture.awayTeam);
-  }else if(props.currentTab == 1){
-    return renderEvents(fixture.events);
-  }else if(props.currentTab == 2){
-    return renderLineups(fixture.lineups);
+  if(props.fetching){
+    return(
+      <View style={{flex:1}}>
+        <View style={{flex:props.topBarFlex}}>
+          <RenderTopBar item={props.topBar}/>
+        </View>
+        <View style={{flex:props.screenFlex}}>
+          <MaterialIndicator/>
+        </View>
+      </View>
+    );
+  }else{
+    bottomPage = null;
+    switch(currentTab){
+      case 0:
+        bottomPage = <RenderStats item={fixture.stats}/>;
+        break;
+      case 1:
+        bottomPage = <RenderEvents item={fixture.events}/>;
+        break;
+      case 2:
+        bottomPage = <RenderLineups item={fixture.lineups}/>;
+        break;
+    }
+    return (
+      <View style={{flex:1}}>
+        <View style={{flex:props.topBarFlex}}>
+          <RenderTopBar item={props.topBar}/>
+        </View>
+        <View style={{flex:props.screenFlex}}>
+          {bottomPage}
+        </View>
+      </View>
+    );
   }
 };
