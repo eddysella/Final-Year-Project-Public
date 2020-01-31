@@ -68,7 +68,7 @@ export const Main = props => {
     player = props.players[playerID.item];
     return (
       <TouchableHighlight onPress={ () =>{
-            props.navigation.push('Player', {id: playerID.item});
+            props.navigation.push('Player', {playerID: playerID.item, teamID:teamID});
         }}>
         <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
           <Text h3>{player.name}</Text>
@@ -84,7 +84,6 @@ export const Main = props => {
         <Text style={{alignSelf: 'center',  textAlign:'center'}}>No Players Available</Text>
       );
     }
-    console.log(playerIDs)
     return (
       <SectionList
       ItemSeparatorComponent={ItemSeparator}
@@ -188,7 +187,7 @@ export const Main = props => {
       );
   }
 
-  teamID = JSON.stringify(props.navigation.getParam('id'));
+  teamID = props.navigation.getParam('id');
   team = props.teams[teamID];
   const [currentTab, setTab] = useState(0);
   const [fixturesFetched, setFixturesFetched] = useState(false);

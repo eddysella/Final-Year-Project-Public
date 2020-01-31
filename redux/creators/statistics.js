@@ -1,146 +1,193 @@
 import {
-  REQUEST_TEAM_STATISTICS_BY_ID,
-  RECEIVE_TEAM_STATISTICS_BY_ID,
   REQUEST_PLAYER_STATS_BY_ID,
   RECEIVE_PLAYER_STATS_BY_ID,
 } from '../types'
-import { getStatisticsForTeamInLeague, getPlayerStatisticsByTeamID } from '../../fetch/Team';
-import { requestPlayersForTeam, receivePlayerIDsForTeam } from './teams'
+import { getPlayerStatisticsByTeamID } from '../../fetch/Team';
 
-// from https://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
-String.prototype.hashCode = function() {
-  var hash = 0, i, chr;
-  if (this.length === 0) return hash;
-  for (i = 0; i < this.length; i++) {
-    chr   = this.charCodeAt(i);
-    hash  = ((hash << 5) - hash) + chr;
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
-};
-
-export function requestTeamStatsByID(teamID, leagueID){
-  key = "" + teamID + leagueID;
+export function requestPlayersStatsForTeam(teamID, leagueID){
   return {
-    type: REQUEST_TEAM_STATISTICS_BY_ID,
-    key: key.hashCode(),
+    type: REQUEST_PLAYER_STATS_BY_ID,
     teamID: teamID,
-    leagueID: leagueID,
   };
 }
 
-export function receiveTeamStatsByID(teamID, leagueID, team){
-  key = "" + teamID + leagueID;
-  return {
-    type: RECEIVE_TEAM_STATISTICS_BY_ID,
-    key: key.hashCode(),
-    matchesPlayed: team.matchesPlayed,
-    wins: team.wins,
-    draws: team.draws,
-    losses: team.losses,
-    goals: team.goals,
-    conceded: team.conceded,
-  };
-}
-
-export function fetchTeamStatistics(teamID, leagueID){
-  return (dispatch, getState) => {
-    dispatch( requestTeamStatsByID(teamID, leagueID))
-    return getStatisticsForTeamInLeague(teamID, leagueID)
-      .then( data => processTeamStatistics(data))
-      .then( statistics => dispatch( receiveTeamStatsByID(teamID, leagueID, statistics)));
-  }
-}
-
-function processTeamStatistics(data){
-  collect={};
-  data = data.api;
-  stats = data.statistics;
-  games = stats.matchs
-  goals = stats.goals
-  stats.forEach( team => {
-      collect = {
-          gamesPlayed: games.matchsPlayed,
-          gamesWon: games.wins,
-          gamesDrawn: games.draws,
-          gamesLost: games.loses,
-          scored: goals.goalsFor,
-          conceded: goals.goalsAgainst,
-      };
-  });
-  return collect;
-}
-
-export function receivePlayerStatsByID(teamID, stats){
-  key = "" + teamID + stats.playerID;
+export function receivePlayerStatsForTeam(stats){
   return {
     type: RECEIVE_PLAYER_STATS_BY_ID,
-    key: key.hashCode(),
-    playerID: stats.playerID,
-    name: stats.name,
-    age: stats.age,
-    position: stats.position,
-    nationality: stats.nationality,
-    injured: stats.injured,
-    captain: stats.captain,
-    shots: stats.shots,
-    goals: stats.goals,
-    passes: stats.passes,
-    tackles: stats.tackles,
-    dribbles: stats.dribbles,
-    fouls: stats.fouls,
-    cards: stats.cards,
-    penalties: stats.penalties,
-    games: stats.games,
+    stats: stats,
   };
+}
+
+function shouldFetchStats(stats){
+  if(!stats){
+    return true;
+  }else if(stats.fetching){
+    return false;
+  }
 }
 
 export function fetchPlayerStatistics(teamID){
   return (dispatch, getState) => {
-    dispatch( requestPlayersForTeam(teamID))
-    return getPlayerStatisticsByTeamID(teamID)
-      .then( data => processPlayerStatistics(data))
-      .then( statistics => dispatch( receivePlayerStats(teamID, statistics)));
+    if(shouldFetchStats(getState().playerStatsByID[teamID])){
+      dispatch( requestPlayersStatsForTeam(teamID))
+      return getPlayerStatisticsByTeamID(teamID)
+        .then( data => processPlayerStats(data, teamID))
+        .then( statistics => dispatch( receivePlayerStatsForTeam(statistics)))
+    }
   }
 }
 
-export function receivePlayerStats(teamID, statistics){
-  promises = statistics[1].map( player => {
-    dispatch( receivePlayerStats(teamID, player))
-  });
-  return (dispatch, getState) => {
-    Promise.all([
-      dispatch( receivePlayerIDsForTeam(teamID, statistics[0])),
-      promises,
-    ]);
-  }
-}
-
-function processPlayerStatistics(data){
-  collect=[];
-  ids=[];
+function processPlayerStats(data, teamID){
+  collect={};
   data = data.api;
   players = data.players;
-  stats.forEach( player => {
-      ids.push(player.player_id);
-      collect.push({
-        playerID:player.played_id,
+
+  if(!players){
+    return {};
+  }
+
+  players.forEach( player => {
+    key = (teamID + "x" + player.player_id);
+    if(collect[key] === undefined){
+      collect[key] = {
         name: player.player_name,
-        age: player.age,
-        position: player.position,
-        nationality: player.nationality,
-        injured: player.injured,
-        captain: player.captain,
-        shots: player.shots,
-        goals: player.goals,
-        passes: player.passes,
-        tackles: player.tackles,
+        cards: player.cards,
         dribbles: player.dribbles,
         fouls: player.fouls,
-        cards: player.cards,
-        penalties: player.penalty,
         games: player.games,
+        goals: player.goals,
+        passes: player.passes,
+        shots: player.shots,
+        tackles: player.tackles,
+      };
+    }else{
+      current = collect[key];
+      Object.assign(collect[key], {
+        cards: cards(player.cards, current.cards),
+        dribbles: dribbles(player.dribbles, current.dribbles),
+        fouls: fouls(player.fouls, current.fouls),
+        games: games(player.games, current.games),
+        goals: goals(player.goals, current.goals),
+        passes: passes(player.passes, current.passes),
+        shots: shots(player.shots, current.shots),
+        tackles: tackles(player.tackles, current.tackles),
       });
+    }
   });
-  return [ids, collect];
+  return collect;
 }
+
+function cards(current, additional){
+  return {
+    red: (current.red + additional.red),
+    yellow: (current.yellow + additional.yellow),
+  }
+}
+
+function dribbles(current, additional){
+  return {
+    attempts: (current.attempts + additional.attempts),
+    success: (current.success + additional.success),
+  }
+}
+
+function fouls(current, additional){
+  return {
+    commited: (current.commited + additional.commited),
+    drawn: (current.drawn + additional.drawn),
+  }
+}
+
+function games(current, additional){
+  return {
+    appearances: (current.appearances + additional.appearances),
+    minutes_played: (current.minutes_played + additional.minutes_played),
+  }
+}
+
+function goals(current, additional){
+  return {
+    assists: (current.assists + additional.assists),
+    total: (current.total + additional.total),
+  }
+}
+
+function passes(current, additional){
+
+  curAcc = ((current.accuracy / 100) * current.total);
+  addAcc = ((additional.accuracy / 100) * additional.total);
+  total = (current.total + additional.total);
+  accuracy = ((curAcc + addAcc) / total);
+
+  return {
+    key: (current.key + additional.key),
+    accuracy: accuracy,
+  }
+}
+
+function shots(current, additional){
+  return {
+    on: (current.on + additional.on),
+    total: (current.total + additional.total),
+  }
+}
+
+function tackles(current, additional){
+  return {
+    interceptions: (current.interceptions + additional.interceptions),
+    total: (current.total + additional.total),
+  }
+}
+
+//
+// export function requestTeamStatsByID(teamID, leagueID){
+//   key = "" + teamID + leagueID;
+//   return {
+//     type: REQUEST_TEAM_STATISTICS_BY_ID,
+//     key: key.hashCode(),
+//     teamID: teamID,
+//     leagueID: leagueID,
+//   };
+// }
+//
+// export function receiveTeamStatsByID(teamID, leagueID, team){
+//   key = "" + teamID + leagueID;
+//   return {
+//     type: RECEIVE_TEAM_STATISTICS_BY_ID,
+//     key: key.hashCode(),
+//     matchesPlayed: team.matchesPlayed,
+//     wins: team.wins,
+//     draws: team.draws,
+//     losses: team.losses,
+//     goals: team.goals,
+//     conceded: team.conceded,
+//   };
+// }
+//
+// export function fetchTeamStatistics(teamID, leagueID){
+//   return (dispatch, getState) => {
+//     dispatch( requestTeamStatsByID(teamID, leagueID))
+//     return getStatisticsForTeamInLeague(teamID, leagueID)
+//       .then( data => processTeamStatistics(data))
+//       .then( statistics => dispatch( receiveTeamStatsByID(teamID, leagueID, statistics)));
+//   }
+// }
+//
+// function processTeamStatistics(data){
+//   collect={};
+//   data = data.api;
+//   stats = data.statistics;
+//   games = stats.matchs
+//   goals = stats.goals
+//   stats.forEach( team => {
+//       collect = {
+//           gamesPlayed: games.matchsPlayed,
+//           gamesWon: games.wins,
+//           gamesDrawn: games.draws,
+//           gamesLost: games.loses,
+//           scored: goals.goalsFor,
+//           conceded: goals.goalsAgainst,
+//       };
+//   });
+//   return collect;
+// }
