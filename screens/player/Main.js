@@ -60,22 +60,24 @@ export const Main = props => {
         switch(key){
           case 'games':
             collect[key] = [
-              "Appearances: " + stat.appearances,
+              "Appearences: " + stat.appearences,
               "Minutes Played: " + stat.minutes_played,
             ]
             break;
           case 'shots':
+            modAcc = stat.accuracy.toFixed(0)
             collect[key] = [
               "Total: " + stat.total,
               "Goals: " + stat.goals,
-              "Conversion R: " + stat.accuracy,
+              "Conversion R: " + modAcc + "%",
               "Assists: " + stat.assists,
             ]
             break;
           case 'passes':
+            modAcc = stat.accuracy.toFixed(0)
             collect[key] = [
               "Key: " + stat.key,
-              "Accuracy: " + stat.accuracy,
+              "Accuracy: " + modAcc + "%",
             ]
             break;
           case 'dribbles':
@@ -98,7 +100,7 @@ export const Main = props => {
             break;
           case 'fouls':
             collect[key] = [
-              "Commited: " + stat.commited,
+              "Committed: " + stat.committed,
               "Drawn: " + stat.drawn,
             ]
             break;
@@ -111,11 +113,11 @@ export const Main = props => {
     stats = item.item;
     if(!stats || stats == null){
       return(
-        <Text style={{alignSelf: 'center',  textAlign:'center'}}>No Players Available</Text>
+        <Text style={{alignSelf: 'center',  textAlign:'center'}}>No Statistics Available</Text>
       );
     }
     stats.shots['goals']=stats.goals.total;
-    stats.shots['accuracy']=(stats.goals.total/stats.shots.total)*100;
+    stats.shots['accuracy']=((stats.goals.total/stats.shots.total)*100);
     stats.shots['assists']=stats.goals.assists;
 
     processedStats = processStats(stats);

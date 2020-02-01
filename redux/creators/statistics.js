@@ -49,93 +49,102 @@ function processPlayerStats(data, teamID){
   players.forEach( player => {
     key = (teamID + "x" + player.player_id);
     if(collect[key] === undefined){
-      collect[key] = {
-        name: player.player_name,
-        cards: player.cards,
-        dribbles: player.dribbles,
-        fouls: player.fouls,
-        games: player.games,
-        goals: player.goals,
-        passes: player.passes,
-        shots: player.shots,
-        tackles: player.tackles,
-      };
+      collect[key] = player;
     }else{
       current = collect[key];
       Object.assign(collect[key], {
-        cards: cards(player.cards, current.cards),
-        dribbles: dribbles(player.dribbles, current.dribbles),
-        fouls: fouls(player.fouls, current.fouls),
-        games: games(player.games, current.games),
-        goals: goals(player.goals, current.goals),
-        passes: passes(player.passes, current.passes),
-        shots: shots(player.shots, current.shots),
-        tackles: tackles(player.tackles, current.tackles),
+        cards: cards(current.cards, player.cards),
+        dribbles: dribbles(current.dribbles, player.dribbles),
+        fouls: fouls(current.fouls, player.fouls),
+        games: games(current.games, player.games),
+        goals: goals(current.goals, player.goals),
+        passes: passes(current.passes, player.passes),
+        shots: shots(current.shots, player.shots),
+        tackles: tackles(current.tackles, player.tackles),
       });
     }
   });
   return collect;
 }
 
+function sumStat(current=null, additional=null, stat){
+  cur = current[stat];
+  add = additional[stat];
+  if(cur == 'NaN' && add != 'NaN'){
+    return add;
+  }else if(cur != 'NaN' && add == 'NaN'){
+    return cur;
+  }else if(cur == 'NaN' && add == 'NaN'){
+    return 0;
+  }
+  return cur + add;
+}
+
 function cards(current, additional){
   return {
-    red: (current.red + additional.red),
-    yellow: (current.yellow + additional.yellow),
+    red: sumStat(current, additional, 'red'),
+    yellow: sumStat(current, additional, 'yellow'),
   }
 }
 
 function dribbles(current, additional){
   return {
-    attempts: (current.attempts + additional.attempts),
-    success: (current.success + additional.success),
+    attempts: sumStat(current, additional, 'attempts'),
+    success: sumStat(current, additional, 'success'),
   }
 }
 
 function fouls(current, additional){
   return {
-    commited: (current.commited + additional.commited),
-    drawn: (current.drawn + additional.drawn),
+    committed: sumStat(current, additional, 'committed'),
+    drawn: sumStat(current, additional, 'drawn'),
   }
 }
 
 function games(current, additional){
   return {
-    appearances: (current.appearances + additional.appearances),
-    minutes_played: (current.minutes_played + additional.minutes_played),
+    appearences: sumStat(current, additional, 'appearences'),
+    minutes_played: sumStat(current, additional, 'minutes_played'),
   }
 }
 
 function goals(current, additional){
   return {
-    assists: (current.assists + additional.assists),
-    total: (current.total + additional.total),
+    assists: sumStat(current, additional, 'assists'),
+    total: sumStat(current, additional, 'total'),
+  }
+}
+
+function accuracy(current=null, additional=null){
+  if(!current.total || !additional.total){
+    return current.accuracy < 1 ? (current.accuracy * 100) : current.accuracy ;
+  }else{
+    curAcc = ((current.accuracy / 100) * current.total);
+    addAcc = ((additional.accuracy / 100) * additional.total);
+    total = (current.total + additional.total);
+    return ((curAcc + addAcc) / total);
   }
 }
 
 function passes(current, additional){
 
-  curAcc = ((current.accuracy / 100) * current.total);
-  addAcc = ((additional.accuracy / 100) * additional.total);
-  total = (current.total + additional.total);
-  accuracy = ((curAcc + addAcc) / total);
-
   return {
-    key: (current.key + additional.key),
-    accuracy: accuracy,
+    key: sumStat(current, additional, 'key'),
+    accuracy: accuracy(current, additional),
   }
 }
 
 function shots(current, additional){
   return {
-    on: (current.on + additional.on),
-    total: (current.total + additional.total),
+    on: sumStat(current, additional, 'on'),
+    total: sumStat(current, additional, 'total'),
   }
 }
 
 function tackles(current, additional){
   return {
-    interceptions: (current.interceptions + additional.interceptions),
-    total: (current.total + additional.total),
+    interceptions: sumStat(current, additional, 'interceptions'),
+    total: sumStat(current, additional, 'total'),
   }
 }
 
@@ -191,3 +200,57 @@ function tackles(current, additional){
 //   });
 //   return collect;
 // }
+
+//
+// function processPlayerStats(data, teamID){
+//   collect={};
+//   data = data.api;
+//   players = data.players;
+//
+//   if(!players){
+//     return {};
+//   }
+//
+//   players.forEach( player => {
+//     key = (teamID + "x" + player.player_id);
+//     if(!(key in collect)){
+//       collect[key]={};
+//     }
+//     Object.assign(collect[key], createStats(collect[key], player));
+//   });
+//   console.log(collect)
+//   return collect;
+// }
+//
+// function createStats(current=null, additional=null){
+//
+//   if(Object.entries(current).length === 0){
+//     return additional;
+//   }
+//
+//   stats={
+//   cards: ['red', 'yellow'],
+//   dribbles: ['attempts','success'],
+//   fouls: ['committed', 'drawn'],
+//   games: ['appearances', 'minutes_played'],
+//   goals: ['assists', 'total'],
+//   shots: ['on', 'total'],
+//   tackles: ['interceptions', 'total'],
+//
+//   for(group in stats){
+//     stats[group]=sumStat(current, additional, stats[group]);
+//   }
+//
+//   stats.passes.accuracy = accuracy(current, additional);
+//   return stats;
+// }
+//
+// function sumStat(current=null, additional=null, group){
+//   collect = {}
+//   for (stat in group){
+//     collect[stat] = current[stat] + additional[stat];
+//   }
+//   return collect;
+// }
+//
+//
