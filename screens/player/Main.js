@@ -13,6 +13,7 @@ const itemHorizontalPadding = (itemWidth/5);
 const itemVerticalPadding = scale(15);
 export const Main = props => {
   const statTitles = [
+    'Player',
     'Games',
     'Shots',
     'Passes',
@@ -55,6 +56,15 @@ export const Main = props => {
 
   function processStats(stats){
     collect = {};
+    collect['player'] = [
+      "Position: " + stats.position,
+      "Nationality: " + stats.nationality,
+      "Height: " + stats.height,
+      "Weight: " + stats.weight,
+      "Age: " + stats.age,
+      "Injured: " + (stats.injured == 0 ? "No" : "Yes"),
+      "Captain: " + (stats.captain == 0 ? "No" : "Yes"),
+    ]
     for(key in stats){
       stat = stats[key];
         switch(key){
@@ -127,13 +137,14 @@ export const Main = props => {
       ItemSeparatorComponent={ItemSeparator}
       ref={(ref) => { this.leagueList = ref; }}
       sections={[
-        {title: statTitles[0], data:processedStats.games},
-        {title: statTitles[1], data:processedStats.shots},
-        {title: statTitles[2], data:processedStats.passes},
-        {title: statTitles[3], data:processedStats.dribbles},
-        {title: statTitles[4], data:processedStats.tackles},
-        {title: statTitles[5], data:processedStats.cards},
-        {title: statTitles[6], data:processedStats.fouls},
+        {title: statTitles[0], data:processedStats.player},
+        {title: statTitles[1], data:processedStats.games},
+        {title: statTitles[2], data:processedStats.shots},
+        {title: statTitles[3], data:processedStats.passes},
+        {title: statTitles[4], data:processedStats.dribbles},
+        {title: statTitles[5], data:processedStats.tackles},
+        {title: statTitles[6], data:processedStats.cards},
+        {title: statTitles[7], data:processedStats.fouls},
       ]}
       renderItem={renderItem}
       keyExtractor={(item,index) => item.toString()}
@@ -162,7 +173,7 @@ export const Main = props => {
     );
     }else{
       if(!statsFetched){
-        props.fetchStatistics(teamID);
+        props.fetchStatistics(teamID, playerID);
         setStatsFetched(true);
       }
       stats = props.playerStats[(teamID + "x" + playerID)];

@@ -11,7 +11,6 @@ function player(
       playerID: action.playerID,
       name: action.name,
       age: action.age,
-      position: action.position,
       nationality: action.nationality,
     });
     default:

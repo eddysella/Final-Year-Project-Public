@@ -8,7 +8,6 @@ export function receivePlayer(stats){
     playerID: stats.playerID,
     name: stats.name,
     age: stats.age,
-    position: stats.position,
     nationality: stats.nationality,
   };
 }
@@ -30,7 +29,6 @@ export function processPlayers(data){
         playerID:player.player_id,
         name: player.player_name,
         age: player.age,
-        position: player.position,
         nationality: player.nationality,
       });
     }
