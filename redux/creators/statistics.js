@@ -26,9 +26,9 @@ function shouldFetchStats(stats){
   }
 }
 
-export function fetchPlayerStatistics(teamID){
+export function fetchPlayerStatistics(teamID, playerID){
   return (dispatch, getState) => {
-    if(shouldFetchStats(getState().playerStatsByID[teamID])){
+    if(shouldFetchStats(getState().playerStatsByID[(teamID + "x" + playerID)])){
       dispatch( requestPlayersStatsForTeam(teamID))
       return getPlayerStatisticsByTeamID(teamID)
         .then( data => processPlayerStats(data, teamID))
