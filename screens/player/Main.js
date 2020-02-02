@@ -173,7 +173,7 @@ export const Main = props => {
     );
     }else{
       if(!statsFetched){
-        props.fetchStatistics(teamID, playerID);
+        props.fetchStatistics(teamID);
         setStatsFetched(true);
       }
       stats = props.playerStats[(teamID + "x" + playerID)];

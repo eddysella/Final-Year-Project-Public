@@ -10,6 +10,7 @@ import {
   REQUEST_FUTURE_TEAM_FIXTURES,
   RECEIVE_FUTURE_TEAM_FIXTURES,
   RECEIVE_MULTIPLE_TEAMS,
+  STATS_FETCHED_FOR_TEAM,
 } from '../types'
 
 function team(
@@ -23,6 +24,7 @@ function team(
     logo: '',
     pastFixtures: [],
     futureFixtures: [],
+    statsFetched: false,
   },
   action
   ){
@@ -75,6 +77,10 @@ function team(
       fetchingFutureFixtures: false,
       futureFixtures: action.fixturesInOrder,
     });
+    case STATS_FETCHED_FOR_TEAM:
+    return Object.assign({}, state, {
+      statsFetched: true,
+    });
     default:
       return state;
   }
@@ -103,6 +109,10 @@ export function teamsByID(state={
     case RECEIVE_FUTURE_TEAM_FIXTURES:
       return Object.assign({}, state, {
         fetching: false,
+        [action.teamID]: team(state[action.teamID], action),
+        });
+    case STATS_FETCHED_FOR_TEAM:
+      return Object.assign({}, state, {
         [action.teamID]: team(state[action.teamID], action),
         });
     case RECEIVE_MULTIPLE_TEAMS:

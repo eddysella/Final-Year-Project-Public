@@ -10,6 +10,7 @@ import {
   REQUEST_FUTURE_TEAM_FIXTURES,
   RECEIVE_FUTURE_TEAM_FIXTURES,
   RECEIVE_MULTIPLE_TEAMS,
+  STATS_FETCHED_FOR_TEAM,
 } from '../types'
 import { getTeamByID, getLastTwentyFixtures, getNextTenFixtures,
   getAllLeaguesForTeam, getStatisticsForTeamInLeague,
@@ -286,5 +287,12 @@ export function receiveMultipleTeams(teams){
   return {
     type: RECEIVE_MULTIPLE_TEAMS,
     teams: teams,
+  };
+}
+
+export function confirmStatsFetched(teamID){
+  return {
+    type: STATS_FETCHED_FOR_TEAM,
+    teamID: teamID,
   };
 }

@@ -3,6 +3,7 @@ import {
   RECEIVE_PLAYER_STATS_BY_ID,
 } from '../types'
 import { getPlayerStatisticsByTeamID } from '../../fetch/Team';
+import { confirmStatsFetched } from './teams'
 
 export function requestPlayersStatsForTeam(teamID, leagueID){
   return {
@@ -18,21 +19,27 @@ export function receivePlayerStatsForTeam(stats){
   };
 }
 
-function shouldFetchStats(stats){
-  if(!stats){
+function shouldFetchStats(team){
+  if(!(team.statsFetched)){
     return true;
   }else if(stats.fetching){
+    return false;
+  }else{
     return false;
   }
 }
 
-export function fetchPlayerStatistics(teamID, playerID){
+export function fetchPlayerStatistics(teamID){
   return (dispatch, getState) => {
-    if(shouldFetchStats(getState().playerStatsByID[(teamID + "x" + playerID)])){
+    if(shouldFetchStats(getState().teamsByID[teamID])){
+      console.log("FetchingStats")
       dispatch( requestPlayersStatsForTeam(teamID))
       return getPlayerStatisticsByTeamID(teamID)
         .then( data => processPlayerStats(data, teamID))
-        .then( statistics => dispatch( receivePlayerStatsForTeam(statistics)))
+        .then( statistics => {
+          dispatch( confirmStatsFetched(teamID));
+          dispatch( receivePlayerStatsForTeam(statistics));
+        })
     }
   }
 }
