@@ -177,7 +177,6 @@ export const Main = props => {
         setStatsFetched(true);
       }
       stats = props.playerStats[(teamID + "x" + playerID)];
-      console.log(stats)
       return (
         <View style={{flex:1}}>
           <View style={{flex:props.topBarFlex}}>

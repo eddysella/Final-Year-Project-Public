@@ -14,7 +14,6 @@ export function followingLeagueIDs(state = [], action){
       return state.filter(function(value, index, arr){
         return value != action.leagueID;
       });
-      return
     default:
       return state;
   }
