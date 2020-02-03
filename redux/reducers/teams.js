@@ -24,6 +24,8 @@ function team(
     logo: '',
     pastFixtures: [],
     futureFixtures: [],
+    nextPastFixturesPage: 1,
+    nextFutureFixturesPage: 1,
     statsFetched: false,
   },
   action
@@ -66,7 +68,8 @@ function team(
     case RECEIVE_PAST_TEAM_FIXTURES:
     return Object.assign({}, state, {
       fetchingPastFixtures: false,
-      pastFixtures: action.fixturesInOrder,
+      pastFixtures: [...state.pastFixtures, ...action.fixtures],
+      nextPastFixturesPage: (state.nextPastFixturesPage+1),
     });
     case REQUEST_FUTURE_TEAM_FIXTURES:
     return Object.assign({}, state, {
@@ -75,7 +78,8 @@ function team(
     case RECEIVE_FUTURE_TEAM_FIXTURES:
     return Object.assign({}, state, {
       fetchingFutureFixtures: false,
-      futureFixtures: action.fixturesInOrder,
+      futureFixtures: [...state.futureFixtures, ...action.fixtures],
+      nextFutureFixturesPage: (state.nextFutureFixturesPage+1),
     });
     case STATS_FETCHED_FOR_TEAM:
     return Object.assign({}, state, {
