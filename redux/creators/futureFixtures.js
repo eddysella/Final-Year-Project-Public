@@ -26,14 +26,15 @@ export function fetchFollowingFutureFixtures(){
     leagueIDs = getState().followingLeagueIDs;
     leaguePromises = fetchFutureLeagueFixtures(leagueIDs, page);
     dispatch( requestFutureFixtures())
-    return Promise.all([teamPromises, leaguePromises])
+    return Promise.all([leaguePromises, teamPromises])
     .then( () => dispatch( receiveFutureFixtures()));
   }
 }
 
-export function requestFutureTeamFixtures(){
+export function requestFutureTeamFixtures(teamID){
   return {
     type: REQUEST_FUTURE_TEAM_FIXTURES,
+    teamID: teamID,
   }
 }
 
@@ -51,7 +52,8 @@ function fetchFutureTeamFixtures(teamIDs, fixturesCurrentPage){
     return teamIDs.map( teamID => {
       teamCurrentPage = getState().teamsByID.teamID['nextFutureFixturesPage'];
       if(shouldFetchFixtures(fixturesCurrentPage, teamCurrentPage)){
-        dispatch( getFutureTeamFixtures(teamID, page))
+        requestFutureTeamFixtures(teamID)
+        return getFutureTeamFixtures(teamID, page)
         .then( data => processFixtures(data))
         .then( processedData => {
           dispatch( receiveFutureTeamFixtures(processedData[0], teamID)));
@@ -62,9 +64,10 @@ function fetchFutureTeamFixtures(teamIDs, fixturesCurrentPage){
   }
 }
 
-export function requestFutureLeagueFixtures(){
+export function requestFutureLeagueFixtures(leagueID){
   return {
     type: REQUEST_FUTURE_LEAGUE_FIXTURES,
+    leagueID: leagueID,
   }
 }
 
@@ -82,7 +85,8 @@ function fetchFutureLeagueFixtures(leagueIDs, fixturesCurrentPage){
     return leagueIDs.map( leagueID => {
       leagueCurrentPage = getState().leaguesByID.leagueID['nextFutureFixturesPage'];
       if(shouldFetchFixtures(fixturesCurrentPage, leagueCurrentPage)){
-        dispatch( getFutureLeagueFixtures(leagueID, page))
+        requestFutureLeagueFixtures(leagueID)
+        return getFutureLeagueFixtures(leagueID, page)
         .then( data => processFixtures(data))
         .then( processedData => {
           dispatch( receiveFutureLeagueFixtures(processedData[0], leagueID)));

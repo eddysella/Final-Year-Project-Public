@@ -26,14 +26,15 @@ export function fetchFollowingPastFixtures(){
     leagueIDs = getState().followingLeagueIDs;
     leaguePromises = fetchPastLeagueFixtures(leagueIDs, page);
     dispatch( requestPastFixtures())
-    return Promise.all([teamPromises, leaguePromises])
+    return Promise.all([leaguePromises, teamPromises])
     .then( () => dispatch( receivePastFixtures()));
   }
 }
 
-export function requestPastTeamFixtures(){
+export function requestPastTeamFixtures(teamID){
   return {
     type: REQUEST_PAST_TEAM_FIXTURES,
+    teamID: teamID,
   }
 }
 
@@ -51,7 +52,8 @@ function fetchPastTeamFixtures(teamIDs, fixturesCurrentPage){
     return teamIDs.map( teamID => {
       teamCurrentPage = getState().teamsByID.teamID['nextPastFixturesPage'];
       if(shouldFetchFixtures(fixturesCurrentPage, teamCurrentPage)){
-        dispatch( getPastTeamFixtures(teamID, page))
+        requestPastTeamFixtures(teamID)
+        return getPastTeamFixtures(teamID, page)
         .then( data => processFixtures(data))
         .then( processedData => {
           dispatch( receivePastTeamFixtures(processedData[0], teamID)));
@@ -62,9 +64,10 @@ function fetchPastTeamFixtures(teamIDs, fixturesCurrentPage){
   }
 }
 
-export function requestPastLeagueFixtures(){
+export function requestPastLeagueFixtures(leagueID){
   return {
     type: REQUEST_PAST_LEAGUE_FIXTURES,
+    leagueID: leagueID,
   }
 }
 
@@ -82,7 +85,8 @@ function fetchPastLeagueFixtures(leagueIDs, fixturesCurrentPage){
     return leagueIDs.map( leagueID => {
       leagueCurrentPage = getState().leaguesByID.leagueID['nextPastFixturesPage'];
       if(shouldFetchFixtures(fixturesCurrentPage, leagueCurrentPage)){
-        dispatch( getPastLeagueFixtures(leagueID, page))
+        requestPastLeagueFixtures(leagueID)
+        return getPastLeagueFixtures(leagueID, page)
         .then( data => processFixtures(data))
         .then( processedData => {
           dispatch( receivePastLeagueFixtures(processedData[0], leagueID)));

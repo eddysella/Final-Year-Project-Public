@@ -7,13 +7,11 @@ import {
   RESET_FIXTURES,
 } from '../types'
 
-function mergeIDs(previous = [], additional){
-  return [...previous, ...additional];
-}
-
-export function fixturesPagination(state={
+export function fixturesStatus(state={
   futureNextPage: 1,
   pastNextPage: 1,
+  pastFetch: false,
+  futureFetch: false,
 }, action){
   switch(action.type){
     case INCREASE_PAST_PAGE:
@@ -22,28 +20,14 @@ export function fixturesPagination(state={
       return Object.assign({}, state, { futureNextPage: (state.futureNextPage+1) });
     case RESET_FIXTURES:
       return Object.assign({}, state, { futureNextPage: 1, pastNextPage: 1, });
-    default:
-      return state;
-  }
-}
-
-export function fixturesPast(state=false, action){
-  switch(action.type){
     case REQUEST_PAST_FIXTURES:
-      return true;
+      return Object.assign({}, state, { pastFetch: true, });
     case RECEIVE_PAST_FIXTURES:
-      return false;
-    default:
-      return state;
-  }
-}
-
-export function fixturesFuture(state=false, action){
-  switch(action.type){
+      return Object.assign({}, state, { pastFetch: false, });
     case REQUEST_FUTURE_FIXTURES:
-      return true;
+      return Object.assign({}, state, { futureFetch: true, });
     case RECEIVE_FUTURE_FIXTURES:
-      return false;
+      return Object.assign({}, state, { futureFetch: false, });
     default:
       return state;
   }
