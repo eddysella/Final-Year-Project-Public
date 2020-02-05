@@ -2,6 +2,27 @@ import {
   STORE_FIXTURES,
 } from '../types'
 
+import { fetchFollowingPastFixtures } './pastFixtures';
+import { fetchFollowingFutureFixtures } './futureFixtures';
+
+const dayStart = null;
+const dayEnd = null;
+
+export function initFixtures(){
+  fetchFollowingPastFixtures();
+  fetchFollowingFutureFixtures();
+}
+
+function todayTimeStamp(){
+  start = new Date();
+  start.setHours(0,0,0,0);
+  dayStart = start.toUTCString();
+
+  end = new Date(start.getTime());
+  end.setHours(23,59,59,999);
+  dayEnd = end.toUTCString();
+}
+
 export function storeFixtures(fixtures){
   return {
     type: STORE_FIXTURES,
@@ -30,7 +51,8 @@ function processFixtureStatus(data){
 }
 
 export function processFixtures(data){
-  identifiers=[];
+  todayIDs=[];
+  otherIDs=[];
   collect={};
   data = data.api;
   fixtures = data.fixtures;
@@ -40,23 +62,27 @@ export function processFixtures(data){
   }
 
   fixtures.forEach( fixture => {
-      identifiers.push([fixture.fixture_id, fixture.timeStamp, fixture.league_id]);
-      collect[fixture.fixture_id].push({
-          timeStamp:fixture.event_timestamp,
-          status: processFixtureStatus([
-            fixture.statusShort,
-            fixture.event_timestamp,
-            fixture.goalsHomeTeam,
-            fixture.goalsAwayTeam,
-            fixture.elapsed
-          ]),
-          elapsed:fixture.elapsed,
-          homeTeam:fixture.homeTeam,
-          awayTeam:fixture.awayTeam,
-          goalsHome:String(fixture.goalsHomeTeam),
-          goalsAway:String(fixture.goalsAwayTeam),
-          statusShort: fixture.statusShort,
-      });
+    if(fixture.timeStamp >= dayStart && fixture.timeStamp <= dayEnd ){
+      todayIDs.push([fixture.fixture_id, fixture.timeStamp, fixture.league_id]);
+    }else{
+      otherIDs.push([fixture.fixture_id, fixture.timeStamp, fixture.league_id]);
+    }
+    collect[fixture.fixture_id].push({
+      timeStamp:fixture.event_timestamp,
+      status: processFixtureStatus([
+        fixture.statusShort,
+        fixture.event_timestamp,
+        fixture.goalsHomeTeam,
+        fixture.goalsAwayTeam,
+        fixture.elapsed
+      ]),
+      elapsed:fixture.elapsed,
+      homeTeam:fixture.homeTeam,
+      awayTeam:fixture.awayTeam,
+      goalsHome:String(fixture.goalsHomeTeam),
+      goalsAway:String(fixture.goalsAwayTeam),
+      statusShort: fixture.statusShort,
+    });
   });
-  return [identifiers,collect];
+  return [todayIDs, otherIDs, collect];
 }
