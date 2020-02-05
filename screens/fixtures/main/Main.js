@@ -13,11 +13,9 @@ const itemVerticalPadding = scale(15);
 
 export const Main = props => {
 
-  listRef = React.createRef();
-
-  useEffect(() => {
-    this.flatListRef.scrollToIndex({index:0});
-  })
+    // useEffect(() => {
+    //   this.flatListRef.scrollToIndex({index:0});
+    // })
 
   function ItemSeparator(){
     return (
@@ -55,8 +53,6 @@ export const Main = props => {
       {
         <View key={props.leagueNames[league.index]} style={{justifyContent: 'center', alignItems: 'center'}}>
             <FlatList
-            // showsVerticalScrollIndicator={false}
-            // initialScrollIndex={4}
             data={league.item}
             renderItem={renderItem}
             keyExtractor={(item,index) => item.id.toString()}
