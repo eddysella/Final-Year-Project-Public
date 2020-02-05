@@ -16,7 +16,7 @@ export const Main = props => {
   listRef = React.createRef();
 
   useEffect(() => {
-    this.flatListRef.scrollToIndex({index:0});
+    this.listRef.scrollToIndex({index:0});
   })
 
   function ItemSeparator(){
@@ -78,7 +78,7 @@ export const Main = props => {
       <View style={{flex:props.screenFlex}}>
         <FlatList
           ItemSeparatorComponent={ItemSeparator}
-          ref={(ref) => { this.flatListRef = ref; }}
+          ref={(ref) => { this.listRef = ref; }}
           initialNumToRender={3}
           data={props.leagueFixtures}
           renderItem={renderCards}
