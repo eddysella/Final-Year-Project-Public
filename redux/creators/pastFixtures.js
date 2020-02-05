@@ -1,10 +1,31 @@
 import {
+  RECEIVE_TODAY_TEAM_FIXTURES,
+  RECEIVE_TODAY_LEAGUE_FIXTURES,
   REQUEST_PAST_FIXTURES,
-  RECEIVE_PAST_LEAGUE_FIXTURES,
+  RECEIVE_PAST_FIXTURES,
+  REQUEST_PAST_TEAM_FIXTURES,
   RECEIVE_PAST_TEAM_FIXTURES,
+  REQUEST_PAST_LEAGUE_FIXTURES,
+  RECEIVE_PAST_LEAGUE_FIXTURES,
 } from '../types'
 import { getPastLeagueFixtures, getPastTeamFixtures, } from '../../fetch/FixturesV2';
 import { processFixtures, storeFixtures } from './processFixtures'
+
+export function receiveTodayTeamFixtures(teamID, fixtures){
+  return {
+    type: RECEIVE_TODAY_TEAM_FIXTURES,
+    teamID: teamID,
+    fixtures: fixtures,
+  }
+}
+
+export function receiveTodayLeagueFixtures(fixtures, leagueID){
+  return {
+    type: RECEIVE_TODAY_LEAGUE_FIXTURES,
+    leagueID: leagueID,
+    fixtures: fixtures,
+  }
+}
 
 export function requestPastFixtures(){
   return {
@@ -18,13 +39,45 @@ export function receivePastFixtures(){
   }
 }
 
+function shouldFetchFixtures(fixturesPage, entityPage){
+  if(fixturesPage > entityPage){
+    return true;
+  }else{
+    return false;
+  }
+}
+
 export function fetchFollowingPastFixtures(){
   return (dispatch, getState) => {
-    fixturesCurrentPage = getState().fixturesPagination['futureNextPage'];
+    fixturesNextPage = getState().fixturesPagination['futureNextPage'];
+
     teamIDs = getState().followingTeamIDs;
-    teamPromises = fetchPastTeamFixtures(teamIDs, page);
+    teamPromises = teamIDs.map( teamID => {
+      teamNextPage = getState().teamsByID.teamID['nextFutureFixturesPage'];
+      if(shouldFetchFixtures(fixturesNextPage, teamNextPage)){
+        getPastTeamFixtures(teamID, teamNextPage)
+        .then( data => processFixtures(data))
+        .then( processedData => {
+          dispatch( storeFixtures(processedData[2]));
+          dispatch( receiveTodayTeamFixture(processedData[0], teamID))
+          dispatch( receivePastTeamFixtures(processedData[1], teamID));
+        });
+      }
+    });
     leagueIDs = getState().followingLeagueIDs;
-    leaguePromises = fetchPastLeagueFixtures(leagueIDs, page);
+    leaguePromises = leagueIDs.map( leagueID => {
+      leagueNextPage = getState().leaguesByID.leagueID['nextFutureFixturesPage'];
+      if(shouldFetchFixtures(fixturesNextPage, leagueNextPage)){
+        getPastLeagueFixtures(leagueID, leagueNextPage)
+        .then( data => processFixtures(data))
+        .then( processedData => {
+          dispatch( storeFixtures(processedData[2]));
+          dispatch( receiveTodayLeagueFixture(processedData[0], leagueID))
+          dispatch( receivePastLeagueFixtures(processedData[1], leagueID));
+        });
+      }
+    });
+
     dispatch( requestPastFixtures())
     return Promise.all([leaguePromises, teamPromises])
     .then( () => dispatch( receivePastFixtures()));
@@ -42,24 +95,21 @@ export function receivePastTeamFixtures(teamID, fixtures){
   return {
     type: RECEIVE_PAST_TEAM_FIXTURES,
     teamID: teamID,
-    pastFixtures: fixtures,
+    fixtures: fixtures,
   }
 }
 
-function fetchPastTeamFixtures(teamIDs, fixturesCurrentPage){
-  // idk if reinjection of dispatch works, check this in case it fails
+function fetchPastTeamFixtures(teamIDs, fixturesNextPage){
   return (dispatch, getState) => {
     return teamIDs.map( teamID => {
-      teamCurrentPage = getState().teamsByID.teamID['nextPastFixturesPage'];
-      if(shouldFetchFixtures(fixturesCurrentPage, teamCurrentPage)){
-        requestPastTeamFixtures(teamID)
-        return getPastTeamFixtures(teamID, page)
-        .then( data => processFixtures(data))
-        .then( processedData => {
-          dispatch( receivePastTeamFixtures(processedData[0], teamID)));
-          dispatch( storeFixtures(processedData[1]));
-        });
-      }
+      teamNextPage = getState().teamsByID.teamID['nextPastFixturesPage'];
+      requestPastTeamFixtures(teamID)
+      return getPastTeamFixtures(teamID, teamNextPage)
+      .then( processedData => {
+        dispatch( storeFixtures(processedData[2]));
+        dispatch( receiveTodayTeamFixture(processedData[0], teamID))
+        dispatch( receivePastTeamFixtures(processedData[1], teamID));
+      });
     });
   }
 }
@@ -75,24 +125,22 @@ export function receivePastLeagueFixtures(fixtures, leagueID){
   return {
     type: RECEIVE_PAST_LEAGUE_FIXTURES,
     leagueID: leagueID,
-    pastFixtures: fixtures,
+    fixtures: fixtures,
   }
 }
 
-function fetchPastLeagueFixtures(leagueIDs, fixturesCurrentPage){
-  // idk if reinjection of dispatch works, check this in case it fails
+function fetchPastLeagueFixtures(leagueIDs, fixturesNextPage){
   return (dispatch, getState) => {
     return leagueIDs.map( leagueID => {
-      leagueCurrentPage = getState().leaguesByID.leagueID['nextPastFixturesPage'];
-      if(shouldFetchFixtures(fixturesCurrentPage, leagueCurrentPage)){
-        requestPastLeagueFixtures(leagueID)
-        return getPastLeagueFixtures(leagueID, page)
-        .then( data => processFixtures(data))
-        .then( processedData => {
-          dispatch( receivePastLeagueFixtures(processedData[0], leagueID)));
-          dispatch( storeFixtures(processedData[1]));
-        });
-      }
+      leagueNextPage = getState().leaguesByID.leagueID['nextPastFixturesPage'];
+      requestPastLeagueFixtures(leagueID)
+      return getPastLeagueFixtures(leagueID, leagueNextPage)
+      .then( data => processFixtures(data))
+      .then( processedData => {
+        dispatch( storeFixtures(processedData[2]));
+        dispatch( receiveTodayLeagueFixture(processedData[0], leagueID))
+        dispatch( receivePastLeagueFixtures(processedData[1], leagueID));
+      });
     });
   }
 }

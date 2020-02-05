@@ -3,6 +3,7 @@ import {
   RECEIVE_LEAGUE_BY_ID,
   REQUEST_PAST_LEAGUE_FIXTURES,
   RECEIVE_PAST_LEAGUE_FIXTURES,
+  RECEIVE_TODAY_LEAGUE_FIXTURES
   REQUEST_FUTURE_LEAGUE_FIXTURES,
   RECEIVE_FUTURE_LEAGUE_FIXTURES,
   REQUEST_TEAMS_FOR_LEAGUE,
@@ -21,8 +22,9 @@ function league(
     countryCode: '',
     logo: '',
     teamIDs: [],
-    futureFixtures:[],
     pastFixtures:[],
+    todayFixtures: [],
+    futureFixtures:[],
     nextPastFixturesPage: 1,
     nextFutureFixturesPage: 1,
   },
@@ -51,6 +53,10 @@ function league(
         pastFixtures: [...state.pastFixtures, ...action.fixtures],
         nextPastFixturesPage: (state.nextPastFixturesPage+1),
       })
+    case RECEIVE_TODAY_LEAGUE_FIXTURES:
+    return Object.assign({}, state, {
+      todayFixtures: [...state.todayFixtures, ...action.fixtures],
+      });
     case REQUEST_FUTURE_LEAGUE_FIXTURES:
       return Object.assign({}, state, {
         fetchingFutureFixtures: true,

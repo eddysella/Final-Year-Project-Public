@@ -7,6 +7,7 @@ import {
   RECEIVE_LEAGUES_FOR_TEAM,
   REQUEST_PAST_TEAM_FIXTURES,
   RECEIVE_PAST_TEAM_FIXTURES,
+  RECEIVE_TODAY_TEAM_FIXTURES,
   REQUEST_FUTURE_TEAM_FIXTURES,
   RECEIVE_FUTURE_TEAM_FIXTURES,
   RECEIVE_MULTIPLE_TEAMS,
@@ -23,6 +24,7 @@ function team(
     name: '',
     logo: '',
     pastFixtures: [],
+    todayFixtures: [],
     futureFixtures: [],
     nextPastFixturesPage: 1,
     nextFutureFixturesPage: 1,
@@ -71,6 +73,10 @@ function team(
       pastFixtures: [...state.pastFixtures, ...action.fixtures],
       nextPastFixturesPage: (state.nextPastFixturesPage+1),
     });
+    case RECEIVE_TODAY_TEAM_FIXTURES:
+    return Object.assign({}, state, {
+      todayFixtures: [...state.todayFixtures, ...action.fixtures],
+      });
     case REQUEST_FUTURE_TEAM_FIXTURES:
     return Object.assign({}, state, {
       fetchingFutureFixtures: true,
