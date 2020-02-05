@@ -14,20 +14,22 @@ export function fixturesStatus(state={
   futureFetch: false,
 }, action){
   switch(action.type){
-    case INCREASE_PAST_PAGE:
-      return Object.assign({}, state, { pastNextPage: (state.pastNextPage+1) });
-    case INCREASE_FUTURE_PAGE:
-      return Object.assign({}, state, { futureNextPage: (state.futureNextPage+1) });
     case RESET_FIXTURES:
       return Object.assign({}, state, { futureNextPage: 1, pastNextPage: 1, });
     case REQUEST_PAST_FIXTURES:
       return Object.assign({}, state, { pastFetch: true, });
     case RECEIVE_PAST_FIXTURES:
-      return Object.assign({}, state, { pastFetch: false, });
+      return Object.assign({}, state, {
+        pastFetch: false,
+        pastNextPage: (state.pastNextPage+1),
+      });
     case REQUEST_FUTURE_FIXTURES:
       return Object.assign({}, state, { futureFetch: true, });
     case RECEIVE_FUTURE_FIXTURES:
-      return Object.assign({}, state, { futureFetch: false, });
+      return Object.assign({}, state, {
+        futureFetch: false,
+        futureNextPage: (state.futureNextPage+1),
+      });
     default:
       return state;
   }
