@@ -1,34 +1,90 @@
 import {
-  STORE_FIXTURES,
+  STORE_FIXTURES_BY_ID,
+  STORE_FIXTURES_BY_DATE,
+  REQUEST_PAST_FIXTURES,
+  RECEIVE_PAST_FIXTURES,
+  RECEIVE_TODAY_LEAGUE_FIXTURES,
+  RECEIVE_TODAY_TEAM_FIXTURES,
+  REQUEST_FUTURE_FIXTURES,
+  RECEIVE_FUTURE_FIXTURES,
 } from '../types'
 
 import { fetchFollowingPastFixtures } './pastFixtures';
 import { fetchFollowingFutureFixtures } './futureFixtures';
 
-const dayStart = null;
-const dayEnd = null;
+const today = new Date().toLocaleDateString();
 
-export function initFixtures(){
-  fetchFollowingPastFixtures();
-  fetchFollowingFutureFixtures();
-}
-
-function todayTimeStamp(){
-  start = new Date();
-  start.setHours(0,0,0,0);
-  dayStart = start.toUTCString();
-
-  end = new Date(start.getTime());
-  end.setHours(23,59,59,999);
-  dayEnd = end.toUTCString();
-}
-
-export function storeFixtures(fixtures){
+export function storeFixturesByID(fixtures){
   return {
-    type: STORE_FIXTURES,
+    type: STORE_FIXTURES_BY_ID,
     fixtures: fixtures,
   }
 }
+
+export function storeFixtureIDsByDate(date, fixtures){
+  return {
+    type: STORE_FIXTURES_BY_DATE,
+    date: date,
+    fixtures: fixtures,
+  }
+}
+
+export function requestPastFixtures(){
+  return {
+    type: REQUEST_PAST_FIXTURES,
+  }
+}
+
+export function receivePastFixtures(date){
+  return {
+    type: RECEIVE_PAST_FIXTURES,
+    date: date,
+  }
+}
+
+export function requestFutureFixtures(){
+  return {
+    type: REQUEST_FUTURE_FIXTURES,
+  }
+}
+
+export function receiveFutureFixtures(date){
+  return {
+    type: RECEIVE_FUTURE_FIXTURES,
+    date: date,
+  }
+}
+
+export function receiveTodayLeagueFixtures(leagueID, fixtures){
+  return {
+    type: RECEIVE_TODAY_LEAGUE_FIXTURES,
+    leagueID: leagueID,
+    fixtures: fixtures,
+  }
+}
+
+export function receiveTodayTeamFixtures(teamID, fixtures){
+  return {
+    type: RECEIVE_TODAY_TEAM_FIXTURES,
+    teamID: teamID,
+    fixtures: fixtures,
+  }
+}
+
+export function initFixtures(){
+  fetchFollowingPastFixtures(today);
+  fetchFollowingFutureFixtures(today);
+}
+//
+// function todayTimeStamp(){
+//   start = new Date();
+//   start.setHours(0,0,0,0);
+//   dayStart = start.toUTCString();
+//
+//   end = new Date(start.getTime());
+//   end.setHours(23,59,59,999);
+//   dayEnd = end.toUTCString();
+// }
 
 function processFixtureStatus(data){
   status='';
@@ -50,25 +106,37 @@ function processFixtureStatus(data){
   return status
 }
 
-export function processFixtures(data){
+export function processTeamFixtures(data, page){
   todayIDs=[];
-  otherIDs=[];
-  collect={};
+  fixByDateLeague={};
+  fixByID={};
   data = data.api;
   fixtures = data.fixtures;
 
   if(!fixtures){
-    return[[],[]]
+    return[[],{},{}]
+  }else if(page > 1){
+    fixtures.splice(0, (20*(page-1)))
   }
 
   fixtures.forEach( fixture => {
-    if(fixture.timeStamp >= dayStart && fixture.timeStamp <= dayEnd ){
-      todayIDs.push([fixture.fixture_id, fixture.timeStamp, fixture.league_id]);
-    }else{
-      otherIDs.push([fixture.fixture_id, fixture.timeStamp, fixture.league_id]);
+    date = new Date(fixture.timeStamp*1000).toDateString();
+    leagueID = fixture.league_id;
+
+    if(!(date in fixByDateLeague)){
+      fixByDateLeague[date] = {}
     }
-    collect[fixture.fixture_id].push({
-      timeStamp:fixture.event_timestamp,
+    if(!(leagueID in fixByDateLeague[date])){
+      fixByDateLeague[date][leagueID] = []
+    }
+    if(date == today){
+      todayIDs.push(fixture.fixture_id);
+    }else{
+      fixByDateLeague[date][leagueID].push(fixture.fixture_id);
+    }
+    fixByID[fixture.fixture_id].push({
+      date: date,
+      timeStamp: fixture.event_timestamp,
       status: processFixtureStatus([
         fixture.statusShort,
         fixture.event_timestamp,
@@ -77,6 +145,7 @@ export function processFixtures(data){
         fixture.elapsed
       ]),
       elapsed:fixture.elapsed,
+      league: fixture.league,
       homeTeam:fixture.homeTeam,
       awayTeam:fixture.awayTeam,
       goalsHome:String(fixture.goalsHomeTeam),
@@ -84,5 +153,53 @@ export function processFixtures(data){
       statusShort: fixture.statusShort,
     });
   });
-  return [todayIDs, otherIDs, collect];
+  return [fixByID, fixByDateLeague, todayIDs];
+}
+
+export function processLeagueFixtures(data){
+  todayIDs=[];
+  fixByDateLeague={};
+  fixByID={};
+  fixByDate={};
+  data = data.api;
+  fixtures = data.fixtures;
+
+  fixtures.forEach( fixture => {
+    date = new Date(fixture.timeStamp*1000).toDateString();
+    leagueID = fixture.league_id;
+    fixtureID = fixture.fixture_id;
+
+    if(!(date in fixByDateLeague)){
+      fixByDateLeague[date] = {}
+      fixByDate[date] = []
+    }
+    if(!(leagueID in fixByDateLeague[date])){
+      fixByDateLeague[date][leagueID] = []
+    }
+    if(date == today){
+      todayIDs.push(fixtureID);
+    }else{
+      fixByDate[date].push(fixtureID)
+      fixByDateLeague[date][leagueID].push(fixtureID);
+    }
+    fixByID[fixtureID].push({
+      date: date,
+      timeStamp: fixture.event_timestamp,
+      status: processFixtureStatus([
+        fixture.statusShort,
+        fixture.event_timestamp,
+        fixture.goalsHomeTeam,
+        fixture.goalsAwayTeam,
+        fixture.elapsed
+      ]),
+      elapsed:fixture.elapsed,
+      league: fixture.league,
+      homeTeam:fixture.homeTeam,
+      awayTeam:fixture.awayTeam,
+      goalsHome:String(fixture.goalsHomeTeam),
+      goalsAway:String(fixture.goalsAwayTeam),
+      statusShort: fixture.statusShort,
+    });
+  });
+  return [fixByID, fixByDateLeague, todayIDs, fixByDate];
 }
