@@ -11,7 +11,7 @@ const itemHeight = scale(screenWidth/4);
 const itemHorizontalPadding = (itemWidth/5);
 const itemVerticalPadding = scale(15);
 
-export const Details = props => {
+export const Main = props => {
 
   function ItemSeparator(){
     return (
@@ -122,6 +122,7 @@ export const Details = props => {
         renderItem={renderDates}
         keyExtractor={(item,index) => index.toString()}
         extraData={props.curFutureDates}
+        onEndReached={() => props.fetchMoreFuture()}
       />
     );
   }
@@ -151,6 +152,7 @@ export const Details = props => {
         renderItem={renderDates}
         keyExtractor={(item,index) => index.toString()}
         extraData={props.curPastDates}
+        onEndReached={() => props.fetchMorePast()}
       />
     );
   }
