@@ -175,7 +175,7 @@ export const Main = props => {
     return(
       <View style={{flex:1}}>
         <View style={{flex:props.topBarFlex}}>
-          <RenderTopBar item={team}/>
+          <RenderTopBar item={league}/>
         </View>
         <View style={{flex:props.screenFlex}}>
           <MaterialIndicator/>
@@ -203,7 +203,7 @@ export const Main = props => {
       return (
         <View style={{flex:1}}>
           <View style={{flex:props.topBarFlex}}>
-            <RenderTopBar item={team}/>
+            <RenderTopBar item={league}/>
           </View>
           <View style={{flex:props.screenFlex}}>
             {bottomPage}
