@@ -7,12 +7,12 @@ import {
   RECEIVE_TODAY_TEAM_FIXTURES,
   REQUEST_FUTURE_FIXTURES,
   RECEIVE_FUTURE_FIXTURES,
+  INIT_LEAGUE_FIXTURES,
+  INIT_TEAM_FIXTURES,
 } from '../types'
 
-import { fetchFollowingPastFixtures } './pastFixtures';
-import { fetchFollowingFutureFixtures } './futureFixtures';
-
-const today = new Date().toLocaleDateString();
+import { initPastFixtures } from './pastFixtures';
+import { initFutureFixtures } from './futureFixtures';
 
 export function storeFixturesByID(fixtures){
   return {
@@ -71,10 +71,37 @@ export function receiveTodayTeamFixtures(teamID, fixtures){
   }
 }
 
-export function initFixtures(){
-  fetchFollowingPastFixtures(today);
-  fetchFollowingFutureFixtures(today);
+export function initFixturesForLeague(leagueID){
+  return {
+    type: INIT_LEAGUE_FIXTURES,
+    leagueID: leagueID,
+  }
 }
+
+export function initFixturesForTeam(teamID){
+  return {
+    type: INIT_TEAM_FIXTURES,
+    teamID: teamID,
+  }
+}
+
+export function initFixtures(){
+  return (dispatch, getState) => {
+    teamIDs = getState().followingTeamIDs;
+    initTeam = teamIDs.map( teamID => {
+      dispatch(initFixturesForTeam(teamID))
+    })
+    leagueIDs = getState().followingLeagueIDs;
+    initLeague = leagueIDs.map( leagueID => {
+      dispatch(initFixturesForLeague(leagueID))
+    })
+
+    Promise.all([initTeam, initLeague])
+    .then(() => dispatch( initPastFixtures()))
+    // .then(() => dispatch(initFutureFixtures()));
+  }
+}
+
 //
 // function todayTimeStamp(){
 //   start = new Date();
@@ -113,8 +140,8 @@ export function processTeamFixtures(data, page){
   data = data.api;
   fixtures = data.fixtures;
 
-  if(!fixtures){
-    return[[],{},{}]
+  if(!fixtures || data.results == 0){
+    return[{},{},[]]
   }else if(page > 1){
     fixtures.splice(0, (20*(page-1)))
   }
@@ -135,6 +162,7 @@ export function processTeamFixtures(data, page){
       fixByDateLeague[date][leagueID].push(fixture.fixture_id);
     }
     fixByID[fixture.fixture_id].push({
+      id: fixture_id,
       date: date,
       timeStamp: fixture.event_timestamp,
       status: processFixtureStatus([
@@ -163,6 +191,10 @@ export function processLeagueFixtures(data){
   fixByDate={};
   data = data.api;
   fixtures = data.fixtures;
+
+  if(!fixtures || data.results == 0){
+    return null;
+  }
 
   fixtures.forEach( fixture => {
     date = new Date(fixture.timeStamp*1000).toDateString();
