@@ -129,6 +129,15 @@ export const Main = props => {
 
   const RenderTodayFixtures = () => {
     today = new Date().toDateString();
+    if(!props.fixtureIDs[today]){
+      title="There are no games on today :(";
+        return (
+          <Card title={title} >
+            <View>
+            </View>
+          </Card>
+        );
+    }
     return (
       <SectionList
       ItemSeparatorComponent={ItemSeparator}
@@ -157,7 +166,8 @@ export const Main = props => {
     );
   }
 
-  const [currentTab, setTab] = useState(0);
+  const [currentTab, setTab] = useState(1);
+  console.log(props.fixtureIDs);
 
   if(props.fetching){
     return(
