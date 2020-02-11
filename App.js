@@ -11,15 +11,13 @@ import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers/index'
-import { initFixtureDates, initTodaysFixtures, initCurrentDate} from './redux/creators/fixturesMain'
+import { initFixtures,} from './redux/creators/fixtures'
 import { fetchTeams } from './redux/creators/teams'
 import { fetchLeagues } from './redux/creators/leagues'
 import store from './redux/store'
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
-  store.dispatch(initFixtureDates());
-  store.dispatch(initCurrentDate());
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
           <AppLoading
@@ -43,10 +41,9 @@ export default function App(props) {
 
 async function loadResourcesAsync() {
   await Promise.all([
-    //store.hydrate
-    store.dispatch(initTodaysFixtures()),
-    // store.dispatch(fetchTeams(store.getState().followingTeamIDs)),
-    // store.dispatch(fetchLeagues(store.getState().followingLeagueIDs))
+    store.dispatch(fetchTeams(store.getState().followingTeamIDs)),
+    store.dispatch(fetchLeagues(store.getState().followingLeagueIDs)),
+    store.dispatch(initFixtures()),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,
@@ -54,7 +51,7 @@ async function loadResourcesAsync() {
       // remove this if you are not using it in your app
       'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     }),
-  ]);
+  ])
 }
 
 function handleLoadingError(error) {
