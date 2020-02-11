@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import TabBarIcon from '../components/TabBarIcon';
 import StandingsContainer from '../containers/standings/Main';
 import StandingsDetailsContainer from '../containers/standings/Details';
-import FixturesContainer from '../containers/fixtures/Main';
+import FixturesContainer from '../containers/fixturesV2/Main';
 import FixturesDetailsContainer from '../containers/fixtures/Details';
 import SearchContainer from '../containers/search/Main';
 import LeagueContainer from '../containers/misc/League';
