@@ -29,7 +29,8 @@ function receiveTeamByID(team){
   return {
     type: RECEIVE_TEAM_BY_ID,
     teamID: team.teamID,
-    teamName: team.teamName,
+    country: team.country,
+    name: team.name,
     logo: team.logo
   };
 }
@@ -50,8 +51,6 @@ function shouldFetchTeam(team){
   if(!team){
     return true;
   }else if(team.fetchingTeam){
-    return false;
-  }else{
     return false;
   }
 }
@@ -75,8 +74,8 @@ export function fetchTeams(teamIDs){
         dispatch(requestTeamByID(teamID))
         return getTeamByID(teamID)
           // get latest season
-        .then( data => processTeams(data))
-        .then( processedData => dispatch(receiveTeamByID(processedData)));
+        .then( data => processTeam(data))
+        .then( processedData => dispatch( receiveTeamByID(processedData)))
       }
     });
     return Promise.all(promises);

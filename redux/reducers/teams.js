@@ -28,7 +28,8 @@ function team(
     case RECEIVE_TEAM_BY_ID:
     return Object.assign({}, state, {
       fetchingTeam: false,
-      name: action.teamName,
+      country: action.country,
+      name: action.name,
       logo: action.logo,
     });
     case REQUEST_PLAYERS_FOR_TEAM:
