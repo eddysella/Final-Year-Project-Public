@@ -21,10 +21,11 @@ export function storeFixturesByID(fixtures){
   }
 }
 
-export function storeFixtureIDsByDate(date, fixtures){
+export function storeFixtureIDsByDate(date, league, fixtures){
   return {
     type: STORE_FIXTURES_BY_DATE,
     date: date,
+    league: league,
     fixtures: fixtures,
   }
 }
@@ -96,22 +97,11 @@ export function initFixtures(){
       dispatch(initFixturesForLeague(leagueID))
     })
 
-    Promise.all([initTeam, initLeague])
+    return Promise.all([initTeam, initLeague])
     .then(() => dispatch( initPastFixtures()))
-    // .then(() => dispatch(initFutureFixtures()));
+    .then(() => dispatch(initFutureFixtures()));
   }
 }
-
-//
-// function todayTimeStamp(){
-//   start = new Date();
-//   start.setHours(0,0,0,0);
-//   dayStart = start.toUTCString();
-//
-//   end = new Date(start.getTime());
-//   end.setHours(23,59,59,999);
-//   dayEnd = end.toUTCString();
-// }
 
 function processFixtureStatus(data){
   status='';
@@ -133,7 +123,11 @@ function processFixtureStatus(data){
   return status
 }
 
+today = new Date().toDateString()
+today = new Date(today).getTime();
+
 export function processTeamFixtures(data, page){
+  console.log("team")
   todayIDs=[];
   fixByDateLeague={};
   fixByID={};
@@ -141,14 +135,15 @@ export function processTeamFixtures(data, page){
   fixtures = data.fixtures;
 
   if(!fixtures || data.results == 0){
-    return[{},{},[]]
+    return null;
   }else if(page > 1){
     fixtures.splice(0, (20*(page-1)))
   }
 
   fixtures.forEach( fixture => {
-    date = new Date(fixture.timeStamp*1000).toDateString();
+    date = new Date(fixture.event_timestamp*1000).toDateString()
     leagueID = fixture.league_id;
+    fixtureID = fixture.fixture_id;
 
     if(!(date in fixByDateLeague)){
       fixByDateLeague[date] = {}
@@ -156,13 +151,13 @@ export function processTeamFixtures(data, page){
     if(!(leagueID in fixByDateLeague[date])){
       fixByDateLeague[date][leagueID] = []
     }
-    if(date == today){
-      todayIDs.push(fixture.fixture_id);
+    if(new Date(date).getTime() == today){
+      todayIDs.push(fixtureID);
     }else{
-      fixByDateLeague[date][leagueID].push(fixture.fixture_id);
+      fixByDateLeague[date][leagueID].push(fixtureID);
     }
-    fixByID[fixture.fixture_id].push({
-      id: fixture_id,
+    fixByID[fixtureID] = {
+      id: fixtureID,
       date: date,
       timeStamp: fixture.event_timestamp,
       status: processFixtureStatus([
@@ -179,12 +174,13 @@ export function processTeamFixtures(data, page){
       goalsHome:String(fixture.goalsHomeTeam),
       goalsAway:String(fixture.goalsAwayTeam),
       statusShort: fixture.statusShort,
-    });
+    };
   });
   return [fixByID, fixByDateLeague, todayIDs];
 }
 
 export function processLeagueFixtures(data){
+  console.log("league")
   todayIDs=[];
   fixByDateLeague={};
   fixByID={};
@@ -197,7 +193,7 @@ export function processLeagueFixtures(data){
   }
 
   fixtures.forEach( fixture => {
-    date = new Date(fixture.timeStamp*1000).toDateString();
+    date = new Date(fixture.event_timestamp*1000).toDateString();
     leagueID = fixture.league_id;
     fixtureID = fixture.fixture_id;
 
@@ -208,15 +204,15 @@ export function processLeagueFixtures(data){
     if(!(leagueID in fixByDateLeague[date])){
       fixByDateLeague[date][leagueID] = []
     }
-    if(date == today){
+    if(new Date(date).getTime() == today){
       todayIDs.push(fixtureID);
     }else{
       fixByDate[date].push(fixtureID)
       fixByDateLeague[date][leagueID].push(fixtureID);
     }
-    fixByID[fixtureID].push({
+    fixByID[fixtureID] = {
+      id: fixtureID,
       date: date,
-      timeStamp: fixture.event_timestamp,
       status: processFixtureStatus([
         fixture.statusShort,
         fixture.event_timestamp,
@@ -231,7 +227,7 @@ export function processLeagueFixtures(data){
       goalsHome:String(fixture.goalsHomeTeam),
       goalsAway:String(fixture.goalsAwayTeam),
       statusShort: fixture.statusShort,
-    });
+    };
   });
   return [fixByID, fixByDateLeague, todayIDs, fixByDate];
 }
