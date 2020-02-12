@@ -9,10 +9,17 @@ import {
   RECEIVE_FUTURE_FIXTURES,
   INIT_LEAGUE_FIXTURES,
   INIT_TEAM_FIXTURES,
+  RESET_FIXTURES,
 } from '../types'
 
 import { initPastFixtures } from './pastFixtures';
 import { initFutureFixtures } from './futureFixtures';
+
+export function resetFixtures(){
+  return {
+    type: RESET_FIXTURES,
+  }
+}
 
 export function storeFixturesByID(fixtures){
   return {
@@ -97,6 +104,7 @@ export function initFixtures(){
       dispatch(initFixturesForLeague(leagueID))
     })
 
+    dispatch(resetFixtures())
     return Promise.all([initTeam, initLeague])
     .then(() => dispatch( initPastFixtures()))
     .then(() => dispatch(initFutureFixtures()));
