@@ -117,9 +117,10 @@ function league(
   state = {
     fetchingFuture: false,
     fetchingPast: false,
-    pastFixtures:{},
+    pastDates:[],
     todayFixtures: [],
-    futureFixtures:{},
+    futureDates:[],
+    fixturesByDate:{},
     lastPastDate: tomorrow,
     lastFutureDate: yesterday,
   },
@@ -135,8 +136,9 @@ function league(
     case RECEIVE_PAST_LEAGUE_FIXTURES:
       return Object.assign({}, state, {
         fetchingPast: false,
-        pastFixtures: Object.assign({}, state.pastFixtures, action.fixtures),
+        fixturesByDate: Object.assign({}, state.fixturesByDate, action.fixtures),
         lastPastDate: action.date,
+        pastDates: [...state.pastDates, action.date]
       })
     case RECEIVE_TODAY_LEAGUE_FIXTURES:
       return Object.assign({}, state, {
@@ -149,8 +151,9 @@ function league(
     case RECEIVE_FUTURE_LEAGUE_FIXTURES:
       return Object.assign({}, state, {
         fetchingFuture: false,
-        futureFixtures: Object.assign({}, state.futureFixtures, action.fixtures),
+        fixturesByDate: Object.assign({}, state.fixturesByDate, action.fixtures),
         lastFutureDate: action.date,
+        futureDates: [...state.futureDates, action.date]
       })
     default:
       return state;
@@ -278,7 +281,7 @@ export function date(state={}, action){
     case STORE_FIXTURES_BY_DATE:
     if(state[action.league]){
       return Object.assign({}, state, {
-          [action.league]: [...state[action.league], ...action.fixtures],
+          [action.league]: sortBy(filterArray([...state[action.league], ...action.fixtures])),
         });
     }else{
       return Object.assign({}, state, {

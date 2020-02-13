@@ -20,10 +20,7 @@ export function initFutureFixtures(){
   }
 }
 
-function shouldFetchFixtures(entity, currentDate){
-  lastDate = entity['lastFutureDate']
-  fetching = entity['fetchingFutureFixtures']
-
+function shouldFetchFixtures(fetching, lastDate, currentDate){
   if(fetching){
     return false;
   }else if (new Date(currentDate).getTime() >= new Date(lastDate).getTime()) {
@@ -51,7 +48,8 @@ export function fetchFollowingFutureFixtures(){
     leaguePromises = dispatch(fetchFutureLeagueFixtures(leagueIDs));
 
     dispatch( requestFutureFixtures())
-    return Promise.all([leaguePromises, teamPromises])
+    Promise.resolve(leaguePromises)
+    .then(Promise.resolve(teamPromises))
   }
 }
 
@@ -80,6 +78,7 @@ function storeFutureDate(){
         console.log("len: " + current)
         date = getState().futureDates[current];
         console.log("state: " , getState().futureDates)
+        console.log("current: " , getState().fixturesStatus['currentFutureDates'])
         console.log("date: " + date)
         dispatch( receiveFutureFixtures(date))
     }
@@ -92,7 +91,7 @@ function fetchFutureTeamFixtures(teamIDs){
     return teamIDs.map( teamID => {
       counter -= 1;
       team = getState().fixtureIDsByTeamID[teamID];
-      if(shouldFetchFixtures(team.fetchingFuture, team.lastPastDate, currentDate)){
+      if(shouldFetchFixtures(team.fetchingFuture, team.lastFutureDate, currentDate)){
         nextPage = team.nextFuturePage;
         dispatch(requestFutureTeamFixtures(teamID))
         return getFutureTeamFixtures(teamID, nextPage)
@@ -102,17 +101,17 @@ function fetchFutureTeamFixtures(teamIDs){
             dispatch( storeFixturesByID(processedData[0]));
             // works because objects iterate by order of insertion
             // I receive the fixs in order so technically the last date is last item
-            dates = Object.keys(processedData[1])
-            lastDate = dates[dates.length-1];
             // for teams have to iter over every date cause multiple dates received
             for (date in processedData[1]){
               for (league in processedData[1][date]){
                   dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
               }
             }
+            dates = Object.keys(processedData[1])
+            lastDate = dates[dates.length-1];
             dispatch( storeFutureDates(dates))
             dispatch( receiveTodayTeamFixtures(teamID, processedData[2]))
-            dispatch( receiveFutureTeamFixtures(teamID, Object.keys(processedData[0], lastDate)));
+            dispatch( receiveFutureTeamFixtures(teamID, Object.keys(processedData[0]), lastDate));
             dispatch( storeFutureDate());
           }
         })
@@ -140,7 +139,6 @@ export function receiveFutureLeagueFixtures(leagueID, fixtures, lastDate){
 }
 
 function getNextDate(date){
-  console.log("date : "+ date);
   const today = new Date(date)
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1)
@@ -154,7 +152,7 @@ function fetchFutureLeagueFixtures(leagueIDs){
   return (dispatch, getState) => {
     currentDate = getState().futureDates[getState().fixturesStatus['currentFutureDates'].length];
     return leagueIDs.map( leagueID => {
-      lastDate = getState().fixtureIDsByLeagueID[leagueID]['lastPastDate']
+      lastDate = getState().fixtureIDsByLeagueID[leagueID]['lastFutureDate']
       dispatch(fetchLeagueFixtures(leagueID, lastDate, currentDate));
     });
   }
@@ -184,6 +182,7 @@ function fetchLeagueFixtures(leagueID, lastDate, currentDate){
           dispatch( receiveFutureLeagueFixtures(leagueID, processedData[3], storeDate));
           dispatch( storeFutureDate());
         }else{
+          dispatch( receiveFutureLeagueFixtures(leagueID, {}, storeDate));
           dispatch( fetchLeagueFixtures(leagueID, storeDate, currentDate));
         }
       });
