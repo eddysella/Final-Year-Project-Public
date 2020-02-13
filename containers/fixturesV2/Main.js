@@ -9,8 +9,8 @@ import { Main } from '../../screens/fixturesV2/main/Main';
 const mapStateToProps = state => ({
     curPastDates: state.fixturesStatus['currentPastDates'],
     curFutureDates: state.fixturesStatus['currentFutureDates'],
-    futureFetch: state.fixturesStatus['futureFetch'],
-    pastFetch: state.fixturesStatus['pastFetch'],
+    fetchingFuture: state.fixturesStatus['futureFetch'],
+    fetchingPast: state.fixturesStatus['pastFetch'],
     fixturesByID: state.fixturesByID,
     fixtureIDs: state.fixtureIDsByDateLeague,
 })
@@ -21,13 +21,14 @@ const mapDispatchToProps = dispatch => ({
   fetchMorePast: () => dispatch(fetchFollowingPastFixtures()),
 })
 
-// forgot to add functions ^^ !!!!!!!!
-const Screen = ({curPastDates, curFutureDates, futureFetch, pastFetch,
-  fixturesByID, fixtureIDs, fetchSpecificFixture, ...props}) => (
+const Screen = ({curPastDates, curFutureDates, fetchingFuture, fetchingPast,
+  fixturesByID, fixtureIDs, fetchSpecificFixture, fetchMorePast,
+  fetchMoreFuture, ...props}) => (
   <Main topBarFlex={1} screenFlex={7} curPastDates={curPastDates}
   curFutureDates={curFutureDates} fetchSpecificFixture={fetchSpecificFixture}
-    futureFetch={futureFetch} pastFetch={pastFetch}
+    fetchingFuture={fetchingFuture} fetchingPast={fetchingPast}
     fixturesByID={fixturesByID} fixtureIDs={fixtureIDs}
+    fetchMorePast={fetchMorePast} fetchMoreFuture={fetchMoreFuture}
     navigation={props.navigation}/>
 )
 

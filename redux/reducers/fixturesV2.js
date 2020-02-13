@@ -47,7 +47,6 @@ export function fixturesStatus(state={
     case REQUEST_FUTURE_FIXTURES:
       return Object.assign({}, state, { futureFetch: true, });
     case RECEIVE_FUTURE_FIXTURES:
-      console.log("receivedDate : " + action.date)
       return Object.assign({}, state, {
         futureFetch: false,
         currentFutureDates: [...state.currentFutureDates, action.date]
@@ -116,13 +115,13 @@ tomorrow = tomorrow.toDateString();
 
 function league(
   state = {
-    fetchingFutureFixtures: false,
-    fetchingPastFixtures: false,
+    fetchingFuture: false,
+    fetchingPast: false,
     pastFixtures:{},
     todayFixtures: [],
     futureFixtures:{},
-    lastPastDateFetched: tomorrow,
-    lastFutureDateFetched: yesterday,
+    lastPastDate: tomorrow,
+    lastFutureDate: yesterday,
   },
   action
   ){
@@ -131,13 +130,13 @@ function league(
       return Object.assign({}, state)
     case REQUEST_PAST_LEAGUE_FIXTURES:
       return Object.assign({}, state, {
-        fetchingPastFixtures: true,
+        fetchingPast: true,
       })
     case RECEIVE_PAST_LEAGUE_FIXTURES:
       return Object.assign({}, state, {
-        fetchingPastFixtures: false,
+        fetchingPast: false,
         pastFixtures: Object.assign({}, state.pastFixtures, action.fixtures),
-        lastPastDateFetched: action.date,
+        lastPastDate: action.date,
       })
     case RECEIVE_TODAY_LEAGUE_FIXTURES:
       return Object.assign({}, state, {
@@ -145,13 +144,13 @@ function league(
       });
     case REQUEST_FUTURE_LEAGUE_FIXTURES:
       return Object.assign({}, state, {
-        fetchingFutureFixtures: true,
+        fetchingFuture: true,
       })
     case RECEIVE_FUTURE_LEAGUE_FIXTURES:
       return Object.assign({}, state, {
-        fetchingFutureFixtures: false,
+        fetchingFuture: false,
         futureFixtures: Object.assign({}, state.futureFixtures, action.fixtures),
-        lastFutureDateFetched: action.date,
+        lastFutureDate: action.date,
       })
     default:
       return state;
@@ -186,13 +185,13 @@ export function fixtureIDsByLeagueID(state={
 
 function team(
   state = {
-    fetchingFutureFixtures: false,
-    fetchingPastFixtures: false,
+    fetchingFuture: false,
+    fetchingPast: false,
     pastFixtures:[],
     todayFixtures: [],
     futureFixtures:[],
-    lastPastDateReceived: tomorrow,
-    lastFutureDateReceived: yesterday,
+    lastPastDate: tomorrow,
+    lastFutureDate: yesterday,
     nextPastPage: 1,
     nextFuturePage: 1,
   },
@@ -203,13 +202,13 @@ function team(
       return Object.assign({}, state)
     case REQUEST_PAST_TEAM_FIXTURES:
       return Object.assign({}, state, {
-        fetchingPastFixtures: true,
+        fetchingPast: true,
       })
     case RECEIVE_PAST_TEAM_FIXTURES:
       return Object.assign({}, state, {
-        fetchingPastFixtures: false,
+        fetchingPast: false,
         pastFixtures: [...state.pastFixtures, ...action.fixtures],
-        lastPastDateReceived: action.date,
+        lastPastDate: action.date,
         nextPastPage: (state.nextPastPage+1),
       })
     case RECEIVE_TODAY_TEAM_FIXTURES:
@@ -218,13 +217,13 @@ function team(
       });
     case REQUEST_FUTURE_TEAM_FIXTURES:
       return Object.assign({}, state, {
-        fetchingFutureFixtures: true,
+        fetchingFuture: true,
       })
     case RECEIVE_FUTURE_TEAM_FIXTURES:
       return Object.assign({}, state, {
-        fetchingFutureFixtures: false,
+        fetchingFuture: false,
         futureFixtures: [...state.futureFixtures, ...action.fixtures],
-        lastFutureDateReceived: action.date,
+        lastFutureDate: action.date,
         nextFuturePage: (state.nextFuturePage+1),
       })
     default:

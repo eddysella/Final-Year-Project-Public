@@ -116,7 +116,6 @@ export const Main = props => {
   const RenderFutureFixtures = () => {
     return (
       <FlatList
-        ItemSeparatorComponent={ItemSeparator}
         ref={(ref) => { this.flatListRef = ref; }}
         data={props.curFutureDates}
         renderItem={renderDates}
@@ -140,7 +139,6 @@ export const Main = props => {
     }
     return (
       <SectionList
-      ItemSeparatorComponent={ItemSeparator}
       ref={(ref) => { this.leagueList = ref; }}
       sections={processDate(props.fixtureIDs[today])}
       renderItem={renderItem}
@@ -155,7 +153,6 @@ export const Main = props => {
   const RenderPastFixtures = () => {
     return (
       <FlatList
-        ItemSeparatorComponent={ItemSeparator}
         ref={(ref) => { this.flatListRef = ref; }}
         data={props.curPastDates}
         renderItem={renderDates}
@@ -167,7 +164,6 @@ export const Main = props => {
   }
 
   const [currentTab, setTab] = useState(1);
-  console.log(props.fixtureIDs);
 
   if(props.fetching){
     return(

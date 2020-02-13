@@ -20,8 +20,13 @@ export function initPastFixtures(){
   }
 }
 
-function shouldFetchFixtures(lastDate, currentDate){
-  if (new Date(currentDate).getTime() <= new Date(lastDate).getTime()) {
+function shouldFetchFixtures(entity, currentDate){
+  lastDate = entity['lastFutureDate']
+  fetching = entity['fetchingFutureFixtures']
+
+  if(fetching){
+    return false;
+  }else if (new Date(currentDate).getTime() <= new Date(lastDate).getTime()) {
     return true;
   }else if(currentDate === undefined){
     return true;
@@ -86,8 +91,8 @@ function fetchPastTeamFixtures(teamIDs){
     currentDate = getState().pastDates[getState().fixturesStatus['currentPastDates'].length];
     return teamIDs.map( teamID => {
       counter -= 1;
-      lastDate = getState().fixtureIDsByTeamID[teamID]['lastPastDateReceived'];
-      if(shouldFetchFixtures(lastDate, currentDate)){
+      team = getState().fixtureIDsByTeamID[teamID]
+      if(shouldFetchFixtures(team.fetchingFuture, team.lastPastDate, currentDate)){
         nextPage = getState().fixtureIDsByTeamID[teamID]['nextPastPage'];
         dispatch(requestPastTeamFixtures(teamID))
         return getPastTeamFixtures(teamID, nextPage)
@@ -97,17 +102,17 @@ function fetchPastTeamFixtures(teamIDs){
             dispatch( storeFixturesByID(processedData[0]));
             // works because objects iterate by order of insertion
             // I receive the fixs in order so technically the last date is last item
-            dates = Object.keys(processedData[1])
-            lastDate = dates[dates.length-1];
             // for teams have to iter over every date cause multiple dates received
             for (date in processedData[1]){
               for (league in processedData[1][date]){
                   dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
               }
             }
+            dates = Object.keys(processedData[1])
+            lastDate = dates[dates.length-1];
             dispatch( storePastDates(dates))
             dispatch( receiveTodayTeamFixtures(teamID, processedData[2]))
-            dispatch( receivePastTeamFixtures(teamID, Object.keys(processedData[0], lastDate)))
+            dispatch( receivePastTeamFixtures(teamID, Object.keys(processedData[0]), lastDate))
             dispatch( storePastDate());
           }
         })
@@ -148,7 +153,7 @@ function fetchPastLeagueFixtures(leagueIDs){
   return (dispatch, getState) => {
     currentDate = getState().pastDates[getState().fixturesStatus['currentPastDates'].length];
     return leagueIDs.map( leagueID => {
-      lastDate = getState().fixtureIDsByLeagueID[leagueID]['lastPastDateFetched'];
+      lastDate = getState().fixtureIDsByLeagueID[leagueID]['lastPastDate']
       dispatch(fetchLeagueFixtures(leagueID, lastDate, currentDate));
     });
   }
@@ -156,7 +161,8 @@ function fetchPastLeagueFixtures(leagueIDs){
 
 function fetchLeagueFixtures(leagueID, lastDate, currentDate){
   return (dispatch, getState) => {
-    if(shouldFetchFixtures(lastDate, currentDate)){
+    fetching = getState().fixtureIDsByLeagueID[leagueID]['fetchingPast']
+    if(shouldFetchFixtures(fetching, lastDate, currentDate)){
       dates = getNextDate(lastDate);
       fetchDate = dates[0]
       storeDate = dates[1]

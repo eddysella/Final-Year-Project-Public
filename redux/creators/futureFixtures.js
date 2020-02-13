@@ -20,8 +20,13 @@ export function initFutureFixtures(){
   }
 }
 
-function shouldFetchFixtures(lastDate, currentDate){
-  if (new Date(currentDate).getTime() >= new Date(lastDate).getTime()) {
+function shouldFetchFixtures(entity, currentDate){
+  lastDate = entity['lastFutureDate']
+  fetching = entity['fetchingFutureFixtures']
+
+  if(fetching){
+    return false;
+  }else if (new Date(currentDate).getTime() >= new Date(lastDate).getTime()) {
     return true;
   }else if(currentDate === undefined){
     return true;
@@ -86,9 +91,9 @@ function fetchFutureTeamFixtures(teamIDs){
     currentDate = getState().futureDates[getState().fixturesStatus['currentFutureDates'].length];
     return teamIDs.map( teamID => {
       counter -= 1;
-      lastDate = getState().fixtureIDsByTeamID[teamID]['lastFutureDateReceived'];
-      if(shouldFetchFixtures(lastDate, currentDate)){
-        nextPage = getState().fixtureIDsByTeamID[teamID]['nextFuturePage'];
+      team = getState().fixtureIDsByTeamID[teamID];
+      if(shouldFetchFixtures(team.fetchingFuture, team.lastPastDate, currentDate)){
+        nextPage = team.nextFuturePage;
         dispatch(requestFutureTeamFixtures(teamID))
         return getFutureTeamFixtures(teamID, nextPage)
         .then( data => processTeamFixtures(data, nextPage))
@@ -125,7 +130,7 @@ export function requestFutureLeagueFixtures(leagueID){
   }
 }
 
-export function receiveFutureLeagueFixtures(fixtures, leagueID, lastDate){
+export function receiveFutureLeagueFixtures(leagueID, fixtures, lastDate){
   return {
     type: RECEIVE_FUTURE_LEAGUE_FIXTURES,
     leagueID: leagueID,
@@ -135,6 +140,7 @@ export function receiveFutureLeagueFixtures(fixtures, leagueID, lastDate){
 }
 
 function getNextDate(date){
+  console.log("date : "+ date);
   const today = new Date(date)
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1)
@@ -148,7 +154,7 @@ function fetchFutureLeagueFixtures(leagueIDs){
   return (dispatch, getState) => {
     currentDate = getState().futureDates[getState().fixturesStatus['currentFutureDates'].length];
     return leagueIDs.map( leagueID => {
-      lastDate = getState().fixtureIDsByLeagueID[leagueID]['lastFutureDateFetched'];
+      lastDate = getState().fixtureIDsByLeagueID[leagueID]['lastPastDate']
       dispatch(fetchLeagueFixtures(leagueID, lastDate, currentDate));
     });
   }
@@ -156,7 +162,8 @@ function fetchFutureLeagueFixtures(leagueIDs){
 
 function fetchLeagueFixtures(leagueID, lastDate, currentDate){
   return (dispatch, getState) => {
-    if(shouldFetchFixtures(lastDate, currentDate)){
+    fetching = getState().fixtureIDsByLeagueID[leagueID]['fetchingFuture']
+    if(shouldFetchFixtures(fetching, lastDate, currentDate)){
       dates = getNextDate(lastDate);
       fetchDate = dates[0]
       storeDate = dates[1]
