@@ -94,7 +94,7 @@ export const Main = props => {
   function renderDates(item){
     date = item.item
     return (
-      <Card title={date}>
+      <Card title={new Date(date).toLocaleDateString()}>
       {
         <View key={date} style={{justifyContent: 'center', alignItems: 'center'}}>
           <SectionList
@@ -121,14 +121,20 @@ export const Main = props => {
         renderItem={renderDates}
         keyExtractor={(item,index) => index.toString()}
         extraData={props.curFutureDates}
-        onEndReached={() => props.fetchMoreFuture()}
+        onEndReached={() => {
+          if(!(props.fetchingFuture)){
+            props.fetchMoreFuture()
+          }
+        }}
+        onEndReachedThreshold={0.2}
       />
     );
   }
 
   const RenderTodayFixtures = () => {
-    today = new Date().toDateString();
-    if(!props.fixtureIDs[today]){
+    today = new Date()
+    today.setHours(0,0,0,0)
+    if(!props.fixtureIDs[today.getTime()]){
       title="There are no games on today :(";
         return (
           <Card title={title} >
@@ -158,7 +164,12 @@ export const Main = props => {
         renderItem={renderDates}
         keyExtractor={(item,index) => index.toString()}
         extraData={props.curPastDates}
-        onEndReached={() => props.fetchMorePast()}
+        onEndReached={() => {
+          if(!(props.fetchingPast)){
+            props.fetchMorePast()
+          }
+        }}
+        onEndReachedThreshold={0.2}
       />
     );
   }

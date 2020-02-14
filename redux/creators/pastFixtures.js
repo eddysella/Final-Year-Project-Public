@@ -16,7 +16,30 @@ counter = 0;
 
 export function initPastFixtures(){
   return (dispatch, getState) => {
-    dispatch(fetchFollowingPastFixtures());
+    const tomorrow = new Date();
+    tomorrow.setDate(new Date().getDate() + 1)
+    console.log("Tomorrow : "+ tomorrow)
+
+    todayLeaguePromises = leagueIDs.map( leagueID => {
+      dates = getNextDate(tomorrow.getTime());
+      fetchDate = dates[0]
+      storeDate = dates[1]
+      return getFixturesByLeagueAndDate(leagueID, fetchDate)
+      .then( data => processLeagueFixtures(data))
+      .then( processedData => {
+        if( processedData ){
+          dispatch( storeFixturesByID(processedData[0]));
+          for (date in processedData[1]){
+            for (league in processedData[1][date]){
+              dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
+            }
+          }
+          dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
+        }
+      });
+    });
+    return Promise.resolve(todayLeaguePromises)
+    .then(() => dispatch(fetchFollowingPastFixtures()))
   }
 }
 
@@ -44,11 +67,10 @@ export function fetchFollowingPastFixtures(){
     teamIDs = getState().followingTeamIDs;
     leagueIDs = getState().followingLeagueIDs;
     counter = teamIDs.length + leagueIDs.length;
-    teamPromises = dispatch(fetchPastTeamFixtures(teamIDs));
-    leaguePromises = dispatch(fetchPastLeagueFixtures(leagueIDs));
 
     dispatch( requestPastFixtures())
-    Promise.all([leaguePromises, teamPromises])
+    Promise.resolve(dispatch(fetchPastLeagueFixtures(leagueIDs)))
+    .then(() => dispatch(fetchPastTeamFixtures(teamIDs)))
   }
 }
 
@@ -69,16 +91,11 @@ export function receivePastTeamFixtures(teamID, fixtures, lastDate){
 }
 
 function storePastDate(){
-  console.log("past")
   return (dispatch, getState) => {
-    console.log("counter : " + counter)
     if(counter == 0){
-        current = getState().fixturesStatus['currentPastDates'].length
-        console.log("len: " + current)
-        date = getState().pastDates[current];
-        console.log("state: " , getState().fixturesStatus['currentPastDates'])
-        console.log("date: " + date)
-        dispatch( receivePastFixtures(date))
+      current = getState().fixturesStatus['currentPastDates'].length
+      date = getState().pastDates[current];
+      dispatch( receivePastFixtures(date))
     }
   }
 }
@@ -87,7 +104,6 @@ function fetchPastTeamFixtures(teamIDs){
   return (dispatch, getState) => {
     currentDate = getState().pastDates[getState().fixturesStatus['currentPastDates'].length];
     return teamIDs.map( teamID => {
-      counter -= 1;
       team = getState().fixtureIDsByTeamID[teamID]
       if(shouldFetchFixtures(team.fetchingPast, team.lastPastDate, currentDate)){
         nextPage = team.nextPastPage;
@@ -110,10 +126,12 @@ function fetchPastTeamFixtures(teamIDs){
             dispatch( storePastDates(dates))
             dispatch( receiveTodayTeamFixtures(teamID, processedData[2]))
             dispatch( receivePastTeamFixtures(teamID, Object.keys(processedData[0]), lastDate))
+            counter -= 1;
             dispatch( storePastDate());
           }
         })
       }else{
+        counter -= 1;
         dispatch(storePastDate());
       }
     });
@@ -136,13 +154,13 @@ export function receivePastLeagueFixtures(leagueID, fixtures,  lastDate){
   }
 }
 
-function getNextDate(date){
-  const today = new Date(date)
-  const yesterday = new Date();
-  yesterday.setDate(today.getDate() - 1)
+function getNextDate(timeStamp){
+  const yesterday = new Date(timeStamp);
+  yesterday.setDate(new Date(timeStamp).getDate() - 1)
   pieces = yesterday.toLocaleDateString().split('/')
   fetchDate = "" + pieces[2] + '-' + pieces[0] + '-' + pieces[1]
-  storeDate = yesterday.toDateString();
+  yesterday.setHours(0,0,0,0)
+  storeDate = yesterday.getTime();
   return [fetchDate, storeDate];
 }
 
@@ -161,6 +179,7 @@ function fetchLeagueFixtures(leagueID, lastDate, currentDate){
     fetching = getState().fixtureIDsByLeagueID[leagueID]['fetchingPast']
     if(shouldFetchFixtures(fetching, lastDate, currentDate)){
       dates = getNextDate(lastDate);
+      console.log(dates)
       fetchDate = dates[0]
       storeDate = dates[1]
       dispatch(requestPastLeagueFixtures(leagueID))
@@ -168,7 +187,6 @@ function fetchLeagueFixtures(leagueID, lastDate, currentDate){
       .then( data => processLeagueFixtures(data))
       .then( processedData => {
         if(processedData){
-          counter -= 1;
           dispatch( storeFixturesByID(processedData[0]));
           for (date in processedData[1]){
             for (league in processedData[1][date]){
@@ -176,8 +194,8 @@ function fetchLeagueFixtures(leagueID, lastDate, currentDate){
             }
           }
           dispatch( storePastDates(Object.keys(processedData[1])))
-          dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
           dispatch( receivePastLeagueFixtures(leagueID, processedData[3], storeDate));
+          counter -= 1;
           dispatch( storePastDate());
         }else{
           dispatch( receivePastLeagueFixtures(leagueID, {}, storeDate));

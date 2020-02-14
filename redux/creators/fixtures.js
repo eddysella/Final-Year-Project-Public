@@ -105,9 +105,9 @@ export function initFixtures(){
     })
 
     dispatch(resetFixtures())
-    return Promise.all([initTeam, initLeague])
+    Promise.all([initTeam, initLeague])
     .then(() => dispatch( initPastFixtures()))
-    .then(() => dispatch(initFutureFixtures()));
+    .then(() => dispatch( initFutureFixtures()));
   }
 }
 
@@ -131,11 +131,10 @@ function processFixtureStatus(data){
   return status
 }
 
-today = new Date().toDateString()
-today = new Date(today).getTime();
+today = new Date()
+today.setHours(0,0,0,0)
 
 export function processTeamFixtures(data, page){
-  console.log("team")
   todayIDs=[];
   fixByDateLeague={};
   fixByID={};
@@ -149,7 +148,8 @@ export function processTeamFixtures(data, page){
   }
 
   fixtures.forEach( fixture => {
-    date = new Date(fixture.event_timestamp*1000).toDateString()
+    date = new Date(fixture.event_timestamp*1000)
+    date.setHours(0,0,0,0)
     leagueID = fixture.league_id;
     fixtureID = fixture.fixture_id;
 
@@ -188,7 +188,6 @@ export function processTeamFixtures(data, page){
 }
 
 export function processLeagueFixtures(data){
-  console.log("league")
   todayIDs=[];
   fixByDateLeague={};
   fixByID={};
@@ -201,7 +200,8 @@ export function processLeagueFixtures(data){
   }
 
   fixtures.forEach( fixture => {
-    date = new Date(fixture.event_timestamp*1000).toDateString();
+    date = new Date(fixture.event_timestamp*1000)
+    date.setHours(0,0,0,0)
     leagueID = fixture.league_id;
     fixtureID = fixture.fixture_id;
 

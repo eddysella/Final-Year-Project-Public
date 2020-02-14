@@ -105,13 +105,14 @@ export function futureDates(state=[], action){
 // }
 
 
-const today = new Date()
+today = new Date()
+today.setHours(0,0,0,0)
 yesterday = new Date();
 yesterday.setDate(today.getDate() - 1)
-yesterday = yesterday.toDateString();
+yesterday = yesterday.getTime();
 tomorrow = new Date();
 tomorrow.setDate(today.getDate() + 1)
-tomorrow = tomorrow.toDateString();
+tomorrow = tomorrow.getTime();
 
 function league(
   state = {
@@ -121,8 +122,8 @@ function league(
     todayFixtures: [],
     futureDates:[],
     fixturesByDate:{},
-    lastPastDate: tomorrow,
-    lastFutureDate: yesterday,
+    lastPastDate: today.getTime(),
+    lastFutureDate: today.getTime(),
   },
   action
   ){
