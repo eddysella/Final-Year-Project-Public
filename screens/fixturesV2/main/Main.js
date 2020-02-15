@@ -86,7 +86,7 @@ export const Main = props => {
   function processDate(date){
     collect = []
     for( league in date ){
-      collect.push({title: league, data: date[league]})
+      collect.push({title: props.leaguesByID[league]['name'], data: date[league]})
     }
     return collect;
   }
@@ -94,7 +94,7 @@ export const Main = props => {
   function renderDates(item){
     date = item.item
     return (
-      <Card title={new Date(date).toLocaleDateString()}>
+      <Card title={new Date(parseInt(date)).toLocaleDateString()}>
       {
         <View key={date} style={{justifyContent: 'center', alignItems: 'center'}}>
           <SectionList
@@ -134,7 +134,8 @@ export const Main = props => {
   const RenderTodayFixtures = () => {
     today = new Date()
     today.setHours(0,0,0,0)
-    if(!props.fixtureIDs[today.getTime()]){
+    date = today.getTime()
+    if(!props.fixtureIDs[date]){
       title="There are no games on today :(";
         return (
           <Card title={title} >
@@ -143,16 +144,26 @@ export const Main = props => {
           </Card>
         );
     }
+    console.log(props.fixtureIDs[date]);
     return (
-      <SectionList
-      ref={(ref) => { this.leagueList = ref; }}
-      sections={processDate(props.fixtureIDs[today])}
-      renderItem={renderItem}
-      keyExtractor={(item,index) => item.toString()}
-      renderSectionHeader={({ section: { title } }) => (
-        <Text>{title}</Text>
-      )}
-      />
+      <Card>
+      {
+        <View key={date} style={{justifyContent: 'center', alignItems: 'center'}}>
+          <SectionList
+          ItemSeparatorComponent={ItemSeparator}
+          ref={(ref) => { this.leagueList = ref; }}
+          sections={processDate(props.fixtureIDs[date])}
+          renderItem={renderItem}
+          keyExtractor={(item,index) => item.toString()}
+          renderSectionHeader={({ section: { title } }) => (
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <Text>{title}</Text>
+            </View>
+          )}
+          />
+        </View>
+      }
+      </Card>
     );
   }
 
