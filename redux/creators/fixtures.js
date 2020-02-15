@@ -12,8 +12,9 @@ import {
   RESET_FIXTURES,
 } from '../types'
 
-import { initPastFixtures } from './pastFixtures';
-import { initFutureFixtures } from './futureFixtures';
+import { fetchFollowingPastFixtures } from './pastFixtures';
+import { fetchFollowingFutureFixtures } from './futureFixtures';
+import { getFixturesByLeagueAndDate, } from '../../fetch/FixturesV2';
 
 export function resetFixtures(){
   return {
@@ -93,21 +94,55 @@ export function initFixturesForTeam(teamID){
   }
 }
 
+function getNextDate(timeStamp){
+  timeStamp = parseInt(timeStamp)
+  const yesterday = new Date(timeStamp);
+  yesterday.setDate(new Date(timeStamp).getDate() - 1)
+  pieces = yesterday.toLocaleDateString().split('/')
+  fetchDate = "" + pieces[2] + '-' + pieces[0] + '-' + pieces[1]
+  yesterday.setHours(0,0,0,0)
+  storeDate = yesterday.getTime();
+  return [fetchDate, storeDate];
+}
+
 export function initFixtures(){
   return (dispatch, getState) => {
+    const tomorrow = new Date();
+    tomorrow.setDate(new Date().getDate() + 1)
+    tomorrow.setHours(0,0,0,0)
+    Object.keys(getState().leaguesByID).map( leagueID => {
+      dates = getNextDate(tomorrow.getTime());
+      fetchDate = dates[0]
+      storeDate = dates[1]
+      return getFixturesByLeagueAndDate(leagueID, fetchDate)
+      .then( data => processLeagueFixtures(data))
+      .then( processedData => {
+        if( processedData ){
+          dispatch( storeFixturesByID(processedData[0]));
+          for (date in processedData[1]){
+            for (league in processedData[1][date]){
+              dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
+            }
+          }
+          dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
+        }
+      });
+    });
+    dispatch( resetFixtures())
+    dispatch( initLeaguesTeams())
+  }
+}
+
+export function initLeaguesTeams(){
+  return (dispatch, getState) => {
     teamIDs = getState().followingTeamIDs;
-    initTeam = teamIDs.map( teamID => {
+    teamIDs.map( teamID => {
       dispatch(initFixturesForTeam(teamID))
     })
     leagueIDs = getState().followingLeagueIDs;
-    initLeague = leagueIDs.map( leagueID => {
+    leagueIDs.map( leagueID => {
       dispatch(initFixturesForLeague(leagueID))
     })
-
-    dispatch(resetFixtures())
-    Promise.all([initTeam, initLeague])
-    .then(() => dispatch( initPastFixtures()))
-    .then(() => dispatch( initFutureFixtures()));
   }
 }
 
@@ -133,6 +168,7 @@ function processFixtureStatus(data){
 
 today = new Date()
 today.setHours(0,0,0,0)
+today = today.getTime()
 
 export function processTeamFixtures(data, page){
   todayIDs=[];
@@ -150,7 +186,8 @@ export function processTeamFixtures(data, page){
   fixtures.forEach( fixture => {
     date = new Date(fixture.event_timestamp*1000)
     date.setHours(0,0,0,0)
-    leagueID = fixture.league_id;
+    date = date.getTime()
+    leagueID = "" + fixture.league_id;
     fixtureID = fixture.fixture_id;
 
     if(!(date in fixByDateLeague)){
@@ -159,7 +196,7 @@ export function processTeamFixtures(data, page){
     if(!(leagueID in fixByDateLeague[date])){
       fixByDateLeague[date][leagueID] = []
     }
-    if(new Date(date).getTime() == today){
+    if(date == today){
       todayIDs.push(fixtureID);
     }else{
       fixByDateLeague[date][leagueID].push(fixtureID);
@@ -167,7 +204,6 @@ export function processTeamFixtures(data, page){
     fixByID[fixtureID] = {
       id: fixtureID,
       date: date,
-      timeStamp: fixture.event_timestamp,
       status: processFixtureStatus([
         fixture.statusShort,
         fixture.event_timestamp,
@@ -202,7 +238,8 @@ export function processLeagueFixtures(data){
   fixtures.forEach( fixture => {
     date = new Date(fixture.event_timestamp*1000)
     date.setHours(0,0,0,0)
-    leagueID = fixture.league_id;
+    date = date.getTime()
+    leagueID = "" + fixture.league_id;
     fixtureID = fixture.fixture_id;
 
     if(!(date in fixByDateLeague)){
@@ -212,7 +249,7 @@ export function processLeagueFixtures(data){
     if(!(leagueID in fixByDateLeague[date])){
       fixByDateLeague[date][leagueID] = []
     }
-    if(new Date(date).getTime() == today){
+    if(date == today){
       todayIDs.push(fixtureID);
     }else{
       fixByDate[date].push(fixtureID)

@@ -13,6 +13,7 @@ const mapStateToProps = state => ({
     fetchingPast: state.fixturesStatus['pastFetch'],
     fixturesByID: state.fixturesByID,
     fixtureIDs: state.fixtureIDsByDateLeague,
+    leaguesByID: state.leaguesByID,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -23,13 +24,13 @@ const mapDispatchToProps = dispatch => ({
 
 const Screen = ({curPastDates, curFutureDates, fetchingFuture, fetchingPast,
   fixturesByID, fixtureIDs, fetchSpecificFixture, fetchMorePast,
-  fetchMoreFuture, ...props}) => (
+  fetchMoreFuture, leaguesByID, ...props}) => (
   <Main topBarFlex={1} screenFlex={7} curPastDates={curPastDates}
   curFutureDates={curFutureDates} fetchSpecificFixture={fetchSpecificFixture}
     fetchingFuture={fetchingFuture} fetchingPast={fetchingPast}
     fixturesByID={fixturesByID} fixtureIDs={fixtureIDs}
     fetchMorePast={fetchMorePast} fetchMoreFuture={fetchMoreFuture}
-    navigation={props.navigation}/>
+    leaguesByID={leaguesByID} navigation={props.navigation}/>
 )
 
 

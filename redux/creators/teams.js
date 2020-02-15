@@ -40,7 +40,7 @@ function processTeam(data){
   teams = data.teams;
   team = teams[0]
   return {
-      teamID: team.team_id,
+      teamID: "" + team.team_id,
       name: team.name,
       country: team.country,
       logo: team.logo,
@@ -69,16 +69,19 @@ function shouldFetchTeam(team){
 
 export function fetchTeams(teamIDs){
   return (dispatch, getState) => {
-    promises = teamIDs.map( teamID => {
-      if(shouldFetchTeam(getState().teamsByID[teamID])){
+    teamIDs.map( teamID => {
+      team = getState().teamsByID[teamID]
+      if(shouldFetchTeam(team)){
         dispatch(requestTeamByID(teamID))
         return getTeamByID(teamID)
           // get latest season
         .then( data => processTeam(data))
         .then( processedData => dispatch( receiveTeamByID(processedData)))
+        .then(() => dispatch(fetchLeaguesForTeam(teamID)))
+      }else if(!(team.leagueIDs)){
+        dispatch(fetchLeaguesForTeam(teamID))
       }
     });
-    return Promise.all(promises);
   }
 }
 
@@ -93,9 +96,9 @@ export function processTeams(data){
     collect[team.team_id] = {
       fetchingTeam: false,
       fetchingLeagues: false,
-      fetchingPastFixtures: false,
+      fetchingPast: false,
       fetchingPlayers: false,
-      fetchingFutureFixtures: false,
+      fetchingFuture: false,
       teamID: team.team_id,
       name: team.name,
       logo: team.logo,

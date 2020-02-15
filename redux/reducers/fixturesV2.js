@@ -80,7 +80,7 @@ function filterArray(array){
 export function pastDates(state=[], action){
   switch(action.type){
     case STORE_PAST_DATES:
-      return sortBy(filterArray([...state, ...action.dates]), (s) => -new Date(s));
+      return sortBy(filterArray([...state, ...action.dates]), (s) => -new Date(parseInt(s)));
     default:
       return state;
   }
@@ -89,7 +89,7 @@ export function pastDates(state=[], action){
 export function futureDates(state=[], action){
   switch(action.type){
     case STORE_FUTURE_DATES:
-      return sortBy(filterArray([...state, ...action.dates]), (s) => new Date(s));
+      return sortBy(filterArray([...state, ...action.dates]), (s) => new Date(parseInt(s)));
     default:
       return state;
   }

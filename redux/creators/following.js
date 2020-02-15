@@ -4,12 +4,13 @@ import {
   ADD_TEAM_TO_FOLLOWING,
   REMOVE_TEAM_FROM_FOLLOWING,
 } from '../types'
-import { initFixtures } from './fixtures'
+import { initFixtures,} from './fixtures'
+import { fetchTeams, } from './teams'
 
 
 export function addLeagueToFollowing(leagueID){
   return dispatch => {
-    dispatch(addLeague())
+    dispatch(addLeague(leagueID))
     dispatch(initFixtures())
   }
 }
@@ -28,9 +29,10 @@ export function removeLeagueFromFollowing(leagueID){
   };
 }
 
-export function addTeamToFollowing(leagueID){
+export function addTeamToFollowing(teamID){
   return dispatch => {
-    dispatch(addTeam())
+    dispatch(addTeam([teamID]))
+    dispatch(fetchTeams([teamID]))
     dispatch(initFixtures())
   }
 }
