@@ -13,6 +13,9 @@ import { storeFixturesByID, storeFixtureIDsByDate, receiveFutureFixtures,
 receiveTodayTeamFixtures, receiveTodayLeagueFixtures } from './fixtures'
 
 counter = 0;
+today = new Date()
+today.setHours(0,0,0,0)
+const todayTime = today.getTime()
 
 export function initFutureFixtures(){
   return (dispatch, getState) => {
@@ -99,6 +102,10 @@ function fetchFutureTeamFixtures(teamIDs){
               }
             }
             dates = Object.keys(processedData[1])
+            const index = dates.indexOf("" + todayTime);
+            if (index >= 0) {
+              dates.splice(index, 1);
+            }
             lastDate = dates[dates.length-1];
             dispatch( storeFutureDates(dates))
             dispatch( receiveTodayTeamFixtures(teamID, processedData[2]))
@@ -135,9 +142,9 @@ function getNextDate(timeStamp){
   timeStamp = parseInt(timeStamp)
   const yesterday = new Date(timeStamp);
   yesterday.setDate(new Date(timeStamp).getDate() + 1)
+  yesterday.setHours(0,0,0,0)
   pieces = yesterday.toLocaleDateString().split('/')
   fetchDate = "" + pieces[2] + '-' + pieces[0] + '-' + pieces[1]
-  yesterday.setHours(0,0,0,0)
   storeDate = yesterday.getTime();
   return [fetchDate, storeDate];
 }

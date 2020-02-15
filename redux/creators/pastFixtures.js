@@ -12,7 +12,10 @@ import { storeFixturesByID, storeFixtureIDsByDate, receivePastFixtures,
   requestPastFixtures, processTeamFixtures, processLeagueFixtures,
 receiveTodayTeamFixtures, receiveTodayLeagueFixtures } from './fixtures'
 
-counter = 0;
+counter = 0
+today = new Date()
+today.setHours(0,0,0,0)
+const todayTime = today.getTime()
 
 export function initPastFixtures(){
   return (dispatch, getState) => {
@@ -98,8 +101,13 @@ function fetchPastTeamFixtures(teamIDs){
                   dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
               }
             }
+            // might be able to refactor this as remove last elemtnn of dates
             dates = Object.keys(processedData[1])
-            lastDate = dates[dates.length-1];
+            const index = dates.indexOf("" + todayTime);
+            if (index >= 0) {
+              dates.splice(index, 1);
+            }
+            lastDate = dates[dates.length-1]
             dispatch( storePastDates(dates))
             dispatch( receiveTodayTeamFixtures(teamID, processedData[2]))
             dispatch( receivePastTeamFixtures(teamID, Object.keys(processedData[0]), lastDate))
@@ -134,9 +142,9 @@ export function receivePastLeagueFixtures(leagueID, fixtures,  lastDate){
 function getNextDate(timeStamp){
   const yesterday = new Date(timeStamp);
   yesterday.setDate(new Date(timeStamp).getDate() - 1)
+  yesterday.setHours(0,0,0,0)
   pieces = yesterday.toLocaleDateString().split('/')
   fetchDate = "" + pieces[2] + '-' + pieces[0] + '-' + pieces[1]
-  yesterday.setHours(0,0,0,0)
   storeDate = yesterday.getTime();
   return [fetchDate, storeDate];
 }

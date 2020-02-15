@@ -94,42 +94,39 @@ export function initFixturesForTeam(teamID){
   }
 }
 
-function getNextDate(timeStamp){
-  timeStamp = parseInt(timeStamp)
-  const yesterday = new Date(timeStamp);
-  yesterday.setDate(new Date(timeStamp).getDate() - 1)
-  pieces = yesterday.toLocaleDateString().split('/')
+function getTodayDates(){
+  today = new Date()
+  pieces = today.toLocaleDateString().split('/')
   fetchDate = "" + pieces[2] + '-' + pieces[0] + '-' + pieces[1]
-  yesterday.setHours(0,0,0,0)
-  storeDate = yesterday.getTime();
+  today.setHours(0,0,0,0)
+  storeDate = today.getTime();
   return [fetchDate, storeDate];
 }
 
 export function initFixtures(){
   return (dispatch, getState) => {
-    const tomorrow = new Date();
-    tomorrow.setDate(new Date().getDate() + 1)
-    tomorrow.setHours(0,0,0,0)
-    Object.keys(getState().leaguesByID).map( leagueID => {
-      dates = getNextDate(tomorrow.getTime());
-      fetchDate = dates[0]
-      storeDate = dates[1]
-      return getFixturesByLeagueAndDate(leagueID, fetchDate)
-      .then( data => processLeagueFixtures(data))
-      .then( processedData => {
-        if( processedData ){
-          dispatch( storeFixturesByID(processedData[0]));
-          for (date in processedData[1]){
-            for (league in processedData[1][date]){
-              dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
+    dispatch( initLeaguesTeams())
+    dates = getTodayDates();
+    fetchDate = dates[0]
+    storeDate = dates[1]
+    getState().followingLeagueIDs.map( leagueID => {
+      if(!(getState().fixtureIDsByLeagueID[leagueID].todayFixtures.length)){
+        return getFixturesByLeagueAndDate(leagueID, fetchDate)
+        .then( data => processLeagueFixtures(data))
+        .then( processedData => {
+          if( processedData ){
+            dispatch( storeFixturesByID(processedData[0]));
+            for (date in processedData[1]){
+              for (league in processedData[1][date]){
+                dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
+              }
             }
+            dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
           }
-          dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
-        }
-      });
+        });
+      }
     });
     dispatch( resetFixtures())
-    dispatch( initLeaguesTeams())
   }
 }
 
@@ -168,7 +165,7 @@ function processFixtureStatus(data){
 
 today = new Date()
 today.setHours(0,0,0,0)
-today = today.getTime()
+todayTime = today.getTime()
 
 export function processTeamFixtures(data, page){
   todayIDs=[];
@@ -182,28 +179,26 @@ export function processTeamFixtures(data, page){
   }else if(page > 1){
     fixtures.splice(0, (20*(page-1)))
   }
-
   fixtures.forEach( fixture => {
     date = new Date(fixture.event_timestamp*1000)
     date.setHours(0,0,0,0)
-    date = date.getTime()
+    timeStamp = date.getTime()
     leagueID = "" + fixture.league_id;
     fixtureID = fixture.fixture_id;
 
-    if(!(date in fixByDateLeague)){
-      fixByDateLeague[date] = {}
+    if(!(timeStamp in fixByDateLeague)){
+      fixByDateLeague[timeStamp] = {}
     }
-    if(!(leagueID in fixByDateLeague[date])){
-      fixByDateLeague[date][leagueID] = []
+    if(!(leagueID in fixByDateLeague[timeStamp])){
+      fixByDateLeague[timeStamp][leagueID] = []
     }
-    if(date == today){
+    if(timeStamp == todayTime){
       todayIDs.push(fixtureID);
-    }else{
-      fixByDateLeague[date][leagueID].push(fixtureID);
     }
+    fixByDateLeague[timeStamp][leagueID].push(fixtureID);
     fixByID[fixtureID] = {
       id: fixtureID,
-      date: date,
+      date: timeStamp,
       status: processFixtureStatus([
         fixture.statusShort,
         fixture.event_timestamp,
@@ -238,26 +233,26 @@ export function processLeagueFixtures(data){
   fixtures.forEach( fixture => {
     date = new Date(fixture.event_timestamp*1000)
     date.setHours(0,0,0,0)
-    date = date.getTime()
+    console.log("FETCHEDDATE"+ date)
+    timeStamp = date.getTime()
     leagueID = "" + fixture.league_id;
     fixtureID = fixture.fixture_id;
 
-    if(!(date in fixByDateLeague)){
-      fixByDateLeague[date] = {}
-      fixByDate[date] = []
+    if(!(timeStamp in fixByDateLeague)){
+      fixByDate[timeStamp] = []
+      fixByDateLeague[timeStamp] = {}
     }
-    if(!(leagueID in fixByDateLeague[date])){
-      fixByDateLeague[date][leagueID] = []
+    if(!(leagueID in fixByDateLeague[timeStamp])){
+      fixByDateLeague[timeStamp][leagueID] = []
     }
-    if(date == today){
+    if(timeStamp == todayTime){
       todayIDs.push(fixtureID);
-    }else{
-      fixByDate[date].push(fixtureID)
-      fixByDateLeague[date][leagueID].push(fixtureID);
     }
+    fixByDate[timeStamp].push(fixtureID)
+    fixByDateLeague[timeStamp][leagueID].push(fixtureID);
     fixByID[fixtureID] = {
       id: fixtureID,
-      date: date,
+      date: timeStamp,
       status: processFixtureStatus([
         fixture.statusShort,
         fixture.event_timestamp,

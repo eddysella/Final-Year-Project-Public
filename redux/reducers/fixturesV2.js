@@ -59,7 +59,7 @@ export function fixturesStatus(state={
 //https://stackoverflow.com/questions/40346773/unique-array-for-dates-javascript/44906207
 function isDateInArray(needle, haystack) {
   for (var i = 0; i < haystack.length; i++) {
-    if (new Date(needle).getTime() === new Date(haystack[i]).getTime()) {
+    if (needle === haystack[i]) {
       return true;
     }
   }
@@ -80,7 +80,7 @@ function filterArray(array){
 export function pastDates(state=[], action){
   switch(action.type){
     case STORE_PAST_DATES:
-      return sortBy(filterArray([...state, ...action.dates]), (s) => -new Date(parseInt(s)));
+      return sortBy(filterArray([...state, ...action.dates]), s => -s);
     default:
       return state;
   }
@@ -89,7 +89,7 @@ export function pastDates(state=[], action){
 export function futureDates(state=[], action){
   switch(action.type){
     case STORE_FUTURE_DATES:
-      return sortBy(filterArray([...state, ...action.dates]), (s) => new Date(parseInt(s)));
+      return sortBy(filterArray([...state, ...action.dates]));
     default:
       return state;
   }
