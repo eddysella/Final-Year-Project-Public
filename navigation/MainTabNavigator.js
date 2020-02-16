@@ -6,7 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import StandingsContainer from '../containers/standings/Main';
 import StandingsDetailsContainer from '../containers/standings/Details';
 import FixturesContainer from '../containers/fixturesV2/Main';
-import FixturesDetailsContainer from '../containers/fixtures/Details';
+import FixturesDetailsContainer from '../containers/fixturesV2/Details';
 import SearchContainer from '../containers/search/Main';
 import LeagueContainer from '../containers/misc/League';
 import TeamContainer from '../containers/misc/Team';
