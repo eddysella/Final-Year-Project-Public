@@ -5,11 +5,11 @@ import {Card} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
 const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
+// const screenHeight = Math.round(Dimensions.get('window').height);
 const itemWidth = screenWidth - scale(screenWidth/5);
-const itemHeight = scale(screenWidth/4);
-const itemHorizontalPadding = (itemWidth/5);
-const itemVerticalPadding = scale(15);
+// const itemHeight = scale(screenWidth/4);
+// const itemHorizontalPadding = (itemWidth/5);
+// const itemVerticalPadding = scale(15);
 
 export const Main = props => {
 
@@ -67,16 +67,14 @@ export const Main = props => {
 
   function renderItem(item) {
     fixture = props.fixturesByID[item.item]
-    status = fixture.status;
-
     return (
       <TouchableHighlight onPress={ () => {
-          props.fetchSpecificFixture(fixture.id);
-          props.navigation.push('Inner');
+          props.fetchSpecificFixture(item.item)
+          props.navigation.push('Inner', {id: item.item});
       }}>
         <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
           <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
-          <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{status}</Text>
+          <Text style={{flex:1, textAlign:'center', alignSelf: 'center',}}>{fixture.status}</Text>
           <Text style={{flex:1,   textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
         </View>
       </TouchableHighlight>
@@ -96,15 +94,14 @@ export const Main = props => {
     return (
       <Card title={new Date(parseInt(date)).toLocaleDateString()}>
       {
-        <View key={date} style={{justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{alignItems: 'center'}}>
           <SectionList
           ItemSeparatorComponent={ItemSeparator}
-          ref={(ref) => { this.leagueList = ref; }}
           sections={processDate(props.fixtureIDs[date])}
           renderItem={renderItem}
           keyExtractor={(item,index) => item.toString()}
           renderSectionHeader={({ section: { title } }) => (
-            <Text>{title}</Text>
+            <Text style={{alignSelf: 'center',}}>{title}</Text>
           )}
           />
         </View>
@@ -116,7 +113,6 @@ export const Main = props => {
   const RenderFutureFixtures = () => {
     return (
       <FlatList
-        ref={(ref) => { this.flatListRef = ref; }}
         data={props.curFutureDates}
         renderItem={renderDates}
         keyExtractor={(item,index) => index.toString()}
@@ -144,11 +140,10 @@ export const Main = props => {
           </Card>
         );
     }
-    console.log(props.fixtureIDs[date]);
     return (
       <Card>
       {
-        <View key={date} style={{justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{alignItems: 'center'}}>
           <SectionList
           ItemSeparatorComponent={ItemSeparator}
           ref={(ref) => { this.leagueList = ref; }}
@@ -156,9 +151,7 @@ export const Main = props => {
           renderItem={renderItem}
           keyExtractor={(item,index) => item.toString()}
           renderSectionHeader={({ section: { title } }) => (
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Text>{title}</Text>
-            </View>
+            <Text style={{alignSelf: 'center',}}>{title}</Text>
           )}
           />
         </View>
@@ -167,10 +160,11 @@ export const Main = props => {
     );
   }
 
+  // const [pastFooter, setPastFooter] = useState(0);
+
   const RenderPastFixtures = () => {
     return (
       <FlatList
-        ref={(ref) => { this.flatListRef = ref; }}
         data={props.curPastDates}
         renderItem={renderDates}
         keyExtractor={(item,index) => index.toString()}
@@ -202,12 +196,22 @@ export const Main = props => {
     bottomPage = null;
     switch(currentTab){
       case 0:
+        if(!(props.curPastDates.length)){
+          if(!(props.fetchingPast)){
+            props.fetchMorePast()
+          }
+        }
         bottomPage = <RenderPastFixtures/>;
         break;
       case 1:
         bottomPage = <RenderTodayFixtures/>;
         break;
       case 2:
+        if(!(props.curFutureDates.length)){
+          if(!(props.fetchingFuture)){
+            props.fetchMoreFuture()
+          }
+        }
         bottomPage = <RenderFutureFixtures/>;
         break;
     }

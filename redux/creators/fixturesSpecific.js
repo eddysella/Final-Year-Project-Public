@@ -1,53 +1,29 @@
 import {
-  RECEIVE_FIXTURE_BY_ID,
-  REQUEST_FIXTURE_BY_ID,
-  SET_TAB,
+  REQUEST_FIXTURE_STATS,
+  RECEIVE_FIXTURE_STATS,
 } from '../types'
-import { getFixtureByID } from '../../fetch/Fixtures';
+import { getFixtureByID } from '../../fetch/FixturesV2';
 
-function requestFixtureByID(id){
+function requestFixtureStats(id){
   return {
-    type: REQUEST_FIXTURE_BY_ID,
+    type: REQUEST_FIXTURE_STATS,
+  };
+}
+
+function receiveFixtureStats(id, stats){
+  return {
+    type: RECEIVE_FIXTURE_STATS,
     fixtureID: id,
-    topBar:
-    {
-      status: '',
-      homeName: '',
-      awayName: '',
-      },
-    screen:
-    {
-      stats: createStats(),
-      events: [],
-      lineups: [],
-      homeTeam: '',
-      awayTeam: '',
-      },
-  };
-}
-
-function receiveFixtureByID(id, fixture){
-  return {
-    type: RECEIVE_FIXTURE_BY_ID,
-    topBar: fixture[0],
-    screen: fixture[1],
-    receivedAt: Date.now(),
-  };
-}
-
-export function setTab(tab){
-  return {
-    type: SET_TAB,
-    tabDisplayed: tab,
+    stats: stats,
   };
 }
 
 export function fetchSpecificFixture(id){
   return dispatch => {
-    dispatch(requestFixtureByID(id))
+    dispatch(requestFixtureStats(id))
     return getFixtureByID(id)
     .then( data => processFixture(data))
-    .then( fixture => dispatch(receiveFixtureByID(id, fixture)))
+    .then( processedData => dispatch(receiveFixtureStats(id, processedData)))
   }
 }
 
@@ -116,11 +92,10 @@ function processFixtureStatus(data){
 }
 
 function processFixture(data){
-  collect=[];
+  collect=null;
   data = data.api;
   fixtures = data.fixtures;
   fixtures.forEach( fixture => {
-      league = fixture.league;
       status = processFixtureStatus([
         fixture.statusShort,
         fixture.event_timestamp,
@@ -128,30 +103,14 @@ function processFixture(data){
         fixture.goalsAwayTeam,
         fixture.elapsed
       ])
-      homeTeam = fixture.homeTeam;
-      awayTeam = fixture.awayTeam;
-      collect.push({
-          leagueName:league.name,
-          id:fixture.fixture_id,
-          timeStamp:fixture.event_timestamp,
-          status:status,
-          elapsed:fixture.elapsed,
-          homeLogo: homeTeam.logo,
-          homeName: homeTeam.team_name,
-          awayLogo: awayTeam.logo,
-          awayName: awayTeam.team_name,
-          goalsHome:String(fixture.goalsHomeTeam),
-          goalsAway:String(fixture.goalsAwayTeam),
-      });
       stats = createStats(fixture.statistics);
       lineups = createLineups(fixture.lineups);
-      collect.push({
-          homeTeam:fixture.homeTeam,
-          awayTeam:fixture.awayTeam,
+      collect = {
+          status: status,
           stats:stats,
           events:fixture.events,
           lineups:lineups,
-      });
+      };
   });
   return collect;
 }

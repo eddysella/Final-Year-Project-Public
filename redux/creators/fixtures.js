@@ -195,16 +195,17 @@ export function processTeamFixtures(data, page){
       todayIDs.push(fixtureID);
     }
     fixByDateLeague[timeStamp][leagueID].push(fixtureID);
+    status = processFixtureStatus([
+      fixture.statusShort,
+      fixture.event_timestamp,
+      fixture.goalsHomeTeam,
+      fixture.goalsAwayTeam,
+      fixture.elapsed
+    ])
     fixByID[fixtureID] = {
       id: fixtureID,
       date: timeStamp,
-      status: processFixtureStatus([
-        fixture.statusShort,
-        fixture.event_timestamp,
-        fixture.goalsHomeTeam,
-        fixture.goalsAwayTeam,
-        fixture.elapsed
-      ]),
+      status: status,
       elapsed:fixture.elapsed,
       league: fixture.league,
       homeTeam:fixture.homeTeam,
@@ -249,16 +250,17 @@ export function processLeagueFixtures(data){
     }
     fixByDate[timeStamp].push(fixtureID)
     fixByDateLeague[timeStamp][leagueID].push(fixtureID);
+    status = processFixtureStatus([
+      fixture.statusShort,
+      fixture.event_timestamp,
+      fixture.goalsHomeTeam,
+      fixture.goalsAwayTeam,
+      fixture.elapsed
+    ])
     fixByID[fixtureID] = {
       id: fixtureID,
       date: timeStamp,
-      status: processFixtureStatus([
-        fixture.statusShort,
-        fixture.event_timestamp,
-        fixture.goalsHomeTeam,
-        fixture.goalsAwayTeam,
-        fixture.elapsed
-      ]),
+      status: status,
       elapsed:fixture.elapsed,
       league: fixture.league,
       homeTeam:fixture.homeTeam,

@@ -20,9 +20,9 @@ import {
   RECEIVE_FUTURE_TEAM_FIXTURES,
   INIT_LEAGUE_FIXTURES,
   INIT_TEAM_FIXTURES,
+  REQUEST_FIXTURE_STATS,
+  RECEIVE_FIXTURE_STATS,
 } from '../types'
-
-const deepMerge = require('deepmerge')
 import sortBy from 'array-sort-by';
 
 export function fixturesStatus(state={
@@ -305,9 +305,29 @@ export function fixtureIDsByDateLeague(state={}, action){
   }
 }
 
-
-export function fixturesByID(state={}, action){
+export function fixture(state={}, action){
+  console.log("Stats",action.stats)
   switch(action.type){
+    case RECEIVE_FIXTURE_STATS:
+    return Object.assign({}, state, action.stats);
+    default:
+      return state;
+  }
+}
+
+export function fixturesByID(state={
+  fetching: false,
+}, action){
+  switch(action.type){
+    case REQUEST_FIXTURE_STATS:
+      return Object.assign({}, state, {
+        fetching: true,
+      });
+    case RECEIVE_FIXTURE_STATS:
+      return Object.assign({}, state, {
+        fetching: false,
+        [action.fixtureID]: fixture(state[action.fixtureID], action)
+      });
     case STORE_FIXTURES_BY_ID:
       return Object.assign({}, state, action.fixtures);
     default:
