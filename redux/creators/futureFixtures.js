@@ -140,12 +140,11 @@ export function receiveFutureLeagueFixtures(leagueID, fixtures, lastDate){
 
 function getNextDate(timeStamp){
   timeStamp = parseInt(timeStamp)
-  const yesterday = new Date(timeStamp);
-  yesterday.setDate(new Date(timeStamp).getDate() + 1)
-  yesterday.setHours(0,0,0,0)
-  pieces = yesterday.toLocaleDateString().split('/')
-  fetchDate = "" + pieces[2] + '-' + pieces[0] + '-' + pieces[1]
-  storeDate = yesterday.getTime();
+  const tomorrow = new Date(timeStamp);
+  tomorrow.setDate(new Date(timeStamp).getDate() + 1)
+  tomorrow.setHours(0,0,0,0)
+  fetchDate = tomorrow.toISOString().substring(0,10)
+  storeDate = tomorrow.getTime();
   return [fetchDate, storeDate];
 }
 

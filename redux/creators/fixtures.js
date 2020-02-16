@@ -96,9 +96,8 @@ export function initFixturesForTeam(teamID){
 
 function getTodayDates(){
   today = new Date()
-  pieces = today.toLocaleDateString().split('/')
-  fetchDate = "" + pieces[2] + '-' + pieces[0] + '-' + pieces[1]
   today.setHours(0,0,0,0)
+  fetchDate = today.toISOString().substring(0,10).trim()
   storeDate = today.getTime();
   return [fetchDate, storeDate];
 }
