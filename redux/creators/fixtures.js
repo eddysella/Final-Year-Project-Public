@@ -10,18 +10,11 @@ import {
   INIT_LEAGUE_FIXTURES,
   INIT_TEAM_FIXTURES,
   RESET_FIXTURES,
-  RESET_LEAGUE_FETCH,
 } from '../types'
 
 import { fetchFollowingPastFixtures } from './pastFixtures';
 import { fetchFollowingFutureFixtures } from './futureFixtures';
 import { getFixturesByLeagueAndDate, } from '../../fetch/FixturesV2';
-
-export function resetLeagueFetch(){
-  return {
-    type: RESET_LEAGUE_FETCH,
-  }
-}
 
 export function resetFixtures(){
   return {

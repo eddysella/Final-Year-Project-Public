@@ -106,7 +106,9 @@ export const Main = props => {
         keyExtractor={(item,index) => index.toString()}
         extraData={props.curFutureDates}
         onEndReached={() => {
-          if(!(props.fetchingFuture)){
+          if(!(props.shouldFetchFuture)){
+            console.log("here 2")
+            props.setShouldFetchFutureTrue()
             props.fetchMoreFuture([props.leagueID])
           }
         }}
@@ -151,7 +153,8 @@ export const Main = props => {
           keyExtractor={(item,index) => index.toString()}
           extraData={props.curPastDates}
           onEndReached={() => {
-            if(!(props.fetchingPast)){
+            if(!(props.shouldFetchPast)){
+              props.setShouldFetchPastTrue()
               props.fetchMorePast([props.leagueID])
             }
           }}
@@ -161,6 +164,8 @@ export const Main = props => {
     }
 
   const [currentTab, setTab] = useState(1);
+  const [initFuture, setFuture] = useState(false);
+  const [initPast, setPast] = useState(false);
 
   if(props.fetchingFuture || props.fetchingPast){
     return(
@@ -178,7 +183,8 @@ export const Main = props => {
     switch(currentTab){
       case 0:
         if(!(props.curPastDates.length)){
-          if(!(props.fetchingPast)){
+          if(!(initPast)){
+            setPast(true);
             props.fetchMorePast([props.leagueID])
           }
         }
@@ -189,7 +195,8 @@ export const Main = props => {
         break;
       case 2:
         if(!(props.curFutureDates.length)){
-          if(!(props.fetchingFuture)){
+          if(!(initFuture)){
+            setFuture(true);
             props.fetchMoreFuture([props.leagueID])
           }
         }

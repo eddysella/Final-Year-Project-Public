@@ -194,7 +194,6 @@ export const Details = props => {
 
   fixture = props.screen
   const [currentTab, setTab] = useState(0);
-  console.log(props.fetching)
 
   if(props.fetching){
     return(

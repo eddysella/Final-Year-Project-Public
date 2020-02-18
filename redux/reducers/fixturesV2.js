@@ -4,7 +4,8 @@ import {
   STORE_PAST_DATES,
   STORE_FUTURE_DATES,
   RESET_FIXTURES,
-  RESET_LEAGUE_FETCH,
+  RESET_PAST_LEAGUE_FETCH,
+  RESET_FUTURE_LEAGUE_FETCH,
   REQUEST_PAST_FIXTURES,
   RECEIVE_PAST_FIXTURES,
   REQUEST_PAST_LEAGUE_FIXTURES,
@@ -23,6 +24,8 @@ import {
   INIT_TEAM_FIXTURES,
   REQUEST_FIXTURE_STATS,
   RECEIVE_FIXTURE_STATS,
+  LEAGUE_SHOULD_FETCH_PAST_TRUE,
+  LEAGUE_SHOULD_FETCH_FUTURE_TRUE,
 } from '../types'
 import sortBy from 'array-sort-by';
 
@@ -119,6 +122,8 @@ function league(
   state = {
     fetchingFuture: false,
     fetchingPast: false,
+    shouldFetchPast: false,
+    shouldFetchFuture: false,
     pastDates:[],
     todayFixtures: [],
     futureDates:[],
@@ -129,6 +134,22 @@ function league(
   action
   ){
   switch(action.type){
+    case LEAGUE_SHOULD_FETCH_PAST_TRUE:
+      return Object.assign({}, state, {
+        shouldFetchPast: true,
+      })
+    case LEAGUE_SHOULD_FETCH_FUTURE_TRUE:
+      return Object.assign({}, state, {
+        shouldFetchFuture: true,
+      })
+    case RESET_FUTURE_LEAGUE_FETCH:
+      return Object.assign({}, state, {
+        fetchingFuture: false,
+      })
+    case RESET_PAST_LEAGUE_FETCH:
+      return Object.assign({}, state, {
+        fetchingPast: false,
+      })
     case INIT_LEAGUE_FIXTURES:
       return Object.assign({}, state)
     case REQUEST_PAST_LEAGUE_FIXTURES:
@@ -140,7 +161,8 @@ function league(
         fetchingPast: false,
         fixturesByDate: Object.assign({}, state.fixturesByDate, action.fixtures),
         lastPastDate: action.date,
-        pastDates: [...state.pastDates, action.date]
+        pastDates: [...state.pastDates, action.date],
+        shouldFetchPast: false,
       })
     case RECEIVE_TODAY_LEAGUE_FIXTURES:
       return Object.assign({}, state, {
@@ -156,38 +178,26 @@ function league(
         fixturesByDate: Object.assign({}, state.fixturesByDate, action.fixtures),
         lastFutureDate: action.date,
         futureDates: [...state.futureDates, action.date],
+        shouldFetchFuture: false,
       })
     default:
       return state;
   }
 }
 
-export function fixtureIDsByLeagueID(state={
-  fetching: false,
-}, action){
+export function fixtureIDsByLeagueID(state={}, action){
   switch(action.type){
+    case RESET_FUTURE_LEAGUE_FETCH:
+    case RESET_PAST_LEAGUE_FETCH:
     case INIT_LEAGUE_FIXTURES:
-      return Object.assign({}, state, {
-        [action.leagueID]: league(state[action.leagueID], action),
-        });
     case REQUEST_PAST_LEAGUE_FIXTURES:
     case REQUEST_FUTURE_LEAGUE_FIXTURES:
-      return Object.assign({}, state, {
-        fetching: true,
-        [action.leagueID]: league(state[action.leagueID], action)
-        });
-    case RESET_LEAGUE_FETCH:
-      return Object.assign({}, state, {
-        fetching: false,
-        });
     case RECEIVE_TODAY_LEAGUE_FIXTURES:
-      return Object.assign({}, state, {
-        [action.leagueID]: league(state[action.leagueID], action)
-        });
     case RECEIVE_PAST_LEAGUE_FIXTURES:
     case RECEIVE_FUTURE_LEAGUE_FIXTURES:
+    case LEAGUE_SHOULD_FETCH_PAST_TRUE:
+    case LEAGUE_SHOULD_FETCH_FUTURE_TRUE:
       return Object.assign({}, state, {
-        fetching: false,
         [action.leagueID]: league(state[action.leagueID], action)
         });
     default:
@@ -314,7 +324,6 @@ export function fixtureIDsByDateLeague(state={}, action){
 }
 
 export function fixture(state={}, action){
-  console.log("Stats",action.stats)
   switch(action.type){
     case RECEIVE_FIXTURE_STATS:
     return Object.assign({}, state, action.stats);

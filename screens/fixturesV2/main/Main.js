@@ -181,7 +181,7 @@ export const Main = props => {
 
   const [currentTab, setTab] = useState(1);
 
-  if(props.fetching){
+  if(props.fetchingFuture || props.fetchingPast){
     return(
       <View style={{flex:1}}>
         <View style={{flex:props.topBarFlex}}>

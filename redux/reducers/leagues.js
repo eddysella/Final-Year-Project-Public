@@ -30,6 +30,8 @@ function league(
       name: action.name,
       countryCode: action.countryCode,
       logo: action.logo,
+      seasonStart: action.seasonStart,
+      seasonEnd: action.seasonEnd,
     });
     case REQUEST_TEAMS_FOR_LEAGUE:
       return Object.assign({}, state, {

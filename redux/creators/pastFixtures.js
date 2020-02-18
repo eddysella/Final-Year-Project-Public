@@ -6,12 +6,27 @@ import {
   RECEIVE_PAST_TEAM_FIXTURES,
   REQUEST_PAST_LEAGUE_FIXTURES,
   RECEIVE_PAST_LEAGUE_FIXTURES,
+  RESET_PAST_LEAGUE_FETCH,
+  LEAGUE_SHOULD_FETCH_PAST_TRUE,
 } from '../types'
 import { getFixturesByLeagueAndDate, getPastTeamFixtures, } from '../../fetch/FixturesV2';
 import { storeFixturesByID, storeFixtureIDsByDate, receivePastFixtures,
   requestPastFixtures, processTeamFixtures, processLeagueFixtures,
-receiveTodayTeamFixtures, receiveTodayLeagueFixtures,
-resetLeagueFetch } from './fixtures'
+receiveTodayTeamFixtures, receiveTodayLeagueFixtures} from './fixtures'
+
+export function resetLeagueFetch(leagueID){
+  return {
+    type: RESET_PAST_LEAGUE_FETCH,
+    leagueID: leagueID,
+  }
+}
+
+export function setShouldFetchPastTrue(leagueID){
+  return {
+    type: LEAGUE_SHOULD_FETCH_PAST_TRUE,
+    leagueID: leagueID,
+  }
+}
 
 counter = 0
 today = new Date()
@@ -25,6 +40,7 @@ export function initPastFixtures(){
 }
 
 function shouldFetchFixtures(fetching, lastDate, currentDate){
+  console.log("lastDate " + new Date(lastDate).toISOString())
   if(fetching){
     return false;
   }else if (new Date(parseInt(currentDate)).getTime() <= new Date(parseInt(lastDate)).getTime()) {
@@ -162,35 +178,37 @@ export function fetchPastLeagueFixtures(leagueIDs, overrideCheck=false){
 
 function fetchLeagueFixtures(leagueID, lastDate, currentDate, overrideCheck){
   return (dispatch, getState) => {
-    fetching = getState().fixtureIDsByLeagueID['fetching']
+    fetching = getState().fixtureIDsByLeagueID[leagueID]['fetchingPast']
     // overrideCheck is for the league screen
-    if(overrideCheck || shouldFetchFixtures(fetching, lastDate, currentDate)){
-      dates = getNextDate(lastDate);
-      fetchDate = dates[0]
-      storeDate = dates[1]
-      dispatch(requestPastLeagueFixtures(leagueID))
-      return getFixturesByLeagueAndDate(leagueID, fetchDate)
-      .then( data => processLeagueFixtures(data))
-      .then( processedData => {
-        if(processedData){
-          dispatch( storeFixturesByID(processedData[0]));
-          for (date in processedData[1]){
-            for (league in processedData[1][date]){
-              dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
+    if(lastDate >= getState().leaguesByID[leagueID]['seasonStart']){
+      if(shouldFetchFixtures(fetching, lastDate, currentDate) || overrideCheck){
+        dates = getNextDate(lastDate);
+        fetchDate = dates[0]
+        storeDate = dates[1]
+        dispatch(requestPastLeagueFixtures(leagueID))
+        return getFixturesByLeagueAndDate(leagueID, fetchDate)
+        .then( data => processLeagueFixtures(data))
+        .then( processedData => {
+          if(processedData){
+            dispatch( storeFixturesByID(processedData[0]));
+            for (date in processedData[1]){
+              for (league in processedData[1][date]){
+                dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
+              }
             }
+            dispatch( storePastDates(Object.keys(processedData[1])))
+            dispatch( receivePastLeagueFixtures(leagueID, processedData[3], storeDate));
+            counter -= 1;
+            dispatch( storePastDate());
+          }else{
+            dispatch( resetLeagueFetch(leagueID));
+            dispatch( fetchLeagueFixtures(leagueID, storeDate, currentDate, overrideCheck));
           }
-          dispatch( storePastDates(Object.keys(processedData[1])))
-          dispatch( receivePastLeagueFixtures(leagueID, processedData[3], storeDate));
-          counter -= 1;
-          dispatch( storePastDate());
-        }else{
-          dispatch( resetLeagueFetch());
-          dispatch( fetchLeagueFixtures(leagueID, storeDate, currentDate, overrideCheck));
-        }
-      });
-    }else{
-      counter -= 1;
-      dispatch(storePastDate());
+        });
+      }else{
+        counter -= 1;
+        dispatch(storePastDate());
+      }
     }
   }
 }

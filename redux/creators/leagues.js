@@ -51,6 +51,12 @@ export function fetchLeagues(leagueIDs){
   }
 }
 
+function dateToTimeStamp(date){
+  pieces = date.trim().split('-');
+  timeStamp = Date.UTC(parseInt(pieces[0]), parseInt(pieces[1], 10)-1, parseInt(pieces[2], 10));
+  return timeStamp
+}
+
 function processLeague(data){
   data = data.api;
   leagues = data.leagues;
@@ -60,6 +66,8 @@ function processLeague(data){
       name: league.country + " " + league.name,
       countryCode: league.country_code,
       logo: league.logo,
+      seasonStart: dateToTimeStamp(league.season_start),
+      seasonEnd: dateToTimeStamp(league.season_end),
   };
 }
 
@@ -93,10 +101,10 @@ export function fetchTeams(leagueID){
       return getTeamsByLeagueID(leagueID)
       .then( data => processTeams(data))
       .then( processedData => {
-          dispatch(receiveMultipleTeams(processedData[1]));
-          dispatch(receiveTeamsByID(processedData[0], leagueID));
+          dispatch(receiveMultipleTeams(processedData));
+          dispatch(receiveTeamsByID(Object.keys(processedData), leagueID));
       })
-}
+    }
   }
 }
 
@@ -119,6 +127,9 @@ export function processLeagues(data){
           name: league.country + " " + league.name,
           countryCode: league.country_code,
           logo: league.logo,
+          // returns timestamp of dates in UTC
+          seasonStart: dateToTimeStamp(league.season_start),
+          seasonEnd: dateToTimeStamp(league.season_end),
         };
     }
     if(count == 9){

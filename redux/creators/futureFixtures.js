@@ -6,12 +6,27 @@ import {
   RECEIVE_FUTURE_TEAM_FIXTURES,
   REQUEST_FUTURE_LEAGUE_FIXTURES,
   RECEIVE_FUTURE_LEAGUE_FIXTURES,
+  RESET_FUTURE_LEAGUE_FETCH,
+  LEAGUE_SHOULD_FETCH_FUTURE_TRUE,
 } from '../types'
 import { getFixturesByLeagueAndDate, getFutureTeamFixtures, } from '../../fetch/FixturesV2';
 import { storeFixturesByID, storeFixtureIDsByDate, receiveFutureFixtures,
   requestFutureFixtures, processTeamFixtures, processLeagueFixtures,
-receiveTodayTeamFixtures, receiveTodayLeagueFixtures,
-resetLeagueFetch } from './fixtures'
+receiveTodayTeamFixtures, receiveTodayLeagueFixtures} from './fixtures'
+
+export function resetLeagueFetch(leagueID){
+  return {
+    type: RESET_FUTURE_LEAGUE_FETCH,
+    leagueID: leagueID,
+  }
+}
+
+export function setShouldFetchFutureTrue(leagueID){
+  return {
+    type: LEAGUE_SHOULD_FETCH_FUTURE_TRUE,
+    leagueID: leagueID,
+  }
+}
 
 counter = 0;
 today = new Date()
@@ -162,34 +177,36 @@ export function fetchFutureLeagueFixtures(leagueIDs, overrideCheck=false){
 
 function fetchLeagueFixtures(leagueID, lastDate, currentDate, overrideCheck){
   return (dispatch, getState) => {
-    fetching = getState().fixtureIDsByLeagueID['fetching']
-    if(overrideCheck || shouldFetchFixtures(fetching, lastDate, currentDate)){
-      dates = getNextDate(lastDate);
-      fetchDate = dates[0]
-      storeDate = dates[1]
-      dispatch(requestFutureLeagueFixtures(leagueID))
-      return getFixturesByLeagueAndDate(leagueID, fetchDate)
-      .then( data => processLeagueFixtures(data))
-      .then( processedData => {
-        if(processedData){
-          dispatch( storeFixturesByID(processedData[0]));
-          for (date in processedData[1]){
-            for (league in processedData[1][date]){
-                dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
+    fetching = getState().fixtureIDsByLeagueID[leagueID]['fetchingFuture']
+    if(lastDate <= getState().leaguesByID[leagueID]['seasonEnd']){
+      if(shouldFetchFixtures(fetching, lastDate, currentDate) || overrideCheck){
+        dates = getNextDate(lastDate);
+        fetchDate = dates[0]
+        storeDate = dates[1]
+        dispatch(requestFutureLeagueFixtures(leagueID))
+        return getFixturesByLeagueAndDate(leagueID, fetchDate)
+        .then( data => processLeagueFixtures(data))
+        .then( processedData => {
+          if(processedData){
+            dispatch( storeFixturesByID(processedData[0]));
+            for (date in processedData[1]){
+              for (league in processedData[1][date]){
+                  dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
+              }
             }
+            dispatch( storeFutureDates(Object.keys(processedData[1])))
+            dispatch( receiveFutureLeagueFixtures(leagueID, processedData[3], storeDate));
+            counter -= 1;
+            dispatch( storeFutureDate());
+          }else{
+            dispatch( resetLeagueFetch(leagueID));
+            dispatch( fetchLeagueFixtures(leagueID, storeDate, currentDate, overrideCheck));
           }
-          dispatch( storeFutureDates(Object.keys(processedData[1])))
-          dispatch( receiveFutureLeagueFixtures(leagueID, processedData[3], storeDate));
-          counter -= 1;
-          dispatch( storeFutureDate());
-        }else{
-          dispatch( resetLeagueFetch());
-          dispatch( fetchLeagueFixtures(leagueID, storeDate, currentDate, overrideCheck));
-        }
-      });
-    }else{
-      counter -= 1;
-      dispatch(storeFutureDate());
+        });
+      }else{
+        counter -= 1;
+        dispatch(storeFutureDate());
+      }
     }
   }
 }
