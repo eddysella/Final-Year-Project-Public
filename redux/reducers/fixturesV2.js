@@ -4,6 +4,7 @@ import {
   STORE_PAST_DATES,
   STORE_FUTURE_DATES,
   RESET_FIXTURES,
+  RESET_LEAGUE_FETCH,
   REQUEST_PAST_FIXTURES,
   RECEIVE_PAST_FIXTURES,
   REQUEST_PAST_LEAGUE_FIXTURES,
@@ -154,7 +155,7 @@ function league(
         fetchingFuture: false,
         fixturesByDate: Object.assign({}, state.fixturesByDate, action.fixtures),
         lastFutureDate: action.date,
-        futureDates: [...state.futureDates, action.date]
+        futureDates: [...state.futureDates, action.date],
       })
     default:
       return state;
@@ -175,8 +176,15 @@ export function fixtureIDsByLeagueID(state={
         fetching: true,
         [action.leagueID]: league(state[action.leagueID], action)
         });
-    case RECEIVE_PAST_LEAGUE_FIXTURES:
+    case RESET_LEAGUE_FETCH:
+      return Object.assign({}, state, {
+        fetching: false,
+        });
     case RECEIVE_TODAY_LEAGUE_FIXTURES:
+      return Object.assign({}, state, {
+        [action.leagueID]: league(state[action.leagueID], action)
+        });
+    case RECEIVE_PAST_LEAGUE_FIXTURES:
     case RECEIVE_FUTURE_LEAGUE_FIXTURES:
       return Object.assign({}, state, {
         fetching: false,
