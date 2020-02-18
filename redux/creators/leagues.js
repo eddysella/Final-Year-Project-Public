@@ -39,16 +39,15 @@ function shouldFetchLeague(league){
 
 export function fetchLeagues(leagueIDs){
   return (dispatch, getState) => {
-    promises = leagueIDs.map( leagueID => {
+    leagueIDs.map( leagueID => {
       if(shouldFetchLeague(getState().leaguesByID[leagueID])){
         dispatch(requestLeagueByID(leagueID))
         return getAllSeasonsForLeague(leagueID)
           // get latest season
         .then( data => processLeague(data))
-        .then( processedData => dispatch(receiveLeagueByID(processedData)));
+        .then( processedData => dispatch( receiveLeagueByID(processedData)))
       }
     });
-    return Promise.all(promises);
   }
 }
 
@@ -58,7 +57,7 @@ function processLeague(data){
   league = leagues[leagues.length-1]
   return {
       leagueID: league.league_id,
-      leagueName: league.country + " " + league.name,
+      name: league.country + " " + league.name,
       countryCode: league.country_code,
       logo: league.logo,
   };

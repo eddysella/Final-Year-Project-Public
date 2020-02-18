@@ -8,7 +8,7 @@ import StandingsDetailsContainer from '../containers/standings/Details';
 import FixturesContainer from '../containers/fixturesV2/Main';
 import FixturesDetailsContainer from '../containers/fixturesV2/Details';
 import SearchContainer from '../containers/search/Main';
-import LeagueContainer from '../containers/misc/League';
+import LeagueContainer from '../containers/league/Main';
 import TeamContainer from '../containers/misc/Team';
 import FollowingContainer from '../containers/following/Main';
 import PlayerContainer from '../containers/misc/Player';

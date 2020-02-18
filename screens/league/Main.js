@@ -5,6 +5,7 @@ import { Card, Avatar} from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
 import { Switcher, SegmentedControlButton } from 'nachos-ui'
+import Fixtures from '../../containers/league/Fixtures'
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 const itemWidth = scale(screenWidth/2);
@@ -36,15 +37,23 @@ export const Main = props => {
 
   const RenderTopBar = (item) => {
     league = item.item;
+    fixturesBorder=0;
     teamsBorder=0;
     standingsBorder=0;
     if(currentTab == 0){
-      teamsBorder=2;
+      fixturesBorder=2;
+      teamsBorder=0;
       standingsBorder=0;
     }else if(currentTab == 1){
+      fixturesBorder=0;
+      teamsBorder=2;
+      standingsBorder=0;
+    }else if(currentTab == 2){
+      fixturesBorder=0;
       teamsBorder=0;
       standingsBorder=2;
     }
+
     return (
       <View style={{flex:1}}>
         <View style={{flex:1, justifyContent: 'space-around'}}>
@@ -52,11 +61,16 @@ export const Main = props => {
         </View>
         <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
           <TouchableHighlight onPress={() => setTab(0)}
-          style={{flex:1, alignItems: 'center', borderBottomWidth:teamsBorder}}>
-          <Text style={{textAlign:'center'}}>Teams</Text>
+          style={{flex:1, borderBottomWidth:fixturesBorder}}>
+          <Text style={{textAlign: 'center'}}>Fixtures</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(1)}
+            style={{flex:1, alignItems: 'center', borderBottomWidth:teamsBorder}}>
+          <Text style={{textAlign:'center'}}>Teams</Text>
+          </TouchableHighlight>
+
+          <TouchableHighlight onPress={() => setTab(2)}
           style={{flex:1, borderBottomWidth:standingsBorder}}>
           <Text style={{textAlign: 'center'}}>Standings</Text>
           </TouchableHighlight>
@@ -186,13 +200,16 @@ export const Main = props => {
       bottomPage = null;
       switch(currentTab){
         case 0:
+          bottomPage = <Fixtures leagueID={leagueID}/>
+          break;
+        case 1:
           if(!teamsFetched){
             props.fetchTeams(leagueID)
             setTeamsFetched(true);
           }
           bottomPage = <RenderTeams item={league}/>
           break;
-        case 1:
+        case 2:
           if(!standingsFetched){
             props.fetchStandings(leagueID)
             setStandingsFetched(true);
