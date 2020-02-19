@@ -40,7 +40,6 @@ export function initPastFixtures(){
 }
 
 function shouldFetchFixtures(fetching, lastDate, currentDate){
-  console.log("lastDate " + new Date(lastDate).toISOString())
   if(fetching){
     return false;
   }else if (new Date(parseInt(currentDate)).getTime() <= new Date(parseInt(lastDate)).getTime()) {

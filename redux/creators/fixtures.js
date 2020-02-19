@@ -10,15 +10,25 @@ import {
   INIT_LEAGUE_FIXTURES,
   INIT_TEAM_FIXTURES,
   RESET_FIXTURES,
+  LEAGUE_SET_CURRENT_ROUND,
 } from '../types'
 
 import { fetchFollowingPastFixtures } from './pastFixtures';
-import { fetchFollowingFutureFixtures } from './futureFixtures';
-import { getFixturesByLeagueAndDate, } from '../../fetch/FixturesV2';
+import { fetchFollowingFutureFixtures, receiveFutureLeagueFixtures } from './futureFixtures';
+import { getFixturesByLeagueAndRound, } from '../../fetch/FixturesV2';
+import { getLeagueCurrentRound, } from '../../fetch/League';
 
 export function resetFixtures(){
   return {
     type: RESET_FIXTURES,
+  }
+}
+
+export function leagueSetCurrentRound(leagueID, round){
+  return {
+    type: LEAGUE_SET_CURRENT_ROUND,
+    leagueID: leagueID,
+    round: round,
   }
 }
 
@@ -94,12 +104,10 @@ export function initFixturesForTeam(teamID){
   }
 }
 
-function getTodayDates(){
+function getTodayTime(){
   today = new Date()
   today.setHours(0,0,0,0)
-  fetchDate = today.toISOString().substring(0,10).trim()
-  storeDate = today.getTime();
-  return [fetchDate, storeDate];
+  return today.getTime()
 }
 
 export function initFixtures(){
@@ -109,20 +117,32 @@ export function initFixtures(){
     fetchDate = dates[0]
     storeDate = dates[1]
     getState().followingLeagueIDs.map( leagueID => {
-      if(!(getState().fixtureIDsByLeagueID[leagueID].todayFixtures.length)){
-        return getFixturesByLeagueAndDate(leagueID, fetchDate)
-        .then( data => processLeagueFixtures(data))
-        .then( processedData => {
-          if( processedData ){
-            dispatch( storeFixturesByID(processedData[0]));
-            for (date in processedData[1]){
-              for (league in processedData[1][date]){
-                dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
+      if(!(getState().fixtureIDsByLeagueID[leagueID].currentRound)){
+        getLeagueCurrentRound(leagueID)
+        .then( data => {
+          round = data.api.fixtures[0]
+          dispatch( leagueSetCurrentRound(leagueID, round))
+          getFixturesByLeagueAndRound(leagueID, round)
+          .then( data2 => processLeagueFixtures(data2))
+          .then( processedData => {
+            if( processedData ){
+              dispatch( storeFixturesByID(processedData[0]));
+              storeDate = null;
+              // should be only one date so, this should work
+              for (date in processedData[1]){
+                storeDate = date;
+                for (league in processedData[1][date]){
+                  dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
+                }
+              }
+              if(getTodayTime == storeDate){
+                dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
+              }else{
+                dispatch( receiveFutureLeagueFixtures(leagueID, processedData[3], storeDate));
               }
             }
-            dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
-          }
-        });
+          });
+        })
       }
     });
     dispatch( resetFixtures())

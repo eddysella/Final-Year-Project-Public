@@ -26,6 +26,7 @@ import {
   RECEIVE_FIXTURE_STATS,
   LEAGUE_SHOULD_FETCH_PAST_TRUE,
   LEAGUE_SHOULD_FETCH_FUTURE_TRUE,
+  LEAGUE_SET_CURRENT_ROUND,
 } from '../types'
 import sortBy from 'array-sort-by';
 
@@ -134,6 +135,10 @@ function league(
   action
   ){
   switch(action.type){
+    case LEAGUE_SET_CURRENT_ROUND:
+      return Object.assign({}, state, {
+        currentRound: action.round,
+      })
     case LEAGUE_SHOULD_FETCH_PAST_TRUE:
       return Object.assign({}, state, {
         shouldFetchPast: true,
@@ -197,6 +202,7 @@ export function fixtureIDsByLeagueID(state={}, action){
     case RECEIVE_FUTURE_LEAGUE_FIXTURES:
     case LEAGUE_SHOULD_FETCH_PAST_TRUE:
     case LEAGUE_SHOULD_FETCH_FUTURE_TRUE:
+    case LEAGUE_SET_CURRENT_ROUND:
       return Object.assign({}, state, {
         [action.leagueID]: league(state[action.leagueID], action)
         });
