@@ -104,18 +104,13 @@ export function initFixturesForTeam(teamID){
   }
 }
 
-function getTodayTime(){
-  today = new Date()
-  today.setHours(0,0,0,0)
-  return today.getTime()
-}
+today = new Date()
+today.setHours(0,0,0,0)
+const todayTime = today.getTime()
 
 export function initFixtures(){
   return (dispatch, getState) => {
     dispatch( initLeaguesTeams())
-    dates = getTodayDates();
-    fetchDate = dates[0]
-    storeDate = dates[1]
     getState().followingLeagueIDs.map( leagueID => {
       if(!(getState().fixtureIDsByLeagueID[leagueID].currentRound)){
         getLeagueCurrentRound(leagueID)
@@ -135,7 +130,7 @@ export function initFixtures(){
                   dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
                 }
               }
-              if(getTodayTime == storeDate){
+              if(todayTime == storeDate){
                 dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
               }else{
                 dispatch( receiveFutureLeagueFixtures(leagueID, processedData[3], storeDate));
@@ -181,10 +176,6 @@ function processFixtureStatus(data){
   }
   return status
 }
-
-today = new Date()
-today.setHours(0,0,0,0)
-todayTime = today.getTime()
 
 export function processTeamFixtures(data, page){
   todayIDs=[];

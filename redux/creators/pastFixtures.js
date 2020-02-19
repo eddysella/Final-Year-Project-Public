@@ -158,10 +158,8 @@ export function receivePastLeagueFixtures(leagueID, fixtures,  lastDate){
 function getNextDate(timeStamp){
   const yesterday = new Date(timeStamp);
   yesterday.setDate(new Date(timeStamp).getDate() - 1)
-  yesterday.setHours(0,0,0,0)
-  fetchDate = yesterday.toISOString().substring(0,10).trim()
-  storeDate = yesterday.getTime();
-  return [fetchDate, storeDate];
+  fetchDate = yesterday.toISOString().substring(0,10)
+  return [fetchDate, yesterday.getTime()];
 }
 
 // overrideCheck is used by the league page to continue fetching
@@ -170,16 +168,17 @@ export function fetchPastLeagueFixtures(leagueIDs, overrideCheck=false){
     currentDate = getState().pastDates[getState().fixturesStatus['currentPastDates'].length];
     leagueIDs.map( leagueID => {
       lastDate = getState().fixtureIDsByLeagueID[leagueID]['lastPastDate']
-      dispatch(fetchLeagueFixtures(leagueID, lastDate, currentDate, overrideCheck));
+      seasonStart = getState().leaguesByID[leagueID]['seasonStart']
+      dispatch(fetchLeagueFixtures(leagueID, lastDate, currentDate, seasonStart, overrideCheck));
     });
   }
 }
 
-function fetchLeagueFixtures(leagueID, lastDate, currentDate, overrideCheck){
+function fetchLeagueFixtures(leagueID, lastDate, currentDate, seasonStart, overrideCheck){
   return (dispatch, getState) => {
     fetching = getState().fixtureIDsByLeagueID[leagueID]['fetchingPast']
     // overrideCheck is for the league screen
-    if(lastDate >= getState().leaguesByID[leagueID]['seasonStart']){
+    if(lastDate >= seasonStart){
       if(shouldFetchFixtures(fetching, lastDate, currentDate) || overrideCheck){
         dates = getNextDate(lastDate);
         fetchDate = dates[0]
@@ -201,7 +200,7 @@ function fetchLeagueFixtures(leagueID, lastDate, currentDate, overrideCheck){
             dispatch( storePastDate());
           }else{
             dispatch( resetLeagueFetch(leagueID));
-            dispatch( fetchLeagueFixtures(leagueID, storeDate, currentDate, overrideCheck));
+            dispatch( fetchLeagueFixtures(leagueID, storeDate, currentDate, seasonStart, overrideCheck));
           }
         });
       }else{

@@ -155,13 +155,10 @@ export function receiveFutureLeagueFixtures(leagueID, fixtures, lastDate){
 }
 
 function getNextDate(timeStamp){
-  timeStamp = parseInt(timeStamp)
   const tomorrow = new Date(timeStamp);
   tomorrow.setDate(new Date(timeStamp).getDate() + 1)
-  tomorrow.setHours(0,0,0,0)
   fetchDate = tomorrow.toISOString().substring(0,10)
-  storeDate = tomorrow.getTime();
-  return [fetchDate, storeDate];
+  return [fetchDate, tomorrow.getTime()];
 }
 
 
@@ -170,15 +167,16 @@ export function fetchFutureLeagueFixtures(leagueIDs, overrideCheck=false){
     currentDate = getState().futureDates[getState().fixturesStatus['currentFutureDates'].length];
     leagueIDs.map( leagueID => {
       lastDate = getState().fixtureIDsByLeagueID[leagueID]['lastFutureDate']
-      dispatch(fetchLeagueFixtures(leagueID, lastDate, currentDate, overrideCheck));
+      seasonEnd = getState().leaguesByID[leagueID]['seasonEnd']
+      dispatch(fetchLeagueFixtures(leagueID, lastDate, currentDate, seasonEnd, overrideCheck));
     });
   }
 }
 
-function fetchLeagueFixtures(leagueID, lastDate, currentDate, overrideCheck){
+function fetchLeagueFixtures(leagueID, lastDate, currentDate, seasonEnd, overrideCheck){
   return (dispatch, getState) => {
     fetching = getState().fixtureIDsByLeagueID[leagueID]['fetchingFuture']
-    if(lastDate <= getState().leaguesByID[leagueID]['seasonEnd']){
+    if(lastDate <= seasonEnd){
       if(shouldFetchFixtures(fetching, lastDate, currentDate) || overrideCheck){
         dates = getNextDate(lastDate);
         fetchDate = dates[0]
@@ -200,7 +198,7 @@ function fetchLeagueFixtures(leagueID, lastDate, currentDate, overrideCheck){
             dispatch( storeFutureDate());
           }else{
             dispatch( resetLeagueFetch(leagueID));
-            dispatch( fetchLeagueFixtures(leagueID, storeDate, currentDate, overrideCheck));
+            dispatch( fetchLeagueFixtures(leagueID, storeDate, currentDate, seasonEnd, overrideCheck));
           }
         });
       }else{
