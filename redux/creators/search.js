@@ -9,7 +9,7 @@ import {
 } from '../types'
 import { searchLeagueByCodeOrName, searchTeamByCodeOrName } from '../../fetch/search'
 import { receiveMultipleLeagues, processLeagues } from './leagues'
-import { receiveMultipleTeams, processTeams } from './teams'
+import { receiveMultipleTeams} from './teams'
 
 export function search(input){
   return dispatch => {
@@ -86,14 +86,36 @@ function receiveTeamIDs(teamIDs){
   };
 }
 
+export function processTeams(data){
+  collect = {};
+  ids = [];
+  data = data.api;
+  teams = data.teams;
+  teams.length=10;
+  teams.forEach( team => {
+    collect[team.team_id] = {
+      fetchingTeam: false,
+      fetchingLeagues: false,
+      fetchingPast: false,
+      fetchingPlayers: false,
+      fetchingFuture: false,
+      teamID: team.team_id,
+      name: team.name,
+      logo: team.logo,
+      country: team.country,
+    }
+  })
+  return collect;
+}
+
 function searchForTeam(input){
   return dispatch => {
     dispatch(requestTeamSearch());
     return searchTeamByCodeOrName(input)
     .then( data => processTeams(data))
     .then( result => {
-      dispatch( receiveMultipleTeams(result[1]));
-      dispatch( receiveTeamIDs(result[0]));
+      dispatch( receiveMultipleTeams(result));
+      dispatch( receiveTeamIDs(Object.keys(result)));
     })
   }
 }
