@@ -96,12 +96,12 @@ function storeFutureDate(){
   }
 }
 
-export function fetchFutureTeamFixtures(teamIDs){
+export function fetchFutureTeamFixtures(teamIDs, overrideCheck = false){
   return (dispatch, getState) => {
     currentDate = getState().futureDates[getState().fixturesStatus['currentFutureDates'].length];
     teamIDs.map( teamID => {
       team = getState().fixtureIDsByTeamID[teamID];
-      if(shouldFetchFixtures(team.fetchingFuture, team.lastFutureDate, currentDate)){
+      if(shouldFetchFixtures(team.fetchingFuture, team.lastFutureDate, currentDate) || overrideCheck){
         nextPage = team.nextFuturePage;
         dispatch(requestFutureTeamFixtures(teamID))
         return getFutureTeamFixtures(teamID, nextPage)

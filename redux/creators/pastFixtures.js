@@ -96,12 +96,12 @@ function storePastDate(){
   }
 }
 
-export function fetchPastTeamFixtures(teamIDs){
+export function fetchPastTeamFixtures(teamIDs, overrideCheck = false){
   return (dispatch, getState) => {
     currentDate = getState().pastDates[getState().fixturesStatus['currentPastDates'].length];
     teamIDs.map( teamID => {
       team = getState().fixtureIDsByTeamID[teamID]
-      if(shouldFetchFixtures(team.fetchingPast, team.lastPastDate, currentDate)){
+      if(shouldFetchFixtures(team.fetchingPast, team.lastPastDate, currentDate) || overrideCheck){
         nextPage = team.nextPastPage;
         dispatch(requestPastTeamFixtures(teamID))
         return getPastTeamFixtures(teamID, nextPage)

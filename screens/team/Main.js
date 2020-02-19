@@ -5,12 +5,13 @@ import { Card, Avatar } from 'react-native-elements';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component'
 import { MaterialIndicator,} from 'react-native-indicators';
+import Fixtures from '../../containers/team/Fixtures'
 const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
+// const screenHeight = Math.round(Dimensions.get('window').height);
 const itemWidth = screenWidth - scale(screenWidth/2);
-const itemHeight = scale(screenWidth/4);
-const itemHorizontalPadding = (itemWidth/5);
-const itemVerticalPadding = scale(15);
+// const itemHeight = scale(screenWidth/4);
+// const itemHorizontalPadding = (itemWidth/5);
+// const itemVerticalPadding = scale(15);
 
 export const Main = props => {
 
@@ -190,7 +191,6 @@ export const Main = props => {
   teamID = props.navigation.getParam('id');
   team = props.teams[teamID];
   const [currentTab, setTab] = useState(0);
-  const [fixturesFetched, setFixturesFetched] = useState(false);
   const [leaguesFetched, setLeaguesFetched] = useState(false);
   const [playersFetched, setPlayersFetched] = useState(false);
 
@@ -209,11 +209,7 @@ export const Main = props => {
     bottomPage = null;
     switch(currentTab){
       case 0:
-        if(!fixturesFetched){
-          props.fetchPastFixtures(teamID);
-          setFixturesFetched(true);
-        }
-        bottomPage = <RenderFixtures item={team}/>;
+        bottomPage = <Fixtures teamID={teamID}/>;
         break;
       case 1:
         if(!leaguesFetched){

@@ -235,7 +235,7 @@ function team(
     case RECEIVE_PAST_TEAM_FIXTURES:
       return Object.assign({}, state, {
         fetchingPast: false,
-        pastFixtures: [...state.pastFixtures, ...action.fixtures],
+        pastFixtures: sortBy(filterArray([...state.pastFixtures, ...action.fixtures]), s => -s),
         lastPastDate: action.date,
         nextPastPage: (state.nextPastPage+1),
       })
@@ -250,7 +250,7 @@ function team(
     case RECEIVE_FUTURE_TEAM_FIXTURES:
       return Object.assign({}, state, {
         fetchingFuture: false,
-        futureFixtures: [...state.futureFixtures, ...action.fixtures],
+        futureFixtures: sortBy(filterArray([...state.futureFixtures, ...action.fixtures])),
         lastFutureDate: action.date,
         nextFuturePage: (state.nextFuturePage+1),
       })

@@ -90,9 +90,7 @@ export function processTeams(data){
   ids = [];
   data = data.api;
   teams = data.teams;
-  teams.length = 10;
   teams.forEach( team => {
-    ids.push(team.team_id);
     collect[team.team_id] = {
       fetchingTeam: false,
       fetchingLeagues: false,
@@ -105,7 +103,7 @@ export function processTeams(data){
       country: team.country,
     }
   })
-  return [ids,collect];
+  return collect;
 }
 
 function requestLeagues(teamID){
@@ -217,15 +215,15 @@ export function processFixtures(data){
   return collect;
 }
 
-export function fetchPastFixtures(teamID){
-  return (dispatch, getState) => {
-    dispatch(requestPastFixtures(teamID))
-    return getLastTwentyFixtures(teamID)
-      // get latest season
-    .then( data => processFixtures(data))
-    .then( processedData => dispatch(receivePastFixtures(teamID, processedData)));
-  }
-}
+// export function fetchPastFixtures(teamID){
+//   return (dispatch, getState) => {
+//     dispatch(requestPastFixtures(teamID))
+//     return getLastTwentyFixtures(teamID)
+//       // get latest season
+//     .then( data => processFixtures(data))
+//     .then( processedData => dispatch(receivePastFixtures(teamID, processedData)));
+//   }
+// }
 
 function requestFutureFixtures(teamID){
   return {
@@ -267,12 +265,10 @@ export function fetchPlayers(teamID){
     return getPlayersByTeamID(teamID)
       .then( data => processPlayers(data))
       .then( processedData => {
-        Promise.all([
           processedData[1].map( player => {
             dispatch( receivePlayer(player))
-          }),
-          dispatch( receivePlayerIDsForTeam(teamID, processedData[0])),
-        ]);
+          })
+          dispatch( receivePlayerIDsForTeam(teamID, processedData[0]))
       });
   }
 }
