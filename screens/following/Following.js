@@ -66,7 +66,6 @@ export const Main = props => {
     return(
       <View style={{flex:1}}>
           <SectionList
-          ItemSeparatorComponent={ItemSeparator}
           ref={(ref) => { this.leagueList = ref; }}
           sections={[{title: 'Leagues', data:props.leagueIDs, renderItem:renderLeague},
                       {title: 'Teams', data:props.teamIDs, renderItem:renderTeam}

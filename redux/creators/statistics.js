@@ -32,7 +32,6 @@ function shouldFetchStats(team){
 export function fetchPlayerStatistics(teamID){
   return (dispatch, getState) => {
     if(shouldFetchStats(getState().teamsByID[teamID])){
-      console.log("FetchingStats")
       dispatch( requestPlayersStatsForTeam(teamID))
       return getPlayerStatisticsByTeamID(teamID)
         .then( data => processPlayerStats(data, teamID))

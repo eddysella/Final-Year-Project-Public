@@ -107,7 +107,6 @@ export const Main = props => {
         extraData={props.curFutureDates}
         onEndReached={() => {
           if(!(props.shouldFetchFuture)){
-            console.log("here 2")
             props.setShouldFetchFutureTrue()
             props.fetchMoreFuture([props.leagueID])
           }
