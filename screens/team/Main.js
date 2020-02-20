@@ -146,6 +146,10 @@ export const Main = props => {
   const [leaguesFetched, setLeaguesFetched] = useState(false);
   const [playersFetched, setPlayersFetched] = useState(false);
   props.initFixtures(teamID);
+  if(!leaguesFetched){
+    props.fetchLeagues(teamID)
+    setLeaguesFetched(true);
+  }
 
   if(props.fetching){
     return(
@@ -165,10 +169,6 @@ export const Main = props => {
         bottomPage = <Fixtures teamID={teamID} navigation={props.navigation}/>;
         break;
       case 1:
-        if(!leaguesFetched){
-          props.fetchLeagues(teamID)
-          setLeaguesFetched(true);
-        }
         bottomPage = <RenderLeagues item={team.leagueIDs}/>;
         break;
       case 2:
