@@ -79,7 +79,6 @@ export const Main = props => {
     }
     return (
       <SectionList
-      ItemSeparatorComponent={ItemSeparator}
       ref={(ref) => { this.leagueList = ref; }}
       sections={[
         {title: 'Attackers', data:playerIDs['Attacker']},
