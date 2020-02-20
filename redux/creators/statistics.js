@@ -55,6 +55,7 @@ function processPlayerStats(data, teamID){
   players.forEach( player => {
     key = (teamID + "x" + player.player_id);
     if(collect[key] === undefined){
+      // all the player stats are assigned here
       collect[key] = player;
     }else{
       current = collect[key];

@@ -54,15 +54,26 @@ export const Main = props => {
       );
   };
 
+  function injured(stat){
+    if(stat == "True"){
+      return "Yes"
+    }else if(stat == "False"){
+      return "No"
+    }else{
+      return "Unavailable"
+    }
+    return
+  }
+
   function processStats(stats){
     collect = {};
     collect['player'] = [
       "Position: " + stats.position,
       "Nationality: " + stats.nationality,
-      "Height: " + stats.height,
-      "Weight: " + stats.weight,
+      "Height: " + (stats.height === "NULL" ? "Unavailable" : stats.height),
+      "Weight: " + (stats.weight === "NULL" ? "Unavailable" : stats.weight),
       "Age: " + stats.age,
-      "Injured: " + (stats.injured == 0 ? "No" : "Yes"),
+      "Injured: " + injured(stats.injured),
       "Captain: " + (stats.captain == 0 ? "No" : "Yes"),
     ]
     for(key in stats){
