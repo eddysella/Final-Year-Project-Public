@@ -10,9 +10,9 @@ import { Main } from '../../screens/league/Main';
 const mapStateToProps = state => ({
     leagues: state.leaguesByID,
     teams: state.teamsByID,
-    standings: state.standingsSpecific,
+    standings: state.standingsByLeagueID,
     fetchingExtraLeagueData: state.leaguesByID['fetching'],
-    fetchingStandings: state.standingsSpecific['isFetching'],
+    fetchingStandings: state.standingsByLeagueID['fetching'],
 });
 
 const mapDispatchToProps = dispatch => ({

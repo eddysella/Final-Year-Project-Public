@@ -8,10 +8,10 @@ import { Switcher, SegmentedControlButton } from 'nachos-ui'
 import Fixtures from '../../containers/league/Fixtures'
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
-const itemWidth = scale(screenWidth/2);
-const itemHeight = scale(screenWidth/4);
-const itemHorizontalPadding = (itemWidth/5);
-const itemVerticalPadding = scale(15);
+const itemWidth = scale(screenWidth/10); // screen / 2 / 4 sections
+const itemHeight = scale(screenWidth/9);
+// const itemHorizontalPadding = (itemWidth/5);
+// const itemVerticalPadding = scale(15);
 
 export const Main = props => {
 
@@ -79,37 +79,81 @@ export const Main = props => {
     );
   }
 
+  const StandingsHeader = () =>{
+    titles = [
+      "Rank",
+      " ",
+      " ",
+      "Games",
+      "S/C",
+      "GoalD",
+      "Points"
+    ];
+    return (
+      <View style={{flexDirection:'row', margin: 10}}>
+        <View style={{flex: 1}}>
+          <Text style={{alignSelf: 'flex-start', marginLeft:5}}>{titles[0]} </Text>
+        </View>
+        <View style={{flex: 1, flexDirection:'row',}}>
+          <View style={{width: itemWidth}}>
+            <Text h3 style={{textAlign:'center'}}>{titles[3]} </Text>
+          </View>
+          <VItemSeparator/>
+          <View style={{width: itemWidth}}>
+            <Text h3 style={{textAlign:'center'}}>{titles[4]} </Text>
+          </View>
+          <VItemSeparator/>
+          <View style={{width: itemWidth}}>
+            <Text h3 style={{textAlign:'center'}}>{titles[5]} </Text>
+          </View>
+          <VItemSeparator/>
+          <View style={{width: itemWidth}}>
+            <Text h3 style={{textAlign:'center'}}>{titles[6]} </Text>
+          </View>
+        </View>
+      </View>
+    )
+  }
+
   function renderStandingsItem(standing) {
     team = standing.item
     return (
       <View
-      flexDirection={'row'}
-      style={{maxWidth:screenWidth, flex: 1, margin: 5, padding: 10}}>
-        <Text h3>{team[0]}</Text>
-        <Avatar
-          size = 'small'
-          source={{ uri: `${team[1]}`}}
-          rounded
-        />
-        <Text h3>{team[2]} </Text>
-        <View style={{width:itemWidth, flexDirection:'row', justifyContent: 'flex-end'}}>
-          <VItemSeparator/>
-          <Text h3>{team[3]} </Text>
-          <VItemSeparator/>
-          <Text h3>{team[4]} </Text>
-          <VItemSeparator/>
-          <Text h3>{team[5]} </Text>
-          <VItemSeparator/>
-          <Text h3>{team[6]} </Text>
-          <VItemSeparator/>
+      style={{margin: 10, flexDirection: 'row'}}>
+        <View style={{flex:1, flexDirection:'row'}}>
+          <Text h3 style={{marginLeft:10, marginRight:10,}}>{team[0]}</Text>
+          <Avatar
+            size = 'small'
+            source={{ uri: `${team[1]}`}}
+            rounded
+          />
+          <Text h3 style={{marginLeft: 10,}}>{team[2]} </Text>
+        </View>
+        <View style={{flex: 1, flexDirection:'row'}}>
+        <View style={{width: itemWidth}}>
+          <Text h3 style={{textAlign:'center'}}>{team[3]} </Text>
+        </View>
+        <VItemSeparator/>
+        <View style={{width: itemWidth}}>
+          <Text h3 style={{textAlign:'center'}}>{team[4]} </Text>
+        </View>
+        <VItemSeparator/>
+        <View style={{width: itemWidth}}>
+          <Text h3 style={{textAlign:'center'}}>{team[5]} </Text>
+        </View>
+        <VItemSeparator/>
+        <View style={{width: itemWidth}}>
+          <Text h3 style={{textAlign:'center'}}>{team[6]} </Text>
+        </View>
         </View>
       </View>
     );
   };
 
   const RenderStandings = (item) =>{
-    standings = item.item;
-    if(!standings.tableData){
+    leagueID = item.leagueID;
+    standings = props.standings[leagueID]
+    if(!standings){
       return(
         <Text style={{alignSelf: 'center',  textAlign:'center'}}>
           No Standings Available
@@ -117,23 +161,12 @@ export const Main = props => {
       );
     }
     return (
-      <View style={{maxWidth:screenWidth}}>
-        <Text>{standings.titles[0]} </Text>
-        <View style={{width:itemWidth, flexDirection:'row', justifyContent: 'flex-end'}}>
-          <VItemSeparator/>
-          <Text h3>{standings.titles[3]} </Text>
-          <VItemSeparator/>
-          <Text h3>{standings.titles[4]} </Text>
-          <VItemSeparator/>
-          <Text h3>{standings.titles[5]} </Text>
-          <VItemSeparator/>
-          <Text h3>{standings.titles[6]} </Text>
-          <VItemSeparator/>
-        </View>
+      <View style={{flex:1}}>
+        <StandingsHeader/>
         <FlatList
         ItemSeparatorComponent={ItemSeparator}
         ref={(ref) => { this.teamList = ref; }}
-        data={standings.tableData}
+        data={standings.data}
         renderItem={renderStandingsItem}
         keyExtractor={(item,index) => index.toString()}
         />
@@ -204,17 +237,17 @@ export const Main = props => {
           break;
         case 1:
           if(!teamsFetched){
-            props.fetchTeams(leagueID)
             setTeamsFetched(true);
+            props.fetchTeams(leagueID)
           }
           bottomPage = <RenderTeams item={league}/>
           break;
         case 2:
           if(!standingsFetched){
-            props.fetchStandings(leagueID)
             setStandingsFetched(true);
+            props.fetchStandings(leagueID)
           }
-          bottomPage = <RenderStandings item={props.standings}/>
+          bottomPage = <RenderStandings leagueID={leagueID}/>
           break;
       }
       return (
