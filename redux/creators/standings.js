@@ -1,30 +1,14 @@
 import {
   REQUEST_STANDINGS,
   RECEIVE_STANDINGS,
-  ADD_LEAGUE_STANDINGS,
-  REMOVE_LEAGUE_STANDINGS,
 } from '../types'
 import { getStandingsByLeague } from '../../fetch/Standings';
 
-
-export function addLeagueToStandings(league){
-  return {
-    type: ADD_LEAGUE_STANDINGS,
-    leagueID: league,
-  };
-}
-
-export function removeLeagueFromStandings(league){
-  return {
-    type: REMOVE_LEAGUE_STANDINGS,
-    leagueID: league,
-  };
-}
-
-function receiveStandings(standings){
+function receiveStandings(standings, leagueID){
   return {
     type: RECEIVE_STANDINGS,
-    tableData: standings,
+    leagueID: leagueID,
+    data: standings,
     lastUpdated: Date.now(),
   };
 }
@@ -36,12 +20,24 @@ function requestStandings(leagueID){
   };
 }
 
+// shoould add time check for last updated
+function shouldFetchStandings(fetching, standings){
+  if(standings === undefined){
+    return true
+  }else{
+    return false
+  }
+}
+
 export function fetchStandings(leagueID){
-  return dispatch => {
-    dispatch(requestStandings(leagueID))
-    return getStandingsByLeague(leagueID)
-      .then( data => processStandings(data))
-      .then( standings => dispatch(receiveStandings(standings)));
+  return (dispatch, getState) => {
+    standings = getState().standingsByLeagueID[leagueID]
+    if(shouldFetchStandings(standings)){
+      dispatch(requestStandings(leagueID))
+      return getStandingsByLeague(leagueID)
+        .then( data => processStandings(data))
+        .then( standings => dispatch(receiveStandings(standings, leagueID)))
+    }
   }
 }
 

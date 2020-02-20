@@ -6,7 +6,7 @@ import { followingLeagueIDs, followingTeamIDs, } from './following'
 import { leaguesByID, } from './leagues'
 import { playersByID, } from './players'
 import { search, searchInput} from './search'
-import { standingsLeagueIDs, standingsSpecific, } from './standings'
+import { standingsByLeagueID, } from './standings'
 import { playerStatsByID, } from './statistics'
 import { teamsByID, } from './teams'
 
@@ -25,8 +25,7 @@ export default combineReducers({
   playersByID,
   searchInput,
   search,
-  standingsLeagueIDs,
-  standingsSpecific,
+  standingsByLeagueID,
   // teamStatsByLeague,
   playerStatsByID,
   teamsByID,

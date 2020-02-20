@@ -1,55 +1,46 @@
 import {
   REQUEST_STANDINGS,
   RECEIVE_STANDINGS,
-  ADD_LEAGUE_STANDINGS,
-  REMOVE_LEAGUE_STANDINGS,
 } from '../types'
 
-export function standingsLeagueIDs(state = [], action){
-  switch(action.type){
-    case ADD_LEAGUE_STANDINGS:
-      return [...state, action.leagueID]
-    case REMOVE_LEAGUE_STANDINGS:
-      return state.filter(function(value, index, arr){
-        return value != action.leagueID;
-      });
-      return
-    default:
-      return state;
-  }
-}
-
-export function standingsSpecific(
+function standings(
   state = {
-    isFetching: false,
-    leagueID: "",
-    titles:[
-      "Rank",
-      " ",
-      " ",
-      "Games",
-      "S/C",
-      "GoalD",
-      "Points"
-    ],
+    fetching: false,
+    lastUpdated: '',
+    data: [],
   },
   action
   ){
   switch(action.type){
     case REQUEST_STANDINGS:
-    // state is not included in the sources to reset it every time a new
-    // standings is fetched
       return Object.assign({}, state, {
-        leagueID: action.leagueID,
-        isFetching:true,
-        standingsInOrder:[],
-      })
+        fetching: true,
+      });
     case RECEIVE_STANDINGS:
-    return Object.assign({}, state, {
-      isFetching: false,
-      tableData: action.tableData,
-      lastUpdated: action.receivedAt,
-    });
+      return Object.assign({}, state, {
+        fetching: false,
+        data: action.data,
+        lastUpdated: action.lastUpdated,
+      });
+    default:
+      return state;
+  }
+}
+
+export function standingsByLeagueID(state={
+  fetching: false,
+}, action){
+  switch(action.type){
+    case REQUEST_STANDINGS:
+      return Object.assign({}, state, {
+        fetching: true,
+        [action.leagueID]: standings(state[action.leagueID], action),
+      });
+    case RECEIVE_STANDINGS:
+      return Object.assign({}, state, {
+        fetching: false,
+        [action.leagueID]: standings(state[action.leagueID], action),
+      });
     default:
       return state;
   }
