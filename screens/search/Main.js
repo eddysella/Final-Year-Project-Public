@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { TouchableHighlight, SectionList, View, Text,} from 'react-native';
 import { Avatar, Icon} from 'react-native-elements';
 import { MaterialIndicator,} from 'react-native-indicators';
@@ -33,15 +33,34 @@ export const Main = props => {
 
   function renderLeague(item) {
     league = props.leagues[item.item];
+    if(props.followingLeagueIDs.includes(parseInt(item.item))){
+      icon = <Icon
+              reverse={true}
+              name='remove'
+              type='ion-icon'
+              onPress={() => {
+                console.log("removed " + parseInt(item.item))
+                setRefresh(true);
+                props.followingRemoveLeague(parseInt(item.item))
+              }}
+              />
+    }else{
+      icon = <Icon
+              reverse={true}
+              name='add'
+              type='ion-icon'
+              onPress={() => {
+                console.log("added " + parseInt(item.item))
+                setRefresh(true);
+                props.followingAddLeague(parseInt(item.item))
+              }}
+              />
+    }
     return(
       <TouchableHighlight onPress={ () => props.navigation.push('League', {id: item.item})}>
         <View flexDirection={'row'}>
           <RenderItem props={league}/>
-          <Icon
-            reverse={true}
-            name='add'
-            type='ion-icon'
-            onPress={() => props.followingAddLeague(item.item)}/>
+          {icon}
         </View>
       </TouchableHighlight>
     );
@@ -49,20 +68,45 @@ export const Main = props => {
 
   function renderTeam(item) {
     team = props.teams[item.item];
+    console.log(props.followingTeamIDs)
+    if(props.followingTeamIDs.includes(parseInt(item.item))){
+      icon = <Icon
+              reverse={true}
+              name='remove'
+              type='ion-icon'
+              onPress={() => {
+                console.log("removed " + parseInt(item.item))
+                setRefresh(true);
+                props.followingRemoveTeam(parseInt(item.item))
+              }}
+              />
+    }else{
+      icon = <Icon
+              reverse={true}
+              name='add'
+              type='ion-icon'
+              onPress={() => {
+                console.log("added " + parseInt(item.item))
+                setRefresh(true);
+                props.followingAddTeam(parseInt(item.item))
+              }}
+              />
+    }
     return(
       <TouchableHighlight onPress={ () => props.navigation.push('Team', {id: item.item})}>
         <View flexDirection={'row'}>
           <RenderItem props={team}/>
-          <Icon
-            reverse={true}
-            name='add'
-            type='ion-icon'
-            onPress={() => props.followingAddTeam(item.item)}/>
+          {icon}
           </View>
       </TouchableHighlight>
     );
   }
 
+  [refresh,setRefresh] = useState(false);
+
+  if(refresh){
+    setRefresh(false);
+  }
   if(props.teamStatus || props.leagueStatus){
     return (
       <View style={{flex:props.screenFlex}}>
@@ -80,11 +124,14 @@ export const Main = props => {
           <SectionList
           ItemSeparatorComponent={ItemSeparator}
           ref={(ref) => { this.leagueList = ref; }}
-          sections={[
+          sections={
+            [
             {title: 'Leagues', data:props.leagueIDs, renderItem:renderLeague},
             {title: 'Teams', data:props.teamIDs, renderItem:renderTeam},
-          ]}
+            ]
+          }
           keyExtractor={(item,index) => item.toString()}
+          extraData={refresh}
           renderSectionHeader={({ section: { title } }) => (
             <Text>{title}</Text>
           )}
