@@ -175,24 +175,24 @@ export const Main = props => {
     bottomPage = null;
     switch(currentTab){
       case 0:
+        bottomPage = <RenderPastFixtures/>;
+        break;
+      case 1:
         if(!(props.pastFixtureIDs.length)){
           if(!(initPast)){
             setPast(true);
             props.fetchMorePast([props.teamID])
           }
         }
-        bottomPage = <RenderPastFixtures/>;
-        break;
-      case 1:
-        bottomPage = <RenderTodayFixtures/>;
-        break;
-      case 2:
         if(!(props.futureFixtureIDs.length)){
           if(!(initFuture)){
             setFuture(true);
             props.fetchMoreFuture([props.teamID])
           }
         }
+        bottomPage = <RenderTodayFixtures/>;
+        break;
+      case 2:
         bottomPage = <RenderFutureFixtures/>;
         break;
     }
