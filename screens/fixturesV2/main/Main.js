@@ -78,8 +78,15 @@ export const Main = props => {
 
   function processDate(date){
     collect = []
+    name = props.leaguesByID[league]
+    if(name === undefined){
+      name = "Loading";
+    }else{
+      name = props.leaguesByID[league]['name']
+    }
+
     for( league in date ){
-      collect.push({title: props.leaguesByID[league]['name'], data: date[league]})
+      collect.push({title: name, data: date[league]})
     }
     return collect;
   }
