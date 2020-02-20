@@ -123,18 +123,16 @@ export function initFixtures(){
             if( processedData ){
               dispatch( storeFixturesByID(processedData[0]));
               storeDate = null;
-              // should be only one date so, this should work
+              // should be in order so last date should be oldest
               for (date in processedData[1]){
                 storeDate = date;
                 for (league in processedData[1][date]){
                   dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
                 }
               }
-              if(todayTime == storeDate){
-                dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
-              }else{
-                dispatch( receiveFutureLeagueFixtures(leagueID, processedData[3], storeDate));
-              }
+              dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
+              //parseInt here necessary for getNextDate()
+              dispatch( receiveFutureLeagueFixtures(leagueID, processedData[3], parseInt(storeDate)));
             }
           });
         })
@@ -244,7 +242,6 @@ export function processLeagueFixtures(data){
   fixtures.forEach( fixture => {
     date = new Date(fixture.event_timestamp*1000)
     date.setHours(0,0,0,0)
-    console.log("FETCHEDDATE"+ date)
     timeStamp = date.getTime()
     leagueID = "" + fixture.league_id;
     fixtureID = fixture.fixture_id;
