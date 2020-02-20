@@ -145,6 +145,7 @@ export const Main = props => {
   const [currentTab, setTab] = useState(0);
   const [leaguesFetched, setLeaguesFetched] = useState(false);
   const [playersFetched, setPlayersFetched] = useState(false);
+  props.initFixtures(teamID);
 
   if(props.fetching){
     return(

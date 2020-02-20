@@ -3,8 +3,7 @@ import { connect } from 'react-redux'
 import { View } from 'react-native'
 import { fetchTeams } from '../../redux/creators/leagues'
 import { fetchStandings, } from '../../redux/creators/standings'
-import { fetchFutureLeagueFixtures } from '../../redux/creators/futureFixtures'
-import { fetchPastLeagueFixtures } from '../../redux/creators/pastFixtures'
+import { initLeague } from '../../redux/creators/fixtures'
 import { Main } from '../../screens/league/Main';
 
 const mapStateToProps = state => ({
@@ -18,14 +17,15 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchTeams: input => dispatch(fetchTeams(input)),
   fetchStandings: input => dispatch(fetchStandings(input)),
+  initFixtures: (input) => dispatch(initLeague(input)),
 })
 
 const Screen = ({leagues, teams, standings, fetchingExtraLeagueData, fetchingStandings,
-  fetchStandings, fetchTeams, ...props}) => (
+  fetchStandings, fetchTeams,initFixtures, ...props}) => (
   <Main screenFlex={7} topBarFlex={1} leagues={leagues} teams={teams}
   fetchingExtraLeagueData={fetchingExtraLeagueData} fetchingStandings={fetchingStandings}
   standings={standings} fetchStandings={fetchStandings} fetchTeams={fetchTeams}
-  navigation={props.navigation}/>
+  initFixtures={initFixtures} navigation={props.navigation}/>
 )
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);
