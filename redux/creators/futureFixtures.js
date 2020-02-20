@@ -187,13 +187,20 @@ function fetchLeagueFixtures(leagueID, lastDate, currentDate, seasonEnd, overrid
         .then( processedData => {
           if(processedData){
             dispatch( storeFixturesByID(processedData[0]));
+            timeStamp = null
             for (date in processedData[1]){
+              timeStamp = date;
               for (league in processedData[1][date]){
                   dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
               }
             }
-            dispatch( storeFutureDates(Object.keys(processedData[1])))
-            dispatch( receiveFutureLeagueFixtures(leagueID, processedData[3], storeDate));
+            if(timeStamp == todayTime){
+              dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
+              dispatch( receiveFutureLeagueFixtures(leagueID, {}, storeDate));
+            }else{
+              dispatch( storeFutureDates(Object.keys(processedData[1])))
+              dispatch( receiveFutureLeagueFixtures(leagueID, processedData[3], storeDate));
+            }
             counter -= 1;
             dispatch( storeFutureDate());
           }else{

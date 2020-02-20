@@ -4,14 +4,16 @@ import {
   FOLLOWING_ADD_TEAM,
   FOLLOWING_REMOVE_TEAM,
 } from '../types/following'
-import { initFixtures,} from './fixtures'
+import { initLeague,} from './fixtures'
 import { fetchTeams, } from './teams'
 
-
+/*
+initLeague is here because theres no next function for it to be sent from
+ */
 export function addLeagueToFollowing(leagueID){
   return dispatch => {
     dispatch(addLeague(leagueID))
-    dispatch(initFixtures())
+    dispatch(initLeague(leagueID))
   }
 }
 
@@ -29,11 +31,14 @@ export function removeLeagueFromFollowing(leagueID){
   };
 }
 
+/*
+initeam is in fetchTeams because they need to have th eleagues fetched before the
+fixtuers can be initialized.
+ */
 export function addTeamToFollowing(teamID){
   return dispatch => {
-    dispatch(addTeam([teamID]))
+    dispatch(addTeam(teamID))
     dispatch(fetchTeams([teamID]))
-    dispatch(initFixtures())
   }
 }
 

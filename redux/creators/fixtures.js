@@ -13,8 +13,8 @@ import {
   FIXTURES_SET_LEAGUE_CURRENT_ROUND,
 } from '../types/fixtures'
 
-import { fetchFollowingPastFixtures } from './pastFixtures';
-import { fetchFollowingFutureFixtures, receiveFutureLeagueFixtures } from './futureFixtures';
+import { fetchPastTeamFixtures, fetchPastLeagueFixtures } from './pastFixtures';
+import { fetchFutureTeamFixtures, fetchFutureLeagueFixtures, receiveFutureLeagueFixtures } from './futureFixtures';
 import { getFixturesByLeagueAndRound, } from '../../fetch/FixturesV2';
 import { getLeagueCurrentRound, } from '../../fetch/League';
 
@@ -110,40 +110,6 @@ const todayTime = today.getTime()
 
 export function initFixtures(){
   return (dispatch, getState) => {
-    dispatch( initLeaguesTeams())
-    getState().followingLeagueIDs.map( leagueID => {
-      if(!(getState().fixtureIDsByLeagueID[leagueID].currentRound)){
-        getLeagueCurrentRound(leagueID)
-        .then( data => {
-          round = data.api.fixtures[0]
-          dispatch( leagueSetCurrentRound(leagueID, round))
-          getFixturesByLeagueAndRound(leagueID, round)
-          .then( data2 => processLeagueFixtures(data2))
-          .then( processedData => {
-            if( processedData ){
-              dispatch( storeFixturesByID(processedData[0]));
-              storeDate = null;
-              // should be in order so last date should be oldest
-              for (date in processedData[1]){
-                storeDate = date;
-                for (league in processedData[1][date]){
-                  dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
-                }
-              }
-              dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
-              //parseInt here necessary for getNextDate()
-              dispatch( receiveFutureLeagueFixtures(leagueID, processedData[3], parseInt(storeDate)));
-            }
-          });
-        })
-      }
-    });
-    dispatch( resetFixtures())
-  }
-}
-
-function initLeaguesTeams(){
-  return (dispatch, getState) => {
     dispatch(initLeagues())
     dispatch(initTeams())
   }
@@ -162,6 +128,8 @@ export function initLeague(leagueID){
   return (dispatch, getState) => {
     if(getState().fixtureIDsByLeagueID[leagueID] === undefined){
       dispatch(initFixturesForLeague(leagueID))
+      dispatch(fetchPastLeagueFixtures([leagueID]))
+      dispatch(fetchFutureLeagueFixtures([leagueID]))
     }
   }
 }
@@ -179,6 +147,8 @@ export function initTeam(teamID){
   return (dispatch, getState) => {
     if(getState().fixtureIDsByTeamID[teamID] === undefined){
       dispatch(initFixturesForTeam(teamID))
+      dispatch(fetchPastTeamFixtures([teamID]))
+      dispatch(fetchFutureTeamFixtures([teamID]))
     }
   }
 }

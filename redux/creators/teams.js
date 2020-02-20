@@ -17,6 +17,7 @@ import { getTeamByID, getLastTwentyFixtures, getNextTenFixtures,
   getPlayersByTeamID } from '../../fetch/Team'
 import { processLeagues, receiveMultipleLeagues } from './leagues'
 import { processPlayers, receivePlayer } from './players'
+import { initTeam,} from './fixtures'
 
 function requestTeamByID(teamID){
   return {
@@ -73,7 +74,7 @@ export function fetchTeams(teamIDs){
       team = getState().teamsByID[teamID]
       if(shouldFetchTeam(team)){
         dispatch(requestTeamByID(teamID))
-        return getTeamByID(teamID)
+        getTeamByID(teamID)
           // get latest season
         .then( data => processTeam(data))
         .then( processedData => dispatch( receiveTeamByID(processedData)))
@@ -140,6 +141,8 @@ export function fetchLeaguesForTeam(teamID){
       .then( processedData => {
         dispatch( receiveMultipleLeagues(processedData[1]));
         dispatch( receiveLeagueIDs(teamID, processedData[0]));
+        // initteam is from fixtures this is as far down the chain as I could put it
+        dispatch(initTeam(teamID));
       })
     }
   }
