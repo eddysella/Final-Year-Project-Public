@@ -11,7 +11,6 @@ import { TopBar } from '../../screens/search/TopBar'
 const mapStateToProps = state => ({
   followingTeamIDs: state.followingTeamIDs,
   followingLeagueIDs: state.followingLeagueIDs,
-  standingsLeagueIDs: state.standingsLeagueIDs,
   teamIDs: state.search['teamIDs'],
   leagueIDs: state.search['leagueIDs'],
   teams: state.teamsByID,
@@ -26,26 +25,23 @@ const mapDispatchToProps = dispatch => ({
   followingRemoveTeam: input => dispatch(removeTeamFromFollowing(input)),
   followingAddLeague: input => dispatch(addLeagueToFollowing(input)),
   followingRemoveLeague: input => dispatch(removeLeagueFromFollowing(input)),
-  standingsAddLeague: input => dispatch(addLeagueToStandings(input)),
-  standingsRemoveLeague: input => dispatch(removeLeagueFromStandings(input)),
   search: input => dispatch(search(input)),
   clear: () => dispatch(clear()),
   update: input => dispatch(updateSearchInput(input)),
 })
 
-const Screen = ({followingTeamIDs, followingLeagueIDs, standingsLeagueIDs, teamIDs,
+const Screen = ({followingTeamIDs, followingLeagueIDs,teamIDs,
    leagueIDs, teams, leagues, teamStatus, leagueStatus, followingAddTeam,
    followingRemoveTeam, followingAddLeague, followingRemoveLeague,
-   standingsAddLeague, standingsRemoveLeague, search, clear, update, input, ...props}) => (
+   search, clear, update, input, ...props}) => (
   <View style={{flex:1}}>
     <TopBar topBarFlex={1} search={search} clear={clear} update={update} input={input} navigation={props.navigation}/>
     <Main screenFlex={6} followingTeamIDs={followingTeamIDs}
-    followingLeagueIDs={followingLeagueIDs} standingsLeagueIDs={standingsLeagueIDs}
+    followingLeagueIDs={followingLeagueIDs} 
     teamIDs={teamIDs} leagueIDs={leagueIDs} teams={teams} leagues={leagues}
     teamStatus={teamStatus} leagueStatus={leagueStatus} followingAddTeam={followingAddTeam}
     followingRemoveTeam={followingRemoveTeam} followingAddLeague={followingAddLeague}
-    followingRemoveLeague={followingRemoveLeague} standingsAddLeague={standingsAddLeague}
-    standingsRemoveLeague={standingsRemoveLeague} navigation={props.navigation}/>
+    followingRemoveLeague={followingRemoveLeague} navigation={props.navigation}/>
   </View>
 )
 
