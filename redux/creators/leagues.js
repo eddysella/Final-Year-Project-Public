@@ -1,12 +1,12 @@
 import {
-  REQUEST_LEAGUE_BY_ID,
-  RECEIVE_LEAGUE_BY_ID,
+  LEAGUE_REQUEST_BY_ID,
+  LEAGUE_RECEIVE_BY_ID,
   REQUEST_FIXTURES_BY_LEAGUE,
   RECEIVE_FIXTURES_BY_LEAGUE,
-  REQUEST_TEAMS_FOR_LEAGUE,
-  RECEIVE_TEAMS_FOR_LEAGUE,
-  RECEIVE_MULTIPLE_LEAGUES,
-} from '../types'
+  LEAGUE_REQUEST_TEAMS,
+  LEAGUE_RECEIVE_TEAMS,
+  LEAGUE_RECEIVE_MULTIPLE_LEAGUES,
+} from '../types/leagues'
 import { getAllSeasonsForLeague } from '../../fetch/League'
 import { getFixturesByLeagueAndDate } from '../../fetch/Fixtures'
 import { getTeamsByLeagueID } from '../../fetch/Team'
@@ -14,14 +14,14 @@ import { processTeams, receiveMultipleTeams } from './teams'
 
 export function requestLeagueByID(leagueID){
   return {
-    type: REQUEST_LEAGUE_BY_ID,
+    type: LEAGUE_REQUEST_BY_ID,
     leagueID: leagueID,
   };
 }
 
 export function receiveLeagueByID(league){
   return {
-    type: RECEIVE_LEAGUE_BY_ID,
+    type: LEAGUE_RECEIVE_BY_ID,
     leagueID: league.leagueID,
     leagueName: league.leagueName,
     countryCode: league.countryCode,
@@ -73,14 +73,14 @@ function processLeague(data){
 
 export function requestTeamsByID(leagueID){
   return {
-    type: REQUEST_TEAMS_FOR_LEAGUE,
+    type: LEAGUE_REQUEST_TEAMS,
     leagueID: leagueID,
   };
 }
 
 export function receiveTeamsByID(teamIDs, leagueID){
   return {
-    type: RECEIVE_TEAMS_FOR_LEAGUE,
+    type: LEAGUE_RECEIVE_TEAMS,
     teamIDs: teamIDs,
     leagueID: leagueID,
   };
@@ -141,7 +141,7 @@ export function processLeagues(data){
 
 export function receiveMultipleLeagues(leagues){
   return {
-    type: RECEIVE_MULTIPLE_LEAGUES,
+    type: LEAGUE_RECEIVE_MULTIPLE_LEAGUES,
     leagues: leagues,
   };
 }

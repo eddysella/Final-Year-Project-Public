@@ -1,9 +1,9 @@
 import {
-  ADD_LEAGUE_TO_FOLLOWING,
-  REMOVE_LEAGUE_FROM_FOLLOWING,
-  ADD_TEAM_TO_FOLLOWING,
-  REMOVE_TEAM_FROM_FOLLOWING,
-} from '../types'
+  FOLLOWING_ADD_LEAGUE,
+  FOLLOWING_REMOVE_LEAGUE,
+  FOLLOWING_ADD_TEAM,
+  FOLLOWING_REMOVE_TEAM,
+} from '../types/following'
 import { initFixtures,} from './fixtures'
 import { fetchTeams, } from './teams'
 
@@ -17,14 +17,14 @@ export function addLeagueToFollowing(leagueID){
 
 function addLeague(leagueID){
   return {
-    type: ADD_LEAGUE_TO_FOLLOWING,
+    type: FOLLOWING_ADD_LEAGUE,
     leagueID: leagueID,
   };
 }
 
 export function removeLeagueFromFollowing(leagueID){
   return {
-    type: REMOVE_LEAGUE_FROM_FOLLOWING,
+    type: FOLLOWING_REMOVE_LEAGUE,
     leagueID: leagueID,
   };
 }
@@ -39,14 +39,14 @@ export function addTeamToFollowing(teamID){
 
 function addTeam(teamID){
   return {
-    type: ADD_TEAM_TO_FOLLOWING,
+    type: FOLLOWING_ADD_TEAM,
     teamID: teamID,
   };
 }
 
 export function removeTeamFromFollowing(teamID){
   return {
-    type: REMOVE_TEAM_FROM_FOLLOWING,
+    type: FOLLOWING_REMOVE_TEAM,
     teamID: teamID,
   };
 }

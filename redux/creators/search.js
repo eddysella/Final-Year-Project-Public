@@ -1,12 +1,12 @@
 import {
-  UPDATE_SEARCH_INPUT,
-  CLEAR_LEAGUE_SEARCH,
-  CLEAR_TEAM_SEARCH,
-  REQUEST_LEAGUE_SEARCH,
-  RECEIVE_LEAGUE_SEARCH,
-  REQUEST_TEAM_SEARCH,
-  RECEIVE_TEAM_SEARCH,
-} from '../types'
+  SEARCH_UPDATE_INPUT,
+  SEARCH_CLEAR_LEAGUE,
+  SEARCH_CLEAR_TEAM,
+  SEARCH_REQUEST_LEAGUE_SEARCH,
+  SEARCH_RECEIVE_LEAGUE_SEARCH,
+  SEARCH_REQUEST_TEAM_SEARCH,
+  SEARCH_RECEIVE_TEAM_SEARCH,
+} from '../types/search'
 import { searchLeagueByCodeOrName, searchTeamByCodeOrName } from '../../fetch/search'
 import { receiveMultipleLeagues, processLeagues } from './leagues'
 import { receiveMultipleTeams} from './teams'
@@ -24,7 +24,7 @@ export function search(input){
 
 export function updateSearchInput(input){
   return {
-    type: UPDATE_SEARCH_INPUT,
+    type: SEARCH_UPDATE_INPUT,
     input: input,
   };
 }
@@ -38,25 +38,25 @@ export function clear(){
 
 function clearLeagueSearch(){
   return {
-    type: CLEAR_LEAGUE_SEARCH
+    type: SEARCH_CLEAR_LEAGUE
   };
 }
 
 function clearTeamSearch(){
   return {
-    type: CLEAR_TEAM_SEARCH
+    type: SEARCH_CLEAR_TEAM
   };
 }
 
 function requestLeagueSearch(){
   return {
-    type: REQUEST_LEAGUE_SEARCH
+    type: SEARCH_REQUEST_LEAGUE_SEARCH
   };
 }
 
 function receiveLeagueIDs(leagueIDs){
   return {
-    type: RECEIVE_LEAGUE_SEARCH,
+    type: SEARCH_RECEIVE_LEAGUE_SEARCH,
     leagueIDs: leagueIDs,
   };
 }
@@ -75,13 +75,13 @@ function searchForLeague(input){
 
 function requestTeamSearch(){
   return {
-    type: REQUEST_TEAM_SEARCH
+    type: SEARCH_REQUEST_TEAM_SEARCH
   };
 }
 
 function receiveTeamIDs(teamIDs){
   return {
-    type: RECEIVE_TEAM_SEARCH,
+    type: SEARCH_RECEIVE_TEAM_SEARCH,
     teamIDs: teamIDs,
   };
 }

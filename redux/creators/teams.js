@@ -1,17 +1,17 @@
 import {
-  REQUEST_TEAM_BY_ID,
-  RECEIVE_TEAM_BY_ID,
-  REQUEST_PLAYERS_FOR_TEAM,
-  RECEIVE_PLAYERS_FOR_TEAM,
-  REQUEST_LEAGUES_FOR_TEAM,
-  RECEIVE_LEAGUES_FOR_TEAM,
-  REQUEST_PAST_TEAM_FIXTURES,
-  RECEIVE_PAST_TEAM_FIXTURES,
-  REQUEST_FUTURE_TEAM_FIXTURES,
-  RECEIVE_FUTURE_TEAM_FIXTURES,
-  RECEIVE_MULTIPLE_TEAMS,
-  STATS_FETCHED_FOR_TEAM,
-} from '../types'
+  TEAM_REQUEST_BY_ID,
+  TEAM_RECEIVE_BY_ID,
+  TEAM_REQUEST_PLAYERS,
+  TEAM_RECEIVE_PLAYERS,
+  TEAM_REQUEST_LEAGUES,
+  TEAM_RECEIVE_LEAGUES,
+  FIXTURES_REQUEST_PAST_TEAM,
+  FIXTURES_RECEIVE_PAST_TEAM,
+  FIXTURES_REQUEST_FUTURE_TEAM,
+  FIXTURES_RECEIVE_FUTURE_TEAM,
+  TEAM_RECEIVE_MULTIPLE_TEAMS,
+  TEAM_SET_STATS_FETCHED_TRUE,
+} from '../types/team'
 import { getTeamByID, getLastTwentyFixtures, getNextTenFixtures,
   getAllLeaguesForTeam, getStatisticsForTeamInLeague,
   getPlayersByTeamID } from '../../fetch/Team'
@@ -20,14 +20,14 @@ import { processPlayers, receivePlayer } from './players'
 
 function requestTeamByID(teamID){
   return {
-    type: REQUEST_TEAM_BY_ID,
+    type: TEAM_REQUEST_BY_ID,
     teamID: teamID,
   };
 }
 
 function receiveTeamByID(team){
   return {
-    type: RECEIVE_TEAM_BY_ID,
+    type: TEAM_RECEIVE_BY_ID,
     teamID: team.teamID,
     country: team.country,
     name: team.name,
@@ -108,14 +108,14 @@ export function processTeams(data){
 
 function requestLeagues(teamID){
   return {
-    type: REQUEST_LEAGUES_FOR_TEAM,
+    type: TEAM_REQUEST_LEAGUES,
     teamID: teamID,
   };
 }
 
 export function receiveLeagueIDs(teamID, leagueIDs){
   return {
-    type: RECEIVE_LEAGUES_FOR_TEAM,
+    type: TEAM_RECEIVE_LEAGUES,
     teamID: teamID,
     leagueIDs: leagueIDs,
   };
@@ -147,14 +147,14 @@ export function fetchLeaguesForTeam(teamID){
 
 function requestPastFixtures(teamID){
   return {
-    type: REQUEST_PAST_TEAM_FIXTURES,
+    type: FIXTURES_REQUEST_PAST_TEAM,
     teamID: teamID,
   };
 }
 
 function receivePastFixtures(teamID, fixtures){
   return {
-    type: RECEIVE_PAST_TEAM_FIXTURES,
+    type: FIXTURES_RECEIVE_PAST_TEAM,
     teamID: teamID,
     fixturesInOrder: fixtures,
     receivedAt: Date.now(),
@@ -227,14 +227,14 @@ export function processFixtures(data){
 
 function requestFutureFixtures(teamID){
   return {
-    type: REQUEST_FUTURE_TEAM_FIXTURES,
+    type: FIXTURES_REQUEST_FUTURE_TEAM,
     teamID: teamID,
   };
 }
 
 function receiveFutureFixtures(teamID, fixtures){
   return {
-    type: RECEIVE_FUTURE_TEAM_FIXTURES,
+    type: FIXTURES_RECEIVE_FUTURE_TEAM,
     teamID: teamID,
     leagueNames: fixtures[0],
     fixturesInOrder: fixtures[1],
@@ -254,7 +254,7 @@ export function fetchFutureFixtures(teamID){
 
 export function requestPlayersForTeam(teamID){
   return {
-    type: REQUEST_PLAYERS_FOR_TEAM,
+    type: TEAM_REQUEST_PLAYERS,
     teamID: teamID,
   };
 }
@@ -275,7 +275,7 @@ export function fetchPlayers(teamID){
 
 export function receivePlayerIDsForTeam(teamID, playerIDs){
   return {
-    type: RECEIVE_PLAYERS_FOR_TEAM,
+    type: TEAM_RECEIVE_PLAYERS,
     teamID: teamID,
     playerIDs: playerIDs,
   };
@@ -283,14 +283,14 @@ export function receivePlayerIDsForTeam(teamID, playerIDs){
 
 export function receiveMultipleTeams(teams){
   return {
-    type: RECEIVE_MULTIPLE_TEAMS,
+    type: TEAM_RECEIVE_MULTIPLE_TEAMS,
     teams: teams,
   };
 }
 
 export function confirmStatsFetched(teamID){
   return {
-    type: STATS_FETCHED_FOR_TEAM,
+    type: TEAM_SET_STATS_FETCHED_TRUE,
     teamID: teamID,
   };
 }

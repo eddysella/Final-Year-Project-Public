@@ -9,7 +9,6 @@ const mapStateToProps = state =>({
   fetching: state.fixturesByID['fetching'],
 })
 
-// TODO: add team page
 
 const Screen = ({fixturesByID, fetching, ...props}) => (
   <View style={{flex:1}}>

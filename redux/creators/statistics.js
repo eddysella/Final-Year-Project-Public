@@ -1,20 +1,20 @@
 import {
-  REQUEST_PLAYER_STATS_BY_ID,
-  RECEIVE_PLAYER_STATS_BY_ID,
-} from '../types'
+  STATS_REQUEST_BY_PLAYER_ID,
+  STATS_RECEIVE_BY_PLAYER_ID,
+} from '../types/statistics'
 import { getPlayerStatisticsByTeamID } from '../../fetch/Team';
 import { confirmStatsFetched } from './teams'
 
 export function requestPlayersStatsForTeam(teamID, leagueID){
   return {
-    type: REQUEST_PLAYER_STATS_BY_ID,
+    type: STATS_REQUEST_BY_PLAYER_ID,
     teamID: teamID,
   };
 }
 
 export function receivePlayerStatsForTeam(stats){
   return {
-    type: RECEIVE_PLAYER_STATS_BY_ID,
+    type: STATS_RECEIVE_BY_PLAYER_ID,
     stats: stats,
   };
 }

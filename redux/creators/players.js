@@ -1,10 +1,10 @@
 import {
-  RECEIVE_PLAYER,
-} from '../types'
+  PLAYER_RECEIVE_BY_ID,
+} from '../types/player'
 
 export function receivePlayer(stats){
   return {
-    type: RECEIVE_PLAYER,
+    type: PLAYER_RECEIVE_BY_ID,
     playerID: stats.playerID,
     name: stats.name,
     age: stats.age,

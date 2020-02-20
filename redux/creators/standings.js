@@ -1,12 +1,12 @@
 import {
-  REQUEST_STANDINGS,
-  RECEIVE_STANDINGS,
-} from '../types'
+  STANDINGS_REQUEST_BY_LEAGUE_ID,
+  STANDINGS_RECEIVE_BY_LEAGUE_ID,
+} from '../types/standings'
 import { getStandingsByLeague } from '../../fetch/Standings';
 
 function receiveStandings(standings, leagueID){
   return {
-    type: RECEIVE_STANDINGS,
+    type: STANDINGS_RECEIVE_BY_LEAGUE_ID,
     leagueID: leagueID,
     data: standings,
     lastUpdated: Date.now(),
@@ -15,7 +15,7 @@ function receiveStandings(standings, leagueID){
 
 function requestStandings(leagueID){
   return {
-    type: REQUEST_STANDINGS,
+    type: STANDINGS_REQUEST_BY_LEAGUE_ID,
     leagueID: leagueID,
   };
 }

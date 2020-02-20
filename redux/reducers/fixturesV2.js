@@ -1,33 +1,33 @@
 import {
-  STORE_FIXTURES_BY_ID,
-  STORE_FIXTURES_BY_DATE,
-  STORE_PAST_DATES,
-  STORE_FUTURE_DATES,
-  RESET_FIXTURES,
-  RESET_PAST_LEAGUE_FETCH,
-  RESET_FUTURE_LEAGUE_FETCH,
-  REQUEST_PAST_FIXTURES,
-  RECEIVE_PAST_FIXTURES,
-  REQUEST_PAST_LEAGUE_FIXTURES,
-  RECEIVE_PAST_LEAGUE_FIXTURES,
-  REQUEST_PAST_TEAM_FIXTURES,
-  RECEIVE_PAST_TEAM_FIXTURES,
-  RECEIVE_TODAY_LEAGUE_FIXTURES,
-  RECEIVE_TODAY_TEAM_FIXTURES,
-  REQUEST_FUTURE_FIXTURES,
-  RECEIVE_FUTURE_FIXTURES,
-  REQUEST_FUTURE_LEAGUE_FIXTURES,
-  RECEIVE_FUTURE_LEAGUE_FIXTURES,
-  REQUEST_FUTURE_TEAM_FIXTURES,
-  RECEIVE_FUTURE_TEAM_FIXTURES,
-  INIT_LEAGUE_FIXTURES,
-  INIT_TEAM_FIXTURES,
-  REQUEST_FIXTURE_STATS,
-  RECEIVE_FIXTURE_STATS,
-  LEAGUE_SHOULD_FETCH_PAST_TRUE,
-  LEAGUE_SHOULD_FETCH_FUTURE_TRUE,
-  LEAGUE_SET_CURRENT_ROUND,
-} from '../types'
+  FIXTURES_STORE_BY_ID,
+  FIXTURES_STORE_BY_DATE,
+  FIXTURES_STORE_PAST_DATES,
+  FIXTURES_STORE_FUTURE_DATES,
+  FIXTURES_RESET,
+  FIXTURES_RESET_PAST_LEAGUE_FETCH,
+  FIXTURES_RESET_FUTURE_LEAGUE_FETCH,
+  FIXTURES_REQUEST_PAST,
+  FIXTURES_RECEIVE_PAST,
+  FIXTURES_REQUEST_PAST_LEAGUE,
+  FIXTURES_RECEIVE_PAST_LEAGUE,
+  FIXTURES_REQUEST_PAST_TEAM,
+  FIXTURES_RECEIVE_PAST_TEAM,
+  FIXTURES_RECEIVE_TODAY_LEAGUE,
+  FIXTURES_RECEIVE_TODAY_TEAM,
+  FIXTURES_REQUEST_FUTURE,
+  FIXTURES_RECEIVE_FUTURE,
+  FIXTURES_REQUEST_FUTURE_LEAGUE,
+  FIXTURES_RECEIVE_FUTURE_LEAGUE,
+  FIXTURES_REQUEST_FUTURE_TEAM,
+  FIXTURES_RECEIVE_FUTURE_TEAM,
+  FIXTURES_INIT_LEAGUE,
+  FIXTURES_INIT_TEAM,
+  FIXTURES_REQUEST_STATS,
+  FIXTURES_RECEIVE_STATS,
+  FIXTURES_SET_SHOULD_FETCH_PAST_LEAGUE_TRUE,
+  FIXTURES_SET_SHOULD_FETCH_FUTURE_LEAGUE_TRUE,
+  FIXTURES_SET_LEAGUE_CURRENT_ROUND,
+} from '../types/fixtures'
 import sortBy from 'array-sort-by';
 
 export function fixturesStatus(state={
@@ -37,21 +37,21 @@ export function fixturesStatus(state={
   futureFetch: false,
 }, action){
   switch(action.type){
-    case RESET_FIXTURES:
+    case FIXTURES_RESET:
       return Object.assign({}, state, {
          currentPastDates: [],
          currentFutureDates: [],
        });
-    case REQUEST_PAST_FIXTURES:
+    case FIXTURES_REQUEST_PAST:
       return Object.assign({}, state, { pastFetch: true, });
-    case RECEIVE_PAST_FIXTURES:
+    case FIXTURES_RECEIVE_PAST:
       return Object.assign({}, state, {
         pastFetch: false,
         currentPastDates: [...state.currentPastDates, action.date]
       });
-    case REQUEST_FUTURE_FIXTURES:
+    case FIXTURES_REQUEST_FUTURE:
       return Object.assign({}, state, { futureFetch: true, });
-    case RECEIVE_FUTURE_FIXTURES:
+    case FIXTURES_RECEIVE_FUTURE:
       return Object.assign({}, state, {
         futureFetch: false,
         currentFutureDates: [...state.currentFutureDates, action.date]
@@ -84,7 +84,7 @@ function filterArray(array){
 
 export function pastDates(state=[], action){
   switch(action.type){
-    case STORE_PAST_DATES:
+    case FIXTURES_STORE_PAST_DATES:
       return sortBy(filterArray([...state, ...action.dates]), s => -s);
     default:
       return state;
@@ -93,7 +93,7 @@ export function pastDates(state=[], action){
 
 export function futureDates(state=[], action){
   switch(action.type){
-    case STORE_FUTURE_DATES:
+    case FIXTURES_STORE_FUTURE_DATES:
       return sortBy(filterArray([...state, ...action.dates]));
     default:
       return state;
@@ -135,33 +135,33 @@ function league(
   action
   ){
   switch(action.type){
-    case LEAGUE_SET_CURRENT_ROUND:
+    case FIXTURES_SET_LEAGUE_CURRENT_ROUND:
       return Object.assign({}, state, {
         currentRound: action.round,
       })
-    case LEAGUE_SHOULD_FETCH_PAST_TRUE:
+    case FIXTURES_SET_SHOULD_FETCH_PAST_LEAGUE_TRUE:
       return Object.assign({}, state, {
         shouldFetchPast: true,
       })
-    case LEAGUE_SHOULD_FETCH_FUTURE_TRUE:
+    case FIXTURES_SET_SHOULD_FETCH_FUTURE_LEAGUE_TRUE:
       return Object.assign({}, state, {
         shouldFetchFuture: true,
       })
-    case RESET_FUTURE_LEAGUE_FETCH:
+    case FIXTURES_RESET_FUTURE_LEAGUE_FETCH:
       return Object.assign({}, state, {
         fetchingFuture: false,
       })
-    case RESET_PAST_LEAGUE_FETCH:
+    case FIXTURES_RESET_PAST_LEAGUE_FETCH:
       return Object.assign({}, state, {
         fetchingPast: false,
       })
-    case INIT_LEAGUE_FIXTURES:
+    case FIXTURES_INIT_LEAGUE:
       return Object.assign({}, state)
-    case REQUEST_PAST_LEAGUE_FIXTURES:
+    case FIXTURES_REQUEST_PAST_LEAGUE:
       return Object.assign({}, state, {
         fetchingPast: true,
       })
-    case RECEIVE_PAST_LEAGUE_FIXTURES:
+    case FIXTURES_RECEIVE_PAST_LEAGUE:
       return Object.assign({}, state, {
         fetchingPast: false,
         fixturesByDate: Object.assign({}, state.fixturesByDate, action.fixtures),
@@ -169,15 +169,15 @@ function league(
         pastDates: [...state.pastDates, action.date],
         shouldFetchPast: false,
       })
-    case RECEIVE_TODAY_LEAGUE_FIXTURES:
+    case FIXTURES_RECEIVE_TODAY_LEAGUE:
       return Object.assign({}, state, {
         todayFixtures: [...state.todayFixtures, ...action.fixtures],
       });
-    case REQUEST_FUTURE_LEAGUE_FIXTURES:
+    case FIXTURES_REQUEST_FUTURE_LEAGUE:
       return Object.assign({}, state, {
         fetchingFuture: true,
       })
-    case RECEIVE_FUTURE_LEAGUE_FIXTURES:
+    case FIXTURES_RECEIVE_FUTURE_LEAGUE:
       return Object.assign({}, state, {
         fetchingFuture: false,
         fixturesByDate: Object.assign({}, state.fixturesByDate, action.fixtures),
@@ -192,17 +192,17 @@ function league(
 
 export function fixtureIDsByLeagueID(state={}, action){
   switch(action.type){
-    case RESET_FUTURE_LEAGUE_FETCH:
-    case RESET_PAST_LEAGUE_FETCH:
-    case INIT_LEAGUE_FIXTURES:
-    case REQUEST_PAST_LEAGUE_FIXTURES:
-    case REQUEST_FUTURE_LEAGUE_FIXTURES:
-    case RECEIVE_TODAY_LEAGUE_FIXTURES:
-    case RECEIVE_PAST_LEAGUE_FIXTURES:
-    case RECEIVE_FUTURE_LEAGUE_FIXTURES:
-    case LEAGUE_SHOULD_FETCH_PAST_TRUE:
-    case LEAGUE_SHOULD_FETCH_FUTURE_TRUE:
-    case LEAGUE_SET_CURRENT_ROUND:
+    case FIXTURES_RESET_FUTURE_LEAGUE_FETCH:
+    case FIXTURES_RESET_PAST_LEAGUE_FETCH:
+    case FIXTURES_INIT_LEAGUE:
+    case FIXTURES_REQUEST_PAST_LEAGUE:
+    case FIXTURES_REQUEST_FUTURE_LEAGUE:
+    case FIXTURES_RECEIVE_TODAY_LEAGUE:
+    case FIXTURES_RECEIVE_PAST_LEAGUE:
+    case FIXTURES_RECEIVE_FUTURE_LEAGUE:
+    case FIXTURES_SET_SHOULD_FETCH_PAST_LEAGUE_TRUE:
+    case FIXTURES_SET_SHOULD_FETCH_FUTURE_LEAGUE_TRUE:
+    case FIXTURES_SET_LEAGUE_CURRENT_ROUND:
       return Object.assign({}, state, {
         [action.leagueID]: league(state[action.leagueID], action)
         });
@@ -226,28 +226,28 @@ function team(
   action
   ){
   switch(action.type){
-    case INIT_TEAM_FIXTURES:
+    case FIXTURES_INIT_TEAM:
       return Object.assign({}, state)
-    case REQUEST_PAST_TEAM_FIXTURES:
+    case FIXTURES_REQUEST_PAST_TEAM:
       return Object.assign({}, state, {
         fetchingPast: true,
       })
-    case RECEIVE_PAST_TEAM_FIXTURES:
+    case FIXTURES_RECEIVE_PAST_TEAM:
       return Object.assign({}, state, {
         fetchingPast: false,
         pastFixtures: sortBy(filterArray([...state.pastFixtures, ...action.fixtures]), s => -s),
         lastPastDate: action.date,
         nextPastPage: (state.nextPastPage+1),
       })
-    case RECEIVE_TODAY_TEAM_FIXTURES:
+    case FIXTURES_RECEIVE_TODAY_TEAM:
       return Object.assign({}, state, {
         todayFixtures: [...state.todayFixtures, ...action.fixtures],
       });
-    case REQUEST_FUTURE_TEAM_FIXTURES:
+    case FIXTURES_REQUEST_FUTURE_TEAM:
       return Object.assign({}, state, {
         fetchingFuture: true,
       })
-    case RECEIVE_FUTURE_TEAM_FIXTURES:
+    case FIXTURES_RECEIVE_FUTURE_TEAM:
       return Object.assign({}, state, {
         fetchingFuture: false,
         futureFixtures: sortBy(filterArray([...state.futureFixtures, ...action.fixtures])),
@@ -263,19 +263,19 @@ export function fixtureIDsByTeamID(state={
   fetching: false,
 }, action){
   switch(action.type){
-    case INIT_TEAM_FIXTURES:
+    case FIXTURES_INIT_TEAM:
     return Object.assign({}, state, {
       [action.teamID]: team(state[action.teamID], action)
       });
-    case REQUEST_PAST_TEAM_FIXTURES:
-    case REQUEST_FUTURE_TEAM_FIXTURES:
+    case FIXTURES_REQUEST_PAST_TEAM:
+    case FIXTURES_REQUEST_FUTURE_TEAM:
     return Object.assign({}, state, {
       fetching: true,
       [action.teamID]: team(state[action.teamID], action)
       });
-    case RECEIVE_PAST_TEAM_FIXTURES:
-    case RECEIVE_TODAY_TEAM_FIXTURES:
-    case RECEIVE_FUTURE_TEAM_FIXTURES:
+    case FIXTURES_RECEIVE_PAST_TEAM:
+    case FIXTURES_RECEIVE_TODAY_TEAM:
+    case FIXTURES_RECEIVE_FUTURE_TEAM:
       return Object.assign({}, state, {
         fetching: false,
         [action.teamID]: team(state[action.teamID], action)
@@ -303,7 +303,7 @@ const combineMerge = (target, source, options) => {
 
 export function date(state={}, action){
   switch(action.type){
-    case STORE_FIXTURES_BY_DATE:
+    case FIXTURES_STORE_BY_DATE:
     if(state[action.league]){
       return Object.assign({}, state, {
           [action.league]: sortBy(filterArray([...state[action.league], ...action.fixtures])),
@@ -320,7 +320,7 @@ export function date(state={}, action){
 
 export function fixtureIDsByDateLeague(state={}, action){
   switch(action.type){
-    case STORE_FIXTURES_BY_DATE:
+    case FIXTURES_STORE_BY_DATE:
       return Object.assign({}, state, {
           [action.date]: date(state[action.date], action)
         });
@@ -331,7 +331,7 @@ export function fixtureIDsByDateLeague(state={}, action){
 
 export function fixture(state={}, action){
   switch(action.type){
-    case RECEIVE_FIXTURE_STATS:
+    case FIXTURES_RECEIVE_STATS:
     return Object.assign({}, state, action.stats);
     default:
       return state;
@@ -342,16 +342,16 @@ export function fixturesByID(state={
   fetching: false,
 }, action){
   switch(action.type){
-    case REQUEST_FIXTURE_STATS:
+    case FIXTURES_REQUEST_STATS:
       return Object.assign({}, state, {
         fetching: true,
       });
-    case RECEIVE_FIXTURE_STATS:
+    case FIXTURES_RECEIVE_STATS:
       return Object.assign({}, state, {
         fetching: false,
         [action.fixtureID]: fixture(state[action.fixtureID], action)
       });
-    case STORE_FIXTURES_BY_ID:
+    case FIXTURES_STORE_BY_ID:
       return Object.assign({}, state, action.fixtures);
     default:
       return state;
@@ -360,22 +360,22 @@ export function fixturesByID(state={
 
 
 
-// REQUEST_PAST_LEAGUE_FIXTURES,
-// RECEIVE_PAST_LEAGUE_FIXTURES,
-// REQUEST_PAST_TEAM_FIXTURES,
-// RECEIVE_PAST_TEAM_FIXTURES,
-// REQUEST_FUTURE_LEAGUE_FIXTURES,
-// RECEIVE_FUTURE_LEAGUE_FIXTURES,
-// REQUEST_FUTURE_TEAM_FIXTURES,
-// RECEIVE_FUTURE_TEAM_FIXTURES,
+// FIXTURES_REQUEST_PAST_LEAGUE,
+// FIXTURES_RECEIVE_PAST_LEAGUE,
+// FIXTURES_REQUEST_PAST_TEAM,
+// FIXTURES_RECEIVE_PAST_TEAM,
+// FIXTURES_REQUEST_FUTURE_LEAGUE,
+// FIXTURES_RECEIVE_FUTURE_LEAGUE,
+// FIXTURES_REQUEST_FUTURE_TEAM,
+// FIXTURES_RECEIVE_FUTURE_TEAM,
 //
 // export function fixturesPastLeague(state={
 //   fetching: false
 //   }, action){
 //   switch(action.type){
-//     case REQUEST_PAST_LEAGUE_FIXTURES:
+//     case FIXTURES_REQUEST_PAST_LEAGUE:
 //       return Object.assign({}, state, { fetching: true });
-//     case RECEIVE_PAST_LEAGUE_FIXTURES:
+//     case FIXTURES_RECEIVE_PAST_LEAGUE:
 //       return Object.assign({}, state, action.fixtures, { fetching: false });
 //     default:
 //       return state;
@@ -387,20 +387,20 @@ export function fixturesByID(state={
 //   fetchingTeamFixtures: false,
 //   }, action){
 //   switch(action.type){
-//     case REQUEST_FUTURE_FIXTURES:
+//     case FIXTURES_REQUEST_FUTURE:
 //       return Object.assign({}, state,
 //         {
 //           fetchingLeagueFixtures: true,
 //           fetchingTeamFixtures: true,
 //         });
-//     case RECEIVE_FUTURE_LEAGUE_FIXTURES:
+//     case FIXTURES_RECEIVE_FUTURE_LEAGUE:
 //       return Object.assign({}, state,
 //         {
 //           fetchingLeagueFixtures: false,
 //           [action.timeStamp]: [...state[action.timeStamp], ...action.fixtureIDs]
 //         }
 //       );
-//     case RECEIVE_FUTURE_TEAM_FIXTURES:
+//     case FIXTURES_RECEIVE_FUTURE_TEAM:
 //       return Object.assign({}, state,
 //         {
 //           fetchingTeamFixtures: false,

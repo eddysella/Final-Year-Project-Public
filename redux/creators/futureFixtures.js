@@ -1,14 +1,14 @@
 import {
-  REQUEST_FUTURE_FIXTURES,
-  RECEIVE_FUTURE_FIXTURES,
-  STORE_FUTURE_DATES,
-  REQUEST_FUTURE_TEAM_FIXTURES,
-  RECEIVE_FUTURE_TEAM_FIXTURES,
-  REQUEST_FUTURE_LEAGUE_FIXTURES,
-  RECEIVE_FUTURE_LEAGUE_FIXTURES,
-  RESET_FUTURE_LEAGUE_FETCH,
-  LEAGUE_SHOULD_FETCH_FUTURE_TRUE,
-} from '../types'
+  FIXTURES_REQUEST_FUTURE,
+  FIXTURES_RECEIVE_FUTURE,
+  FIXTURES_STORE_FUTURE_DATES,
+  FIXTURES_REQUEST_FUTURE_TEAM,
+  FIXTURES_RECEIVE_FUTURE_TEAM,
+  FIXTURES_REQUEST_FUTURE_LEAGUE,
+  FIXTURES_RECEIVE_FUTURE_LEAGUE,
+  FIXTURES_RESET_FUTURE_LEAGUE_FETCH,
+  FIXTURES_SET_SHOULD_FETCH_FUTURE_LEAGUE_TRUE,
+} from '../types/fixtures'
 import { getFixturesByLeagueAndDate, getFutureTeamFixtures, } from '../../fetch/FixturesV2';
 import { storeFixturesByID, storeFixtureIDsByDate, receiveFutureFixtures,
   requestFutureFixtures, processTeamFixtures, processLeagueFixtures,
@@ -16,14 +16,14 @@ receiveTodayTeamFixtures, receiveTodayLeagueFixtures} from './fixtures'
 
 export function resetLeagueFetch(leagueID){
   return {
-    type: RESET_FUTURE_LEAGUE_FETCH,
+    type: FIXTURES_RESET_FUTURE_LEAGUE_FETCH,
     leagueID: leagueID,
   }
 }
 
 export function setShouldFetchFutureTrue(leagueID){
   return {
-    type: LEAGUE_SHOULD_FETCH_FUTURE_TRUE,
+    type: FIXTURES_SET_SHOULD_FETCH_FUTURE_LEAGUE_TRUE,
     leagueID: leagueID,
   }
 }
@@ -53,7 +53,7 @@ function shouldFetchFixtures(fetching, lastDate, currentDate){
 
 export function storeFutureDates(dates){
   return {
-    type: STORE_FUTURE_DATES,
+    type: FIXTURES_STORE_FUTURE_DATES,
     dates: dates
   }
 }
@@ -72,14 +72,14 @@ export function fetchFollowingFutureFixtures(){
 
 export function requestFutureTeamFixtures(teamID){
   return {
-    type: REQUEST_FUTURE_TEAM_FIXTURES,
+    type: FIXTURES_REQUEST_FUTURE_TEAM,
     teamID: teamID,
   }
 }
 
 export function receiveFutureTeamFixtures(teamID, fixtures, lastDate){
   return {
-    type: RECEIVE_FUTURE_TEAM_FIXTURES,
+    type: FIXTURES_RECEIVE_FUTURE_TEAM,
     teamID: teamID,
     fixtures: fixtures,
     date: lastDate,
@@ -140,14 +140,14 @@ export function fetchFutureTeamFixtures(teamIDs, overrideCheck = false){
 
 export function requestFutureLeagueFixtures(leagueID){
   return {
-    type: REQUEST_FUTURE_LEAGUE_FIXTURES,
+    type: FIXTURES_REQUEST_FUTURE_LEAGUE,
     leagueID: leagueID,
   }
 }
 
 export function receiveFutureLeagueFixtures(leagueID, fixtures, lastDate){
   return {
-    type: RECEIVE_FUTURE_LEAGUE_FIXTURES,
+    type: FIXTURES_RECEIVE_FUTURE_LEAGUE,
     leagueID: leagueID,
     fixtures: fixtures,
     date: lastDate,

@@ -1,17 +1,17 @@
 import {
-  STORE_FIXTURES_BY_ID,
-  STORE_FIXTURES_BY_DATE,
-  REQUEST_PAST_FIXTURES,
-  RECEIVE_PAST_FIXTURES,
-  RECEIVE_TODAY_LEAGUE_FIXTURES,
-  RECEIVE_TODAY_TEAM_FIXTURES,
-  REQUEST_FUTURE_FIXTURES,
-  RECEIVE_FUTURE_FIXTURES,
-  INIT_LEAGUE_FIXTURES,
-  INIT_TEAM_FIXTURES,
-  RESET_FIXTURES,
-  LEAGUE_SET_CURRENT_ROUND,
-} from '../types'
+  FIXTURES_STORE_BY_ID,
+  FIXTURES_STORE_BY_DATE,
+  FIXTURES_REQUEST_PAST,
+  FIXTURES_RECEIVE_PAST,
+  FIXTURES_RECEIVE_TODAY_LEAGUE,
+  FIXTURES_RECEIVE_TODAY_TEAM,
+  FIXTURES_REQUEST_FUTURE,
+  FIXTURES_RECEIVE_FUTURE,
+  FIXTURES_INIT_LEAGUE,
+  FIXTURES_INIT_TEAM,
+  FIXTURES_RESET,
+  FIXTURES_SET_LEAGUE_CURRENT_ROUND,
+} from '../types/fixtures'
 
 import { fetchFollowingPastFixtures } from './pastFixtures';
 import { fetchFollowingFutureFixtures, receiveFutureLeagueFixtures } from './futureFixtures';
@@ -20,13 +20,13 @@ import { getLeagueCurrentRound, } from '../../fetch/League';
 
 export function resetFixtures(){
   return {
-    type: RESET_FIXTURES,
+    type: FIXTURES_RESET,
   }
 }
 
 export function leagueSetCurrentRound(leagueID, round){
   return {
-    type: LEAGUE_SET_CURRENT_ROUND,
+    type: FIXTURES_SET_LEAGUE_CURRENT_ROUND,
     leagueID: leagueID,
     round: round,
   }
@@ -34,14 +34,14 @@ export function leagueSetCurrentRound(leagueID, round){
 
 export function storeFixturesByID(fixtures){
   return {
-    type: STORE_FIXTURES_BY_ID,
+    type: FIXTURES_STORE_BY_ID,
     fixtures: fixtures,
   }
 }
 
 export function storeFixtureIDsByDate(date, league, fixtures){
   return {
-    type: STORE_FIXTURES_BY_DATE,
+    type: FIXTURES_STORE_BY_DATE,
     date: date,
     league: league,
     fixtures: fixtures,
@@ -50,33 +50,33 @@ export function storeFixtureIDsByDate(date, league, fixtures){
 
 export function requestPastFixtures(){
   return {
-    type: REQUEST_PAST_FIXTURES,
+    type: FIXTURES_REQUEST_PAST,
   }
 }
 
 export function receivePastFixtures(date){
   return {
-    type: RECEIVE_PAST_FIXTURES,
+    type: FIXTURES_RECEIVE_PAST,
     date: date,
   }
 }
 
 export function requestFutureFixtures(){
   return {
-    type: REQUEST_FUTURE_FIXTURES,
+    type: FIXTURES_REQUEST_FUTURE,
   }
 }
 
 export function receiveFutureFixtures(date){
   return {
-    type: RECEIVE_FUTURE_FIXTURES,
+    type: FIXTURES_RECEIVE_FUTURE,
     date: date,
   }
 }
 
 export function receiveTodayLeagueFixtures(leagueID, fixtures){
   return {
-    type: RECEIVE_TODAY_LEAGUE_FIXTURES,
+    type: FIXTURES_RECEIVE_TODAY_LEAGUE,
     leagueID: leagueID,
     fixtures: fixtures,
   }
@@ -84,7 +84,7 @@ export function receiveTodayLeagueFixtures(leagueID, fixtures){
 
 export function receiveTodayTeamFixtures(teamID, fixtures){
   return {
-    type: RECEIVE_TODAY_TEAM_FIXTURES,
+    type: FIXTURES_RECEIVE_TODAY_TEAM,
     teamID: teamID,
     fixtures: fixtures,
   }
@@ -92,14 +92,14 @@ export function receiveTodayTeamFixtures(teamID, fixtures){
 
 export function initFixturesForLeague(leagueID){
   return {
-    type: INIT_LEAGUE_FIXTURES,
+    type: FIXTURES_INIT_LEAGUE,
     leagueID: leagueID,
   }
 }
 
 export function initFixturesForTeam(teamID){
   return {
-    type: INIT_TEAM_FIXTURES,
+    type: FIXTURES_INIT_TEAM,
     teamID: teamID,
   }
 }

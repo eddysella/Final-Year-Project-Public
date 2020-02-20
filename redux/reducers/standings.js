@@ -1,7 +1,7 @@
 import {
-  REQUEST_STANDINGS,
-  RECEIVE_STANDINGS,
-} from '../types'
+  STANDINGS_REQUEST_BY_LEAGUE_ID,
+  STANDINGS_RECEIVE_BY_LEAGUE_ID,
+} from '../types/standings'
 
 function standings(
   state = {
@@ -12,11 +12,11 @@ function standings(
   action
   ){
   switch(action.type){
-    case REQUEST_STANDINGS:
+    case STANDINGS_REQUEST_BY_LEAGUE_ID:
       return Object.assign({}, state, {
         fetching: true,
       });
-    case RECEIVE_STANDINGS:
+    case STANDINGS_RECEIVE_BY_LEAGUE_ID:
       return Object.assign({}, state, {
         fetching: false,
         data: action.data,
@@ -31,12 +31,12 @@ export function standingsByLeagueID(state={
   fetching: false,
 }, action){
   switch(action.type){
-    case REQUEST_STANDINGS:
+    case STANDINGS_REQUEST_BY_LEAGUE_ID:
       return Object.assign({}, state, {
         fetching: true,
         [action.leagueID]: standings(state[action.leagueID], action),
       });
-    case RECEIVE_STANDINGS:
+    case STANDINGS_RECEIVE_BY_LEAGUE_ID:
       return Object.assign({}, state, {
         fetching: false,
         [action.leagueID]: standings(state[action.leagueID], action),

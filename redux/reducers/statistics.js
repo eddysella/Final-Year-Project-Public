@@ -1,17 +1,17 @@
 import {
-  REQUEST_PLAYER_STATS_BY_ID,
-  RECEIVE_PLAYER_STATS_BY_ID,
-} from '../types'
+  STATS_REQUEST_BY_PLAYER_ID,
+  STATS_RECEIVE_BY_PLAYER_ID,
+} from '../types/statistics'
 
 export function playerStatsByID(state={
   fetching: false,
 }, action){
   switch(action.type){
-    case REQUEST_PLAYER_STATS_BY_ID:
+    case STATS_REQUEST_BY_PLAYER_ID:
       return Object.assign({}, state, {
         fetching:true,
         });
-    case RECEIVE_PLAYER_STATS_BY_ID:
+    case STATS_RECEIVE_BY_PLAYER_ID:
       return Object.assign({}, state, {
         fetching: false,
       }, action.stats);
@@ -75,7 +75,7 @@ export function playerStatsByID(state={
 // function playerStats(
 //   state = {},action){
 //   switch(action.type){
-//     case RECEIVE_PLAYER_STATS_BY_ID:
+//     case STATS_RECEIVE_BY_PLAYER_ID:
 //     return Object.assign({}, state, {
 //       shots: action.shots,
 //       goals: action.goals,

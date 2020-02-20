@@ -1,16 +1,16 @@
 import {
-  ADD_LEAGUE_TO_FOLLOWING,
-  REMOVE_LEAGUE_FROM_FOLLOWING,
-  ADD_TEAM_TO_FOLLOWING,
-  REMOVE_TEAM_FROM_FOLLOWING,
-} from '../types'
+  FOLLOWING_ADD_LEAGUE,
+  FOLLOWING_REMOVE_LEAGUE,
+  FOLLOWING_ADD_TEAM,
+  FOLLOWING_REMOVE_TEAM,
+} from '../types/following'
 
 
 export function followingLeagueIDs(state = [], action){
   switch(action.type){
-    case ADD_LEAGUE_TO_FOLLOWING:
+    case FOLLOWING_ADD_LEAGUE:
       return [...state, action.leagueID]
-    case REMOVE_LEAGUE_FROM_FOLLOWING:
+    case FOLLOWING_REMOVE_LEAGUE:
       return state.filter(function(value, index, arr){
         return value != action.leagueID;
       });
@@ -23,9 +23,9 @@ export function followingLeagueIDs(state = [], action){
 
 export function followingTeamIDs(state = [], action){
   switch(action.type){
-    case ADD_TEAM_TO_FOLLOWING:
+    case FOLLOWING_ADD_TEAM:
       return [...state, action.teamID]
-    case REMOVE_TEAM_FROM_FOLLOWING:
+    case FOLLOWING_REMOVE_TEAM:
       return state.filter(function(value, index, arr){
         return value != action.teamID;
       });

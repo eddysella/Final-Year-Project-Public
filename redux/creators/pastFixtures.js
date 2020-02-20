@@ -1,14 +1,14 @@
 import {
-  REQUEST_PAST_FIXTURES,
-  RECEIVE_PAST_FIXTURES,
-  STORE_PAST_DATES,
-  REQUEST_PAST_TEAM_FIXTURES,
-  RECEIVE_PAST_TEAM_FIXTURES,
-  REQUEST_PAST_LEAGUE_FIXTURES,
-  RECEIVE_PAST_LEAGUE_FIXTURES,
-  RESET_PAST_LEAGUE_FETCH,
-  LEAGUE_SHOULD_FETCH_PAST_TRUE,
-} from '../types'
+  FIXTURES_REQUEST_PAST,
+  FIXTURES_RECEIVE_PAST,
+  FIXTURES_STORE_PAST_DATES,
+  FIXTURES_REQUEST_PAST_TEAM,
+  FIXTURES_RECEIVE_PAST_TEAM,
+  FIXTURES_REQUEST_PAST_LEAGUE,
+  FIXTURES_RECEIVE_PAST_LEAGUE,
+  FIXTURES_RESET_PAST_LEAGUE_FETCH,
+  FIXTURES_SET_SHOULD_FETCH_PAST_LEAGUE_TRUE,
+} from '../types/fixtures'
 import { getFixturesByLeagueAndDate, getPastTeamFixtures, } from '../../fetch/FixturesV2';
 import { storeFixturesByID, storeFixtureIDsByDate, receivePastFixtures,
   requestPastFixtures, processTeamFixtures, processLeagueFixtures,
@@ -16,14 +16,14 @@ receiveTodayTeamFixtures, receiveTodayLeagueFixtures} from './fixtures'
 
 export function resetLeagueFetch(leagueID){
   return {
-    type: RESET_PAST_LEAGUE_FETCH,
+    type: FIXTURES_RESET_PAST_LEAGUE_FETCH,
     leagueID: leagueID,
   }
 }
 
 export function setShouldFetchPastTrue(leagueID){
   return {
-    type: LEAGUE_SHOULD_FETCH_PAST_TRUE,
+    type: FIXTURES_SET_SHOULD_FETCH_PAST_LEAGUE_TRUE,
     leagueID: leagueID,
   }
 }
@@ -53,7 +53,7 @@ function shouldFetchFixtures(fetching, lastDate, currentDate){
 
 export function storePastDates(dates){
   return {
-    type: STORE_PAST_DATES,
+    type: FIXTURES_STORE_PAST_DATES,
     dates: dates,
   }
 }
@@ -72,14 +72,14 @@ export function fetchFollowingPastFixtures(){
 
 export function requestPastTeamFixtures(teamID){
   return {
-    type: REQUEST_PAST_TEAM_FIXTURES,
+    type: FIXTURES_REQUEST_PAST_TEAM,
     teamID: teamID,
   }
 }
 
 export function receivePastTeamFixtures(teamID, fixtures, lastDate){
   return {
-    type: RECEIVE_PAST_TEAM_FIXTURES,
+    type: FIXTURES_RECEIVE_PAST_TEAM,
     teamID: teamID,
     fixtures: fixtures,
     date: lastDate,
@@ -141,14 +141,14 @@ export function fetchPastTeamFixtures(teamIDs, overrideCheck = false){
 
 export function requestPastLeagueFixtures(leagueID){
   return {
-    type: REQUEST_PAST_LEAGUE_FIXTURES,
+    type: FIXTURES_REQUEST_PAST_LEAGUE,
     leagueID: leagueID,
   }
 }
 
 export function receivePastLeagueFixtures(leagueID, fixtures,  lastDate){
   return {
-    type: RECEIVE_PAST_LEAGUE_FIXTURES,
+    type: FIXTURES_RECEIVE_PAST_LEAGUE,
     leagueID: leagueID,
     fixtures: fixtures,
     date: lastDate,

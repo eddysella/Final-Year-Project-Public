@@ -1,18 +1,18 @@
 import {
-  REQUEST_FIXTURE_STATS,
-  RECEIVE_FIXTURE_STATS,
-} from '../types'
+  FIXTURES_REQUEST_STATS,
+  FIXTURES_RECEIVE_STATS,
+} from '../types/fixtures'
 import { getFixtureByID } from '../../fetch/FixturesV2';
 
 function requestFixtureStats(id){
   return {
-    type: REQUEST_FIXTURE_STATS,
+    type: FIXTURES_REQUEST_STATS,
   };
 }
 
 function receiveFixtureStats(id, stats){
   return {
-    type: RECEIVE_FIXTURE_STATS,
+    type: FIXTURES_RECEIVE_STATS,
     fixtureID: id,
     stats: stats,
   };

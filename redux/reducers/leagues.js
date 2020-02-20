@@ -1,10 +1,10 @@
 import {
-  REQUEST_LEAGUE_BY_ID,
-  RECEIVE_LEAGUE_BY_ID,
-  REQUEST_TEAMS_FOR_LEAGUE,
-  RECEIVE_TEAMS_FOR_LEAGUE,
-  RECEIVE_MULTIPLE_LEAGUES,
-} from '../types'
+  LEAGUE_REQUEST_BY_ID,
+  LEAGUE_RECEIVE_BY_ID,
+  LEAGUE_REQUEST_TEAMS,
+  LEAGUE_RECEIVE_TEAMS,
+  LEAGUE_RECEIVE_MULTIPLE_LEAGUES,
+} from '../types/leagues'
 
 function league(
   state = {
@@ -19,12 +19,12 @@ function league(
   action
   ){
   switch(action.type){
-    case REQUEST_LEAGUE_BY_ID:
+    case LEAGUE_REQUEST_BY_ID:
       return Object.assign({}, state, {
         leagueID: action.leagueID,
         fetchingLeague: true,
       })
-    case RECEIVE_LEAGUE_BY_ID:
+    case LEAGUE_RECEIVE_BY_ID:
     return Object.assign({}, state, {
       fetchingLeague: false,
       name: action.name,
@@ -33,11 +33,11 @@ function league(
       seasonStart: action.seasonStart,
       seasonEnd: action.seasonEnd,
     });
-    case REQUEST_TEAMS_FOR_LEAGUE:
+    case LEAGUE_REQUEST_TEAMS:
       return Object.assign({}, state, {
         fetchingTeams: true,
       })
-    case RECEIVE_TEAMS_FOR_LEAGUE:
+    case LEAGUE_RECEIVE_TEAMS:
       return Object.assign({}, state, {
         fetchingTeams: false,
         teamIDs: action.teamIDs,
@@ -51,19 +51,19 @@ export function leaguesByID(state={
   fetching:false,
 }, action){
   switch(action.type){
-    case REQUEST_LEAGUE_BY_ID:
-    case REQUEST_TEAMS_FOR_LEAGUE:
+    case LEAGUE_REQUEST_BY_ID:
+    case LEAGUE_REQUEST_TEAMS:
       return Object.assign({}, state, {
         fetching: true,
         [action.leagueID]: league(state[action.leagueID], action)
         });
-    case RECEIVE_LEAGUE_BY_ID:
-    case RECEIVE_TEAMS_FOR_LEAGUE:
+    case LEAGUE_RECEIVE_BY_ID:
+    case LEAGUE_RECEIVE_TEAMS:
       return Object.assign({}, state, {
         fetching:false,
         [action.leagueID]: league(state[action.leagueID], action)
         });
-    case RECEIVE_MULTIPLE_LEAGUES:
+    case LEAGUE_RECEIVE_MULTIPLE_LEAGUES:
       return Object.assign({}, state, action.leagues);
     default:
       return state;

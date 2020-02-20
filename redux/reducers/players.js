@@ -1,11 +1,11 @@
 import {
-  RECEIVE_PLAYER,
-} from '../types'
+  PLAYER_RECEIVE_BY_ID,
+} from '../types/player'
 
 function player(
   state = {},action){
   switch(action.type){
-    case RECEIVE_PLAYER:
+    case PLAYER_RECEIVE_BY_ID:
     return Object.assign({}, state, {
       isFetching: false,
       playerID: action.playerID,
@@ -20,7 +20,7 @@ function player(
 
 export function playersByID(state={}, action){
   switch(action.type){
-    case RECEIVE_PLAYER:
+    case PLAYER_RECEIVE_BY_ID:
       return Object.assign({}, state, {
         [action.playerID]: player(state[action.playerID], action)
         });
