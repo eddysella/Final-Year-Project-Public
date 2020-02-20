@@ -142,16 +142,44 @@ export function initFixtures(){
   }
 }
 
-export function initLeaguesTeams(){
+function initLeaguesTeams(){
+  return (dispatch, getState) => {
+    dispatch(initLeagues())
+    dispatch(initTeams())
+  }
+}
+
+function initLeagues(){
+  return (dispatch, getState) => {
+    leagueIDs = getState().followingLeagueIDs;
+    leagueIDs.map( leagueID => {
+      dispatch(initLeague(leagueID))
+    })
+  }
+}
+
+export function initLeague(leagueID){
+  return (dispatch, getState) => {
+    if(getState().fixtureIDsByLeagueID[leagueID] === undefined){
+      dispatch(initFixturesForLeague(leagueID))
+    }
+  }
+}
+
+function initTeams(){
   return (dispatch, getState) => {
     teamIDs = getState().followingTeamIDs;
     teamIDs.map( teamID => {
+      dispatch(initTeam(teamID))
+    })
+  }
+}
+
+export function initTeam(teamID){
+  return (dispatch, getState) => {
+    if(getState().fixtureIDsByTeamID[teamID] === undefined){
       dispatch(initFixturesForTeam(teamID))
-    })
-    leagueIDs = getState().followingLeagueIDs;
-    leagueIDs.map( leagueID => {
-      dispatch(initFixturesForLeague(leagueID))
-    })
+    }
   }
 }
 
