@@ -1,15 +1,7 @@
 import React, { Component, useState } from 'react';
-import { ExpoConfigView } from '@expo/samples';
-import {Image, TouchableHighlight, SectionList, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
+import {TouchableHighlight, SectionList, FlatList, View, Text, Dimensions } from 'react-native';
 import {Card} from 'react-native-elements';
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
-const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
-const itemWidth = screenWidth - scale(screenWidth/5);
-const itemHeight = scale(screenWidth/4);
-const itemHorizontalPadding = (itemWidth/5);
-const itemVerticalPadding = scale(15);
 
 export const Main = props => {
 

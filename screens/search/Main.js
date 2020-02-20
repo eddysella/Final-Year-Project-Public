@@ -1,14 +1,8 @@
-import React, { useState, } from 'react';
-import { ExpoConfigView } from '@expo/samples';
-import { TouchableHighlight, SectionList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
-import { Card, Avatar, Icon} from 'react-native-elements';
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
-import SquareGrid from "react-native-square-grid";
+import React from 'react';
+import { TouchableHighlight, SectionList, View, Text,} from 'react-native';
+import { Avatar, Icon} from 'react-native-elements';
 import { MaterialIndicator,} from 'react-native-indicators';
-
-const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
-
+import { scale,} from 'react-native-size-matters';
 export const Main = props => {
 
   function ItemSeparator(){

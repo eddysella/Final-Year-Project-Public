@@ -1,17 +1,9 @@
 import React, { Component, useState } from 'react';
-import { ExpoConfigView } from '@expo/samples';
-import { TouchableHighlight, SectionList, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
-import { Card, Avatar } from 'react-native-elements';
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component'
+import { TouchableHighlight, SectionList, FlatList, View, Text,} from 'react-native';
+import { Avatar } from 'react-native-elements';
+import { scale,} from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
 import Fixtures from '../../containers/team/Fixtures'
-const screenWidth = Math.round(Dimensions.get('window').width);
-// const screenHeight = Math.round(Dimensions.get('window').height);
-const itemWidth = screenWidth - scale(screenWidth/2);
-// const itemHeight = scale(screenWidth/4);
-// const itemHorizontalPadding = (itemWidth/5);
-// const itemVerticalPadding = scale(15);
 
 export const Main = props => {
 

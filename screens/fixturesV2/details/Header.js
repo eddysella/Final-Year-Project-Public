@@ -1,5 +1,5 @@
-import React, { Component, useState } from 'react';
-import {Image, TouchableHighlight, SectionList, BackHandler, AsyncStorage, FlatList, View, ActivityIndicator, Text, Dimensions } from 'react-native';
+import React, { Component} from 'react';
+import {Image, View, Text,} from 'react-native';
 
 export const Header = props => {
 

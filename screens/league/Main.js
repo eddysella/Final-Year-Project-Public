@@ -1,17 +1,11 @@
 import React, { Component, useState } from 'react';
-import { ExpoConfigView } from '@expo/samples';
 import { TouchableHighlight, FlatList, View, Text, Dimensions } from 'react-native';
-import { Card, Avatar} from 'react-native-elements';
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import { Avatar} from 'react-native-elements';
+import { scale, } from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
-import { Switcher, SegmentedControlButton } from 'nachos-ui'
 import Fixtures from '../../containers/league/Fixtures'
 const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
 const itemWidth = scale(screenWidth/10); // screen / 2 / 4 sections
-const itemHeight = scale(screenWidth/9);
-// const itemHorizontalPadding = (itemWidth/5);
-// const itemVerticalPadding = scale(15);
 
 export const Main = props => {
 

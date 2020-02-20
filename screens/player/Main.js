@@ -1,16 +1,7 @@
 import React, { Component, useState } from 'react';
-import { ExpoConfigView } from '@expo/samples';
-import { TouchableHighlight, FlatList, View, Text, Dimensions, SectionList } from 'react-native';
-import { Card, Avatar} from 'react-native-elements';
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import { View, Text, Dimensions, SectionList } from 'react-native';
 import { MaterialIndicator,} from 'react-native-indicators';
-import { Switcher, SegmentedControlButton } from 'nachos-ui'
-const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
-const itemWidth = scale(screenWidth/2);
-const itemHeight = scale(screenWidth/4);
-const itemHorizontalPadding = (itemWidth/5);
-const itemVerticalPadding = scale(15);
+
 export const Main = props => {
   const statTitles = [
     'Player',
