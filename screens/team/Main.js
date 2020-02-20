@@ -140,54 +140,6 @@ export const Main = props => {
       );
   }
 
-// need to fix this !?!?!?!?!?!
-  function renderFixturesItem(fixture) {
-      fixture = fixture.item;
-      status = fixture.status;
-      outcome = '';
-      if(fixture.goalsHome > fixture.goalsAway){
-        outcome = 'W';
-      }else if(fixture.goalsHome < fixture.goalsAway){
-        outcome = 'L';
-      }else if(fixture.goalsHome == fixture.goalsAway){
-        outcome = 'D';
-      }else if(fixture.statusShort == 'NS'){
-        outcome = 'NS';
-      }
-      date = new Date(fixture.timeStamp * 1000).toLocaleDateString();
-      return (
-        <TouchableHighlight onPress={ () =>{
-              props.navigation.push('Fixture', {id: fixture.fixtureID});
-          }}>
-          <View flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
-            <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
-            <Text style={{flex:1,   textAlign:'center'}}>{status}</Text>
-            <Text style={{flex:1,   textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
-            <Text style={{flex:1,   textAlign:'center'}}>{date}</Text>
-            <Text style={{flex:1,   textAlign:'center'}}>{outcome}</Text>
-          </View>
-        </TouchableHighlight>
-        );
-  };
-
-  const RenderFixtures = (item) => {
-    team = item.item;
-    if(!team.pastFixtures){
-        return(
-          <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>No Fixtures Available</Text>
-        );
-      }
-      return (
-        <FlatList
-          ItemSeparatorComponent={ItemSeparator}
-          ref={(ref) => { this.fixturesList = ref; }}
-          data={team.pastFixtures}
-          renderItem={renderFixturesItem}
-          keyExtractor={(item,index) => index.toString()}
-          />
-      );
-  }
-
   teamID = props.navigation.getParam('id');
   team = props.teams[teamID];
   const [currentTab, setTab] = useState(0);
