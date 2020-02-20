@@ -3,8 +3,7 @@ import {Image, TouchableHighlight, SectionList, BackHandler, AsyncStorage, FlatL
 
 export const Header = props => {
 
-  fixtureID = JSON.stringify(props.navigation.getParam('id'));
-  fixture = props.fixturesByID[fixtureID];
+  fixtureID = props.navigation.getParam('id');
   homeTeam = fixture.homeTeam;
   awayTeam = fixture.awayTeam;
 

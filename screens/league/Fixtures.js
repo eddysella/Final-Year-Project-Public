@@ -70,7 +70,7 @@ export const Main = props => {
     return (
       <TouchableHighlight onPress={ () => {
           props.fetchSpecificFixture(item.item)
-          props.navigation.push('Inner', {id: item.item});
+          props.navigation.push('Fixture', {id: item.item});
       }}>
         <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
           <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>

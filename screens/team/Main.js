@@ -162,7 +162,7 @@ export const Main = props => {
     bottomPage = null;
     switch(currentTab){
       case 0:
-        bottomPage = <Fixtures teamID={teamID}/>;
+        bottomPage = <Fixtures teamID={teamID} navigation={props.navigation}/>;
         break;
       case 1:
         if(!leaguesFetched){

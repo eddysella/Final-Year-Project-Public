@@ -79,7 +79,7 @@ export const Main = props => {
             collect[key] = [
               "Total: " + stat.total,
               "Goals: " + stat.goals,
-              "Conversion R: " + modAcc + "%",
+              "Conversion Rate: " + modAcc + "%",
               "Assists: " + stat.assists,
             ]
             break;
@@ -134,7 +134,6 @@ export const Main = props => {
 
     return (
       <SectionList
-      ItemSeparatorComponent={ItemSeparator}
       ref={(ref) => { this.leagueList = ref; }}
       sections={[
         {title: statTitles[0], data:processedStats.player},

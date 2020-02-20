@@ -168,7 +168,7 @@ export const Main = props => {
     );
   }
 
-  fixtureID = JSON.stringify(props.navigation.getParam('id'));
+  fixtureID = props.navigation.getParam('id');
   fixture = props.fixturesByID[fixtureID];
   const [currentTab, setTab] = useState(0);
 
