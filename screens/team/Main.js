@@ -122,7 +122,6 @@ export const Main = props => {
       }
       return (
         <FlatList
-        ItemSeparatorComponent={ItemSeparator}
         ref={(ref) => { this.teamList = ref; }}
         data={leagueIDs}
         renderItem={renderLeaguesItem}

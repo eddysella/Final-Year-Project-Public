@@ -39,7 +39,6 @@ export const Main = props => {
               name='remove'
               type='ion-icon'
               onPress={() => {
-                console.log("removed " + parseInt(item.item))
                 setRefresh(true);
                 props.followingRemoveLeague(parseInt(item.item))
               }}
@@ -50,7 +49,6 @@ export const Main = props => {
               name='add'
               type='ion-icon'
               onPress={() => {
-                console.log("added " + parseInt(item.item))
                 setRefresh(true);
                 props.followingAddLeague(parseInt(item.item))
               }}
@@ -68,7 +66,6 @@ export const Main = props => {
 
   function renderTeam(item) {
     team = props.teams[item.item];
-    console.log(props.followingTeamIDs)
     if(props.followingTeamIDs.includes(parseInt(item.item))){
       icon = <Icon
               reverse={true}
