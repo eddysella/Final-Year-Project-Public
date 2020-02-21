@@ -1,8 +1,13 @@
 import React from 'react';
-import { Button, TouchableHighlight, SectionList, View, Text,} from 'react-native';
-import {Avatar} from 'react-native-elements';
-import SquareGrid from "react-native-square-grid";
+import { Button, TouchableHighlight, View, Text, Dimensions} from 'react-native';
+import { Avatar, Icon } from 'react-native-elements';
+import { SectionGrid } from 'react-native-super-grid';
 import { MaterialIndicator,} from 'react-native-indicators'
+const screenWidth = Math.round(Dimensions.get('window').width);
+const screenHeight = Math.round(Dimensions.get('window').height);
+import { scale, } from 'react-native-size-matters';
+const itemWidth = (screenWidth/2.2);
+const itemHeight = scale(screenHeight/6);
 
 export const Main = props => {
   function ItemSeparator(){
@@ -17,26 +22,42 @@ export const Main = props => {
     );
   };
 
-  const RenderItem = (props) => {
-    return (
-        <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
-          <Avatar
-              size = 'medium'
-              source={{ uri: `${props.props.logo}`}}
-              rounded
-          />
-          <Text h3>
-              {props.props.name}
-          </Text>
-        </View>
-    );
-  }
-
   function renderLeague(item) {
     league = props.leagues[item.item];
     return(
-      <TouchableHighlight style={{width:'33%'}} onPress={ () => props.navigation.push('League', {id: item.item})}>
-        <RenderItem props={league}/>
+      <TouchableHighlight
+        style={{
+          width: itemWidth,
+          height:itemHeight,
+          borderWidth: 2,
+          borderRadius: 5,
+        }}
+        onPress={ () => props.navigation.push('League', {id: item.item})}>
+        <View style={{padding:10 , alignItems:'center',}}>
+          <View style={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+          }}>
+          <Icon
+            size={10}
+            reverse={true}
+            name='remove'
+            type='ion-icon'
+            onPress={() => {
+              props.removeLeague(item.item)
+            }}
+          />
+          </View>
+          <Avatar
+              size = 'large'
+              source={{ uri: `${league.logo}`}}
+              rounded
+          />
+          <Text style={{textAlign:'center',}}>
+              {league.name}
+          </Text>
+          </View>
       </TouchableHighlight>
     );
   }
@@ -44,15 +65,46 @@ export const Main = props => {
   function renderTeam(item) {
     team = props.teams[item.item];
     return(
-      <TouchableHighlight style={{width:'33%'}} onPress={ () => props.navigation.push('Team', {id: item.item})}>
-        <RenderItem props={team}/>
+      <TouchableHighlight
+        style={{
+          width: itemWidth,
+          height:itemHeight,
+          borderWidth: 2,
+          borderRadius: 5,
+        }}
+        onPress={ () => props.navigation.push('Team', {id: item.item})}>
+        <View style={{padding:10 , alignItems:'center',}}>
+          <View style={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+          }}>
+          <Icon
+            size={10}
+            reverse={true}
+            name='remove'
+            type='ion-icon'
+            onPress={() => {
+              props.removeTeam(item.item)
+            }}
+          />
+          </View>
+          <Avatar
+              size = 'large'
+              source={{ uri: `${team.logo}`}}
+              rounded
+          />
+          <Text style={{textAlign:'center',}}>
+              {team.name}
+          </Text>
+        </View>
       </TouchableHighlight>
     );
   }
 
   if(!props.teamIDs.length && !props.leagueIDs.length){
     return (
-      <View style={{flex:props.screenFlex}}>
+      <View style={{flex:1, alignItems:'center'}}>
         <Button title="Follow a League /n or Team"
           onPress={() => props.navigation.navigate('Search')}
         />
@@ -61,8 +113,8 @@ export const Main = props => {
   }else{
     return(
       <View style={{flex:1}}>
-          <SectionList
-          ref={(ref) => { this.leagueList = ref; }}
+          <SectionGrid
+          itemDimension={itemWidth}
           sections={[{title: 'Leagues', data:props.leagueIDs, renderItem:renderLeague},
                       {title: 'Teams', data:props.teamIDs, renderItem:renderTeam}
                     ]}
