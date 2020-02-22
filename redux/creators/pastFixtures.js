@@ -158,6 +158,7 @@ export function receivePastLeagueFixtures(leagueID, fixtures,  lastDate){
 function getNextDate(timeStamp){
   const yesterday = new Date(timeStamp);
   yesterday.setDate(new Date(timeStamp).getDate() - 1)
+  yesterday.setHours(0,0,0,0)
   fetchDate = yesterday.toISOString().substring(0,10)
   return [fetchDate, yesterday.getTime()];
 }
@@ -194,8 +195,13 @@ function fetchLeagueFixtures(leagueID, lastDate, currentDate, seasonStart, overr
                 dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
               }
             }
-            dispatch( storePastDates(Object.keys(processedData[1])))
-            dispatch( receivePastLeagueFixtures(leagueID, processedData[3], storeDate));
+            if(storeDate == todayTime){
+              dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
+              dispatch( receivePastLeagueFixtures(leagueID, {}, storeDate));
+            }else{
+              dispatch( storePastDates(Object.keys(processedData[1])))
+              dispatch( receivePastLeagueFixtures(leagueID, processedData[3], storeDate));
+            }
             counter -= 1;
             dispatch( storePastDate());
           }else{

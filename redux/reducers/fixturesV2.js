@@ -129,8 +129,8 @@ function league(
     todayFixtures: [],
     futureDates:[],
     fixturesByDate:{},
-    lastPastDate: today.getTime(),
-    lastFutureDate: today.getTime(),
+    lastPastDate: tomorrow,
+    lastFutureDate: yesterday,
   },
   action
   ){
@@ -329,7 +329,7 @@ export function fixtureIDsByDateLeague(state={}, action){
   }
 }
 
-export function fixture(state={}, action){
+function fixture(state={}, action){
   switch(action.type){
     case FIXTURES_RECEIVE_STATS:
     return Object.assign({}, state, action.stats);
