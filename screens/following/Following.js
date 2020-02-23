@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TouchableHighlight, View, Text, Dimensions} from 'react-native';
+import { Button, TouchableHighlight, View, Text, Dimensions, Alert} from 'react-native';
 import { Avatar, Icon } from 'react-native-elements';
 import { SectionGrid } from 'react-native-super-grid';
 import { MaterialIndicator,} from 'react-native-indicators'
@@ -8,6 +8,7 @@ const screenHeight = Math.round(Dimensions.get('window').height);
 import { scale, } from 'react-native-size-matters';
 const itemWidth = (screenWidth/2.2);
 const itemHeight = scale(screenHeight/6);
+import { Updates } from 'expo';
 
 export const Main = props => {
   function ItemSeparator(){
@@ -44,6 +45,15 @@ export const Main = props => {
             type='ion-icon'
             onPress={() => {
               props.removeLeague(item.item)
+              Alert.alert(
+                "The fixtures won't display correctly until the application is restarted",
+                "Would you like to restart now?",
+                [
+                  {text: 'No'},
+                  {text: 'Restart', onPress: () => Updates.reload()},
+                ],
+                {cancelable: false},
+              );
             }}
           />
           </View>
@@ -82,6 +92,15 @@ export const Main = props => {
             type='ion-icon'
             onPress={() => {
               props.removeTeam(item.item)
+              Alert.alert(
+                "The fixtures won't display correctly until the application is restarted",
+                "Would you like to restart now?",
+                [
+                  {text: 'No'},
+                  {text: 'Restart', onPress: () => Updates.reload()},
+                ],
+                {cancelable: false},
+              );
             }}
           />
           </View>
