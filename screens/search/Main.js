@@ -24,7 +24,7 @@ export const Main = props => {
           source={{ uri: `${props.props.logo}`}}
           rounded
         />
-        <Text h3>
+        <Text style={{padding:10, fontSize:18}}>
           {props.props.name}
         </Text>
       </View>
@@ -58,7 +58,9 @@ export const Main = props => {
       <TouchableHighlight onPress={ () => props.navigation.push('League', {id: item.item})}>
         <View flexDirection={'row'}>
           <RenderItem props={league}/>
+          <View style={{ position: 'absolute', right: 0,}}>
           {icon}
+          </View>
         </View>
       </TouchableHighlight>
     );
@@ -93,8 +95,10 @@ export const Main = props => {
       <TouchableHighlight onPress={ () => props.navigation.push('Team', {id: item.item})}>
         <View flexDirection={'row'}>
           <RenderItem props={team}/>
+          <View style={{ position: 'absolute', right: 0,}}>
           {icon}
           </View>
+        </View>
       </TouchableHighlight>
     );
   }
@@ -119,7 +123,6 @@ export const Main = props => {
     return(
       <View style={{flex:props.screenFlex}}>
           <SectionList
-          ItemSeparatorComponent={ItemSeparator}
           ref={(ref) => { this.leagueList = ref; }}
           sections={
             [
@@ -130,7 +133,7 @@ export const Main = props => {
           keyExtractor={(item,index) => item.toString()}
           extraData={refresh}
           renderSectionHeader={({ section: { title } }) => (
-            <Text>{title}</Text>
+            <Text style={{textAlign:'center', fontSize: 30,}}>{title}</Text>
           )}
           />
       </View>

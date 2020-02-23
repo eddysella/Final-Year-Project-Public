@@ -42,18 +42,18 @@ export const Main = props => {
       <View style={{flex:1}}>
         <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
           <TouchableHighlight onPress={() => setTab(0)}
-          style={{flex:1, borderBottomWidth:pastBorder}}>
-          <Text style={{textAlign: 'center'}}>Past</Text>
+          style={{flex:1, borderBottomWidth:pastBorder, justifyContent:'center'}}>
+          <Text style={{textAlign: 'center', fontSize:18,}}>Past</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(1)}
-            style={{flex:1, alignItems: 'center', borderBottomWidth:todayBorder}}>
-          <Text style={{textAlign:'center'}}>Today</Text>
+            style={{flex:1, alignItems: 'center', borderBottomWidth:todayBorder, justifyContent:'center'}}>
+          <Text style={{textAlign:'center', fontSize:18,}}>Today</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(2)}
-          style={{flex:1, borderBottomWidth:futureBorder}}>
-          <Text style={{textAlign: 'center'}}>Future</Text>
+          style={{flex:1, borderBottomWidth:futureBorder,  justifyContent:'center'}}>
+          <Text style={{textAlign: 'center', fontSize:18,}}>Future</Text>
           </TouchableHighlight>
         </View>
       </View>
@@ -63,7 +63,7 @@ export const Main = props => {
   function renderItem(item) {
     fixture = props.fixturesByID[item.item]
     return (
-      <TouchableHighlight onPress={ () => {
+      <TouchableHighlight style={{padding:7}}onPress={ () => {
           props.fetchSpecificFixture(item.item)
           props.navigation.push('Inner', {id: item.item});
       }}>
@@ -78,14 +78,13 @@ export const Main = props => {
 
   function processDate(date){
     collect = []
-    name = props.leaguesByID[league]
-    if(name === undefined){
-      name = "Loading";
-    }else{
-      name = props.leaguesByID[league]['name']
-    }
-
     for( league in date ){
+      name = null
+      if(props.leaguesByID[league] === undefined){
+        name = "Loading";
+      }else{
+        name = props.leaguesByID[league]['name']
+      }
       collect.push({title: name, data: date[league]})
     }
     return collect;
@@ -103,7 +102,7 @@ export const Main = props => {
           renderItem={renderItem}
           keyExtractor={(item,index) => item.toString()}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={{alignSelf: 'center',}}>{title}</Text>
+            <Text style={{alignSelf: 'center', fontSize:20, padding:10}}>{title}</Text>
           )}
           />
         </View>
@@ -142,6 +141,7 @@ export const Main = props => {
           </Card>
         );
     }
+    console.log("fixtures " , props.fixtureIDs[date])
     return (
       <Card>
       {
@@ -153,7 +153,7 @@ export const Main = props => {
           renderItem={renderItem}
           keyExtractor={(item,index) => item.toString()}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={{alignSelf: 'center',}}>{title}</Text>
+            <Text style={{alignSelf: 'center', fontSize:20, padding:10}}>{title}</Text>
           )}
           />
         </View>

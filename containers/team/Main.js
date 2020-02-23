@@ -25,7 +25,7 @@ const mapDispatchToProps = dispatch => ({
 
 const Screen = ({teams, teamStats, players, fetchLeagues, fetchPastFixtures,
   fetchFutureFixtures, fetchPlayers, leagues,initFixtures, standings, fetching, ...props}) => (
-  <Main screenFlex={8} topBarFlex={1} teams={teams} teamStats={teamStats}
+  <Main screenFlex={7} topBarFlex={1} teams={teams} teamStats={teamStats}
   players={players} fetchLeagues={fetchLeagues} fetchPastFixtures={fetchPastFixtures}
   fetchFutureFixtures={fetchFutureFixtures} fetchPlayers={fetchPlayers} leagues={leagues}
   standings={standings} fetching={fetching} initFixtures={initFixtures} navigation={props.navigation}/>

@@ -41,17 +41,17 @@ export const Main = props => {
         <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
           <TouchableHighlight onPress={() => setTab(0)}
           style={{flex:1, borderBottomWidth:statsBorder}}>
-          <Text style={{textAlign: 'center'}}>Stats</Text>
+          <Text style={{textAlign: 'center', fontSize:18,}}>Stats</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(1)}
             style={{flex:1, alignItems: 'center', borderBottomWidth:eventsBorder}}>
-          <Text style={{textAlign:'center'}}>Events</Text>
+          <Text style={{textAlign:'center', fontSize:18,}}>Events</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(2)}
           style={{flex:1, borderBottomWidth:lineupBorder}}>
-          <Text style={{textAlign: 'center'}}>Line-Up</Text>
+          <Text style={{textAlign: 'center', fontSize:18,}}>Line-Up</Text>
           </TouchableHighlight>
         </View>
       </View>

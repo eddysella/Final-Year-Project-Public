@@ -28,8 +28,8 @@ export const Main = props => {
     player = item.item;
     return (
       <View style={{flex:1}}>
-        <View style={{flex:1, justifyContent: 'space-around'}}>
-          <Text style={{textAlign:'center'}}>{player.name}</Text>
+        <View style={{flex:1, padding:10, justifyContent: 'space-around'}}>
+          <Text style={{textAlign:'center', fontSize: 30,}}>{player.name}</Text>
         </View>
       </View>
 
@@ -72,7 +72,7 @@ export const Main = props => {
         switch(key){
           case 'games':
             collect[key] = [
-              "Appearences: " + stat.appearences,
+              "Appearances: " + stat.appearences,
               "Minutes Played: " + stat.minutes_played,
             ]
             break;
@@ -150,7 +150,7 @@ export const Main = props => {
       renderItem={renderItem}
       keyExtractor={(item,index) => item.toString()}
       renderSectionHeader={({ section: { title } }) => (
-        <Text>{title}</Text>
+        <Text style={{padding:10, textAlign:'center', fontSize: 20,}}>{title}</Text>
       )}
       />
     );

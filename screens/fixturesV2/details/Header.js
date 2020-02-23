@@ -16,11 +16,11 @@ export const Header = props => {
         resizeMode={"contain"}
         source={{ uri: homeTeam.logo }}
         />
-        <Text style={{flex:1, textAlign:'center'}}>{homeTeam.team_name}</Text>
+        <Text style={{flex:1, textAlign:'center', fontSize:20, padding:10}}>{homeTeam.team_name}</Text>
       </View>
 
-      <View style={{flex:1, margin: 5, alignItems:'center', justifyContent:'center'}}>
-        <Text>{fixture.status}</Text>
+      <View style={{flex:1, margin: 5, padding:10, alignItems:'center', justifyContent:'center'}}>
+        <Text style={{fontSize:20}}>{fixture.status}</Text>
       </View>
 
       <View style={{flex:1, margin: 5}}>
@@ -29,7 +29,7 @@ export const Header = props => {
         resizeMode={"contain"}
         source={{ uri: awayTeam.logo}}
         />
-        <Text style={{flex:1, textAlign:'center'}}>{awayTeam.team_name}</Text>
+        <Text style={{flex:1, textAlign:'center', fontSize:20, padding:10}}>{awayTeam.team_name}</Text>
       </View>
     </View>
   );

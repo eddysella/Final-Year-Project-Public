@@ -27,8 +27,6 @@ export const Main = props => {
     return(
       <TouchableHighlight
         style={{
-          width: itemWidth,
-          height:itemHeight,
           borderWidth: 2,
           borderRadius: 5,
         }}
@@ -54,7 +52,7 @@ export const Main = props => {
               source={{ uri: `${league.logo}`}}
               rounded
           />
-          <Text style={{textAlign:'center',}}>
+          <Text style={{textAlign:'center', fontSize:18}}>
               {league.name}
           </Text>
           </View>
@@ -67,8 +65,6 @@ export const Main = props => {
     return(
       <TouchableHighlight
         style={{
-          width: itemWidth,
-          height:itemHeight,
           borderWidth: 2,
           borderRadius: 5,
         }}
@@ -94,7 +90,7 @@ export const Main = props => {
               source={{ uri: `${team.logo}`}}
               rounded
           />
-          <Text style={{textAlign:'center',}}>
+          <Text style={{textAlign:'center', fontSize:18}}>
               {team.name}
           </Text>
         </View>
@@ -104,8 +100,8 @@ export const Main = props => {
 
   if(!props.teamIDs.length && !props.leagueIDs.length){
     return (
-      <View style={{flex:1, alignItems:'center'}}>
-        <Button title="Follow a League /n or Team"
+      <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+        <Button title="Follow a League or Team"
           onPress={() => props.navigation.navigate('Search')}
         />
       </View>
@@ -120,7 +116,7 @@ export const Main = props => {
                     ]}
           keyExtractor={(item,index) => item.toString()}
           renderSectionHeader={({ section: { title } }) => (
-            <Text>{title}</Text>
+            <Text style={{textAlign:'center', fontSize: 30,}}>{title}</Text>
           )}
           />
       </View>

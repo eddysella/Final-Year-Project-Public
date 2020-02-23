@@ -50,23 +50,23 @@ export const Main = props => {
 
     return (
       <View style={{flex:1}}>
-        <View style={{flex:1, justifyContent: 'space-around'}}>
-          <Text style={{flex:1, textAlign:'center'}}>{league.name}</Text>
+        <View style={{flex:1, padding:10, justifyContent: 'space-around'}}>
+          <Text style={{textAlign:'center', fontSize: 20,}}>{league.name}</Text>
         </View>
         <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
           <TouchableHighlight onPress={() => setTab(0)}
-          style={{flex:1, borderBottomWidth:fixturesBorder}}>
-          <Text style={{textAlign: 'center'}}>Fixtures</Text>
+          style={{flex:1, borderBottomWidth:fixturesBorder, justifyContent:'center'}}>
+          <Text style={{textAlign: 'center', fontSize:18}}>Fixtures</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(1)}
-            style={{flex:1, alignItems: 'center', borderBottomWidth:teamsBorder}}>
-          <Text style={{textAlign:'center'}}>Teams</Text>
+            style={{flex:1, alignItems: 'center', borderBottomWidth:teamsBorder, justifyContent:'center'}}>
+          <Text style={{textAlign:'center', fontSize:18}}>Teams</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(2)}
-          style={{flex:1, borderBottomWidth:standingsBorder}}>
-          <Text style={{textAlign: 'center'}}>Standings</Text>
+          style={{flex:1, borderBottomWidth:standingsBorder, justifyContent:'center'}}>
+          <Text style={{textAlign: 'center', fontSize:18}}>Standings</Text>
           </TouchableHighlight>
         </View>
       </View>

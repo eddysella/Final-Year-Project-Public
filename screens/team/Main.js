@@ -34,22 +34,22 @@ export const Main = props => {
     return (
       <View style={{flex:1}}>
         <View style={{flex:1, justifyContent: 'space-around'}}>
-          <Text style={{textAlign:'center'}}>{team.name}</Text>
+          <Text style={{textAlign:'center', fontSize:20}}>{team.name}</Text>
         </View>
         <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
           <TouchableHighlight onPress={() => setTab(0)}
-          style={{flex:1, borderBottomWidth:fixturesBorder}}>
-          <Text style={{textAlign: 'center'}}>Fixtures</Text>
+          style={{flex:1, borderBottomWidth:fixturesBorder, justifyContent:'center'}}>
+          <Text style={{textAlign: 'center', fontSize:18}}>Fixtures</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(1)}
-              style={{flex:1, alignItems: 'center', borderBottomWidth:leaguesBorder}}>
-          <Text style={{textAlign:'center'}}>Leagues</Text>
+              style={{flex:1, alignItems: 'center', borderBottomWidth:leaguesBorder, justifyContent:'center'}}>
+          <Text style={{textAlign:'center', fontSize:18}}>Leagues</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(2)}
-          style={{flex:1, borderBottomWidth:playersBorder}}>
-          <Text style={{textAlign: 'center'}}>Players</Text>
+          style={{flex:1, borderBottomWidth:playersBorder, justifyContent:'center'}}>
+          <Text style={{textAlign: 'center', fontSize:18}}>Players</Text>
           </TouchableHighlight>
         </View>
       </View>

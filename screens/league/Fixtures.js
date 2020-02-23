@@ -42,18 +42,18 @@ export const Main = props => {
       <View style={{flex:1}}>
         <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
           <TouchableHighlight onPress={() => setTab(0)}
-          style={{flex:1, borderBottomWidth:pastBorder}}>
-          <Text style={{textAlign: 'center'}}>Past</Text>
+          style={{flex:1, borderBottomWidth:pastBorder, justifyContent:'center'}}>
+          <Text style={{textAlign: 'center', fontSize:18}}>Past</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(1)}
-            style={{flex:1, alignItems: 'center', borderBottomWidth:todayBorder}}>
-          <Text style={{textAlign:'center'}}>Today</Text>
+            style={{flex:1, alignItems: 'center', borderBottomWidth:todayBorder, justifyContent:'center'}}>
+          <Text style={{textAlign:'center', fontSize:18}}>Today</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(2)}
-          style={{flex:1, borderBottomWidth:futureBorder}}>
-          <Text style={{textAlign: 'center'}}>Future</Text>
+          style={{flex:1, borderBottomWidth:futureBorder, justifyContent:'center'}}>
+          <Text style={{textAlign: 'center', fontSize:18}}>Future</Text>
           </TouchableHighlight>
         </View>
       </View>
