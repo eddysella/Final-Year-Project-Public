@@ -64,9 +64,11 @@ export function fetchFollowingPastFixtures(){
     leagueIDs = getState().followingLeagueIDs;
     counter = teamIDs.length + leagueIDs.length;
 
-    dispatch( requestPastFixtures())
-    dispatch( fetchPastLeagueFixtures(leagueIDs))
-    dispatch( fetchPastTeamFixtures(teamIDs))
+    if(counter){
+      dispatch( requestPastFixtures())
+      dispatch( fetchPastLeagueFixtures(leagueIDs))
+      dispatch( fetchPastTeamFixtures(teamIDs))
+    }
   }
 }
 

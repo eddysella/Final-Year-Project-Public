@@ -20,6 +20,10 @@ export const Main = props => {
     );
   };
 
+  function shouldDisplayData(){
+    return props.followedTeams.length || props.followedLeagues.length;
+  }
+
   const RenderTopBar = () => {
     pastBorder=0;
     todayBorder=0;
@@ -112,6 +116,14 @@ export const Main = props => {
   };
 
   const RenderFutureFixtures = () => {
+    if(!shouldDisplayData()){
+      return (
+        <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+          <Text style={{fontSize:20}}> Fixtures for followed leagues </Text>
+          <Text style={{fontSize:20}}> and teams are displayed here</Text>
+        </View>
+      )
+    }
     return (
       <FlatList
         data={props.curFutureDates}
@@ -132,7 +144,14 @@ export const Main = props => {
     today = new Date()
     today.setHours(0,0,0,0)
     date = today.getTime()
-    if(!props.fixtureIDs[date]){
+    if(!shouldDisplayData()){
+      return (
+      <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+        <Text style={{fontSize:20}}> Fixtures for followed leagues </Text>
+        <Text style={{fontSize:20}}> and teams are displayed here</Text>
+      </View>
+    )
+    }else if(!props.fixtureIDs[date]){
       title="There are no games on today :(";
         return (
           <Card title={title} >
@@ -165,6 +184,14 @@ export const Main = props => {
   // const [pastFooter, setPastFooter] = useState(0);
 
   const RenderPastFixtures = () => {
+    if(!shouldDisplayData()){
+      return (
+        <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+          <Text style={{fontSize:20}}> Fixtures for followed leagues </Text>
+          <Text style={{fontSize:20}}> and teams are displayed here</Text>
+        </View>
+      )
+    }
     return (
       <FlatList
         data={props.curPastDates}

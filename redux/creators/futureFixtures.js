@@ -63,10 +63,12 @@ export function fetchFollowingFutureFixtures(){
     teamIDs = getState().followingTeamIDs;
     leagueIDs = getState().followingLeagueIDs;
     counter = teamIDs.length + leagueIDs.length;
-
-    dispatch( requestFutureFixtures())
-    dispatch( fetchFutureLeagueFixtures(leagueIDs))
-    dispatch( fetchFutureTeamFixtures(teamIDs))
+    // if any teams are followed, otherwise loads infinitely
+    if(counter){
+      dispatch( requestFutureFixtures())
+      dispatch( fetchFutureLeagueFixtures(leagueIDs))
+      dispatch( fetchFutureTeamFixtures(teamIDs))
+    }
   }
 }
 
