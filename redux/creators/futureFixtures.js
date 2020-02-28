@@ -176,37 +176,56 @@ export function fetchFutureLeagueFixtures(leagueIDs, overrideCheck=false){
   }
 }
 
+/**
+ * Recursive fetch sequence for league fixtures.
+ * League fixtures are fetched by date =>
+ * If a date has no fixtures, the next date is checked until fixtures are found.
+ * @method fetchLeagueFixtures
+ * @param  {Integer} leagueID An ID referencing a league
+ * @param  {Integer} lastDate Represents the date of the last received set of fixtures.
+ * @param  {Integer} currentDate A ms timestamp of the last displayed date in the fixtures screen.
+ * @param  {Integer} seasonEnd A ms timestamp
+ * @param  {Boolean} overrideCheck Used by the league-fixtures screen to continue
+ * fetching data past what the fixtures tab is currently at.
+ * @return {Function}
+ */
 function fetchLeagueFixtures(leagueID, lastDate, currentDate, seasonEnd, overrideCheck){
   return (dispatch, getState) => {
     fetching = getState().fixtureIDsByLeagueID[leagueID]['fetchingFuture']
     if(lastDate <= seasonEnd){
       if(shouldFetchFixtures(fetching, lastDate, currentDate) || overrideCheck){
         dates = getNextDate(lastDate);
-        fetchDate = dates[0]
-        storeDate = dates[1]
+        fetchDate = dates[0] // yyyy-mm-dd
+        storeDate = dates[1] // ms timestamp
         dispatch(requestFutureLeagueFixtures(leagueID))
         return getFixturesByLeagueAndDate(leagueID, fetchDate)
         .then( data => processLeagueFixtures(data))
         .then( processedData => {
-          if(processedData){
-            dispatch( storeFixturesByID(processedData[0]));
-            for (date in processedData[1]){
-              for (league in processedData[1][date]){
-                  dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
+          switch(processedData[0]){
+            case "VALID":
+              dispatch( storeFixturesByID(processedData[1])); // (id: Object fixture)
+              for (date in processedData[2]){
+                for (league in processedData[2][date]){
+                  dispatch( storeFixtureIDsByDate(date, league, processedData[2][date][league]));
+                }   // Array of fixtureIDS
               }
-            }
-            if(storeDate == todayTime){
-              dispatch( receiveTodayLeagueFixtures(leagueID, processedData[2]))
-              dispatch( receiveFutureLeagueFixtures(leagueID, {}, storeDate));
-            }else{
-              dispatch( storeFutureDates(Object.keys(processedData[1])))
-              dispatch( receiveFutureLeagueFixtures(leagueID, processedData[3], storeDate));
-            }
-            counter -= 1;
-            dispatch( storeFutureDate());
-          }else{
-            dispatch( resetLeagueFetch(leagueID));
-            dispatch( fetchLeagueFixtures(leagueID, storeDate, currentDate, seasonEnd, overrideCheck));
+              if(storeDate == todayTime){           // Array of fixtureIDs
+                dispatch( receiveTodayLeagueFixtures(leagueID, processedData[3], storeDate))
+                dispatch( resetLeagueFetch(leagueID));
+              }else{
+                dispatch( storeFutureDates(Object.keys(processedData[2])))
+                dispatch( receiveFutureLeagueFixtures(leagueID, processedData[4], storeDate));
+              }
+              counter -= 1;
+              dispatch( storeFutureDate());
+              break;
+            case "EMPTY":
+              dispatch( resetLeagueFetch(leagueID)); // recursive call, new date is calculated at the top
+              dispatch( fetchLeagueFixtures(leagueID, storeDate, currentDate, seasonEnd, overrideCheck));
+              break;
+            case "INVALID":
+            //self-destroy
+              break;
           }
         });
       }else{

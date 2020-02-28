@@ -129,7 +129,7 @@ function league(
     todayFixtures: [],
     futureDates:[],
     fixturesByDate:{},
-    lastPastDate: tomorrow,
+    lastPastDate: today,
     lastFutureDate: yesterday,
   },
   action
