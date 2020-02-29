@@ -4,13 +4,14 @@ import {Image, View, Text,} from 'react-native';
 export const Header = props => {
 
   fixtureID = props.navigation.getParam('id');
+  fixture = props.fixturesByID[fixtureID];
   homeTeam = fixture.homeTeam;
   awayTeam = fixture.awayTeam;
 
   return (
 
-    <View flexDirection={'row'} style={{flex:props.headerFlex, justifyContent: 'space-around', paddingTop:10,}}>
-      <View style={{flex:1, margin: 5}}>
+    <View flexDirection={'row'} style={{flex:props.headerFlex, justifyContent: 'space-around', paddingTop:10, paddingHorizontal:10}}>
+      <View style={{flex:2, margin: 5}}>
         <Image
         style={{flex:2}}
         resizeMode={"contain"}
@@ -23,7 +24,7 @@ export const Header = props => {
         <Text style={{fontSize:20}}>{fixture.status}</Text>
       </View>
 
-      <View style={{flex:1, margin: 5}}>
+      <View style={{flex:2, margin: 5}}>
         <Image
         style={{flex:2}}
         resizeMode={"contain"}
