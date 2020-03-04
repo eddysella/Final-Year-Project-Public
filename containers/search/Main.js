@@ -1,4 +1,4 @@
-import React,{ Component }from 'react';
+import React from 'react';
 import { addLeagueToStandings, removeLeagueFromStandings } from '../../redux/creators/standings'
 import { addLeagueToFollowing, removeLeagueFromFollowing,
   addTeamToFollowing, removeTeamFromFollowing  } from '../../redux/creators/following'
@@ -37,7 +37,7 @@ const Screen = ({followingTeamIDs, followingLeagueIDs,teamIDs,
   <View style={{flex:1}}>
     <TopBar topBarFlex={1} search={search} clear={clear} update={update} input={input} navigation={props.navigation}/>
     <Main screenFlex={6} followingTeamIDs={followingTeamIDs}
-    followingLeagueIDs={followingLeagueIDs} 
+    followingLeagueIDs={followingLeagueIDs}
     teamIDs={teamIDs} leagueIDs={leagueIDs} teams={teams} leagues={leagues}
     teamStatus={teamStatus} leagueStatus={leagueStatus} followingAddTeam={followingAddTeam}
     followingRemoveTeam={followingRemoveTeam} followingAddLeague={followingAddLeague}

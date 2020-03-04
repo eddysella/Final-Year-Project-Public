@@ -1,9 +1,8 @@
-import React,{ Component }from 'react';
+import React from 'react';
 import { fetchFutureTeamFixtures} from '../../redux/creators/futureFixtures'
 import { fetchPastTeamFixtures} from '../../redux/creators/pastFixtures'
 import { fetchSpecificFixture , } from '../../redux/creators/fixturesSpecific'
 import { connect } from 'react-redux'
-import { View } from 'react-native'
 import { Main } from '../../screens/team/Fixtures';
 
 

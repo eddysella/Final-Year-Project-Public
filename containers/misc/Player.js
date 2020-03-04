@@ -1,6 +1,5 @@
-import React,{ Component }from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
-import { View } from 'react-native'
 import { Main } from '../../screens/player/Main';
 import { fetchPlayerStatistics, } from '../../redux/creators/statistics'
 

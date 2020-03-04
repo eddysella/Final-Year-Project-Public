@@ -1,7 +1,6 @@
-import React,{ Component }from 'react';
+import React from 'react';
 import { removeLeagueFromFollowing, removeTeamFromFollowing  } from '../../redux/creators/following'
 import { connect } from 'react-redux'
-import { View } from 'react-native'
 import { Main } from '../../screens/following/Following';
 
 const mapStateToProps = state => ({

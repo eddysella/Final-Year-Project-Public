@@ -1,6 +1,5 @@
-import React,{ Component }from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
-import { View } from 'react-native'
 import { fetchLeaguesForTeam, fetchPastFixtures, fetchFutureFixtures, fetchPlayers } from '../../redux/creators/teams'
 import { fetchTeamStatistics, fetchPlayerStatistics} from '../../redux/creators/statistics'
 import { initTeam } from '../../redux/creators/fixtures'
