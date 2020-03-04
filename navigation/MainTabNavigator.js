@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import TabBarIcon from '../components/TabBarIcon';
+
 import FixturesContainer from '../containers/fixturesV2/Main';
 import FixturesDetailsContainer from '../containers/fixturesV2/Details';
 import SearchContainer from '../containers/search/Main';
@@ -10,8 +11,6 @@ import LeagueContainer from '../containers/league/Main';
 import TeamContainer from '../containers/team/Main';
 import FollowingContainer from '../containers/following/Main';
 import PlayerContainer from '../containers/misc/Player';
-import Sample from '../screens/sample';
-// import FollowingScreen from '../screens/following/Following';
 
 const FixturesStack = createStackNavigator({
   Fixtures: FixturesContainer,
@@ -54,8 +53,6 @@ const MainTabNavigator = createBottomTabNavigator(
                   }else if (routeName === 'Following') {
                     iconName = `ios-heart`;
                   }
-
-                  // You can return any component that you like here!
                   return <IconComponent name={iconName} size={25} color={tintColor} />;
                 },
                 headerStyle: {
@@ -68,7 +65,6 @@ const MainTabNavigator = createBottomTabNavigator(
                 }),
         lazy: true,
         initialRouteName: 'Fixtures',
-
     }
 );
 
