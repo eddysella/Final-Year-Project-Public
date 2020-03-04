@@ -225,7 +225,23 @@ export function processTeamFixtures(data, page){
   return [fixByID, fixByDateLeague, todayIDs];
 }
 
+/**
+ * Processes a set of fixtures for a League.
+ * @method processLeagueFixtures
+ * @param  {Object} data A parsed JSON Object
+ * @return {Array} [
+ * 0 : [Object] (fixtureID:data)
+ * 1 : [Object] (Date: [Object] (League:fixtureIDs))
+ * 2 : [Array] A set of fixture IDs for today
+ * 3 : [Object] (Date: [Array] fixtureIDs)
+ * ]
+ */
 export function processLeagueFixtures(data){
+  if(data === undefined){
+    return ["INVALID"];
+  }else if(data.api.results == 0){
+    return ["EMPTY"];
+  }
   todayIDs=[];
   fixByDateLeague={};
   fixByID={};
@@ -233,15 +249,11 @@ export function processLeagueFixtures(data){
   data = data.api;
   fixtures = data.fixtures;
 
-  if(!fixtures || data.results == 0){
-    return null;
-  }
-
   fixtures.forEach( fixture => {
     date = new Date(fixture.event_timestamp*1000)
     date.setHours(0,0,0,0)
     timeStamp = date.getTime()
-    leagueID = "" + fixture.league_id;
+    leagueID = fixture.league_id;
     fixtureID = fixture.fixture_id;
 
     if(!(timeStamp in fixByDateLeague)){
@@ -276,5 +288,5 @@ export function processLeagueFixtures(data){
       statusShort: fixture.statusShort,
     };
   });
-  return [fixByID, fixByDateLeague, todayIDs, fixByDate];
+  return ["VALID", fixByID, fixByDateLeague, todayIDs, fixByDate];
 }
