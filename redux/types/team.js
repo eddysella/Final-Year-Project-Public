@@ -1,3 +1,6 @@
+/**
+ * This file contains all types belonging to the team functionality
+ */
 export const TEAM_REQUEST_BY_ID = 'TEAM_REQUEST_BY_ID'
 export const TEAM_RECEIVE_BY_ID = 'TEAM_RECEIVE_BY_ID'
 export const TEAM_REQUEST_PLAYERS = 'TEAM_REQUEST_PLAYERS'

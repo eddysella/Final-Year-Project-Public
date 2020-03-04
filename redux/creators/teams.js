@@ -18,7 +18,16 @@ import { getTeamByID, getLastTwentyFixtures, getNextTenFixtures,
 import { processLeagues, receiveMultipleLeagues } from './leagues'
 import { processPlayers, receivePlayer } from './players'
 import { initTeam,} from './fixtures'
+/**
+ * @module Redux Creators Teams
+ */
 
+/**
+ * Sets the fetching property of the teamsByID store to true.
+ * @method requestTeamByID
+ * @param  {Integer} teamID A team ID
+ * @return {Action} type: TEAM_REQUEST_BY_ID
+ */
 function requestTeamByID(teamID){
   return {
     type: TEAM_REQUEST_BY_ID,
@@ -26,6 +35,12 @@ function requestTeamByID(teamID){
   };
 }
 
+/**
+ * Sets the fetching property of the teamsByID store to false.
+ * @method receiveTeamByID
+ * @param  {Object} team (propertyName : property)
+ * @return {Action} type: TEAM_RECEIVE_BY_ID
+ */
 function receiveTeamByID(team){
   return {
     type: TEAM_RECEIVE_BY_ID,
@@ -36,6 +51,12 @@ function receiveTeamByID(team){
   };
 }
 
+/**
+ * Processes a team.
+ * @method processTeam
+ * @param  {Object} data A parsed JSON Object
+ * @return {Object} (propertName : property)
+ */
 function processTeam(data){
   data = data.api;
   teams = data.teams;
@@ -48,6 +69,12 @@ function processTeam(data){
   };
 }
 
+/**
+ * Should fetch test for a team.
+ * @method shouldFetchTeam
+ * @param  {Integer} team A team Object
+ * @return {Boolean}
+ */
 function shouldFetchTeam(team){
   if(!team){
     return true;
@@ -55,19 +82,13 @@ function shouldFetchTeam(team){
     return false;
   }
 }
-// removed cause not used?
-// export function fetchTeam(teamID){
-//   return (dispatch, getState) => {
-//     if(shouldFetchTeam(getState().teamsByID[teamID])){
-//       dispatch(requestTeamByID(teamID))
-//       return getTeamByID(teamID)
-//         // get latest season
-//       .then( data => processTeam(data))
-//       .then( processedData => dispatch(receiveTeamByID(processedData)));
-//     }
-//   }
-// }
 
+/**
+ * Fetch sequence for a set of teams.
+ * @method fetchTeams
+ * @param  {Array}   teamIDs A set of team IDs.
+ * @return {Function}
+ */
 export function fetchTeams(teamIDs){
   return (dispatch, getState) => {
     teamIDs.map( teamID => {
@@ -86,27 +107,12 @@ export function fetchTeams(teamIDs){
   }
 }
 
-export function processTeams(data){
-  collect = {};
-  ids = [];
-  data = data.api;
-  teams = data.teams;
-  teams.forEach( team => {
-    collect[team.team_id] = {
-      fetchingTeam: false,
-      fetchingLeagues: false,
-      fetchingPast: false,
-      fetchingPlayers: false,
-      fetchingFuture: false,
-      teamID: team.team_id,
-      name: team.name,
-      logo: team.logo,
-      country: team.country,
-    }
-  })
-  return collect;
-}
-
+/**
+ * Sets the fetching property of the teamsByID store to true.
+ * @method requestLeagues
+ * @param  {Integer} teamID A team ID
+ * @return {Action} type: TEAM_REQUEST_LEAGUES
+ */
 function requestLeagues(teamID){
   return {
     type: TEAM_REQUEST_LEAGUES,
@@ -114,6 +120,14 @@ function requestLeagues(teamID){
   };
 }
 
+/**
+ * Sets the fetching property of the teamsByID store to false.
+ * Stores a set of league IDs into the store for the specified teamID.
+ * @method receiveLeagueIDs
+ * @param  {Integer} teamID A team ID
+ * @param  {Array} leagueIDs A set of league IDs
+ * @return {Action} type: TEAM_RECEIVE_LEAGUES
+ */
 export function receiveLeagueIDs(teamID, leagueIDs){
   return {
     type: TEAM_RECEIVE_LEAGUES,
@@ -122,6 +136,12 @@ export function receiveLeagueIDs(teamID, leagueIDs){
   };
 }
 
+/**
+ * Should fetch test for a league
+ * @method shouldFetchLeagues
+ * @param  {Object} team A team
+ * @return {Boolean}
+ */
 function shouldFetchLeagues(team){
   if("leagueIDs" in team){
     return false;
@@ -132,6 +152,12 @@ function shouldFetchLeagues(team){
   }
 }
 
+/**
+ * Fetch sequence for the leagues of a team.
+ * @method fetchLeaguesForTeam
+ * @param  {Integer} teamID A team ID
+ * @return {Function}
+ */
 export function fetchLeaguesForTeam(teamID){
   return (dispatch, getState) => {
     if(shouldFetchLeagues(getState().teamsByID[teamID])){
@@ -148,113 +174,12 @@ export function fetchLeaguesForTeam(teamID){
   }
 }
 
-function requestPastFixtures(teamID){
-  return {
-    type: FIXTURES_REQUEST_PAST_TEAM,
-    teamID: teamID,
-  };
-}
-
-function receivePastFixtures(teamID, fixtures){
-  return {
-    type: FIXTURES_RECEIVE_PAST_TEAM,
-    teamID: teamID,
-    fixturesInOrder: fixtures,
-    receivedAt: Date.now(),
-  };
-}
-
-function processFixtureStatus(data){
-  status='';
-  if(data[0] == 'NS'){
-      var date = new Date(data[1]*1000);
-      // Hours part from the timestamp
-      var hours = date.getHours();
-      // Minutes part from the timestamp
-      var minutes = "0" + date.getMinutes();
-      // Will display time in 10:30:23 format
-      status = hours + ':' + minutes.substr(-2);
-  }else if (['HT', 'FT'].includes(data[0])){
-      status = String(data[2] + "  " + data[0] + "  " + data[3]);
-  }else if (['1H','2H','ET','P'].includes(data[0])){
-      status = String(data[2] + "  " + data[4] + "'  " + data[3]);
-  }else{
-    status = data[0];
-  }
-  return status
-}
-
-export function processFixtures(data){
-  collect=[];
-  data = data.api;
-  fixtures = data.fixtures;
-
-  if(!fixtures){
-    return[[],[]]
-  }
-
-  fixtures.forEach( fixture => {
-      status = processFixtureStatus([
-        fixture.statusShort,
-        fixture.event_timestamp,
-        fixture.goalsHomeTeam,
-        fixture.goalsAwayTeam,
-        fixture.elapsed
-      ])
-      league = fixture.league;
-      collect.push({
-          flag:league.logo,
-          id:fixture.fixture_id,
-          timeStamp:fixture.event_timestamp,
-          status:status,
-          elapsed:fixture.elapsed,
-          homeTeam:fixture.homeTeam,
-          awayTeam:fixture.awayTeam,
-          goalsHome:String(fixture.goalsHomeTeam),
-          goalsAway:String(fixture.goalsAwayTeam),
-          statusShort: fixture.statusShort,
-      });
-  });
-  return collect;
-}
-
-// export function fetchPastFixtures(teamID){
-//   return (dispatch, getState) => {
-//     dispatch(requestPastFixtures(teamID))
-//     return getLastTwentyFixtures(teamID)
-//       // get latest season
-//     .then( data => processFixtures(data))
-//     .then( processedData => dispatch(receivePastFixtures(teamID, processedData)));
-//   }
-// }
-
-function requestFutureFixtures(teamID){
-  return {
-    type: FIXTURES_REQUEST_FUTURE_TEAM,
-    teamID: teamID,
-  };
-}
-
-function receiveFutureFixtures(teamID, fixtures){
-  return {
-    type: FIXTURES_RECEIVE_FUTURE_TEAM,
-    teamID: teamID,
-    leagueNames: fixtures[0],
-    fixturesInOrder: fixtures[1],
-    receivedAt: Date.now(),
-  };
-}
-
-export function fetchFutureFixtures(teamID){
-  return (dispatch, getState) => {
-    dispatch(requestFutureFixtures(teamID))
-    return getNextTenFixtures(teamID)
-      // get latest season
-    .then( data => processFixtures(data))
-    .then( processedData => dispatch(receiveFutureFixtures(teamID, processedData)));
-  }
-}
-
+/**
+ * Sets the fetching property of the teamsByID store to true.
+ * @method requestPlayersForTeam
+ * @param  {Integer} teamID A team ID
+ * @return {Action} type: TEAM_REQUEST_PLAYERS
+ */
 export function requestPlayersForTeam(teamID){
   return {
     type: TEAM_REQUEST_PLAYERS,
@@ -262,6 +187,12 @@ export function requestPlayersForTeam(teamID){
   };
 }
 
+/**
+ * Fetch sequence for the players of a team.
+ * @method fetchPlayers
+ * @param  {Integer} teamID A team ID
+ * @return {Function}
+ */
 export function fetchPlayers(teamID){
   return (dispatch, getState) => {
     dispatch( requestPlayersForTeam(teamID))
@@ -276,6 +207,13 @@ export function fetchPlayers(teamID){
   }
 }
 
+/**
+ * Sets the fetching property of the teamsByID store to false.
+ * @method receivePlayerIDsForTeam
+ * @param  {Integer} teamID A team ID
+ * @param  {Array} playerIDs A set of player IDs
+ * @return {Action} type: TEAM_RECEIVE_PLAYERS
+ */
 export function receivePlayerIDsForTeam(teamID, playerIDs){
   return {
     type: TEAM_RECEIVE_PLAYERS,
@@ -284,6 +222,12 @@ export function receivePlayerIDsForTeam(teamID, playerIDs){
   };
 }
 
+/**
+ * Sets the fetching property of the teamsByID store to false.
+ * @method receiveMultipleTeams
+ * @param  {Object} teams (teamID : team)
+ * @return {Action} type: TEAM_RECEIVE_BY_ID
+ */
 export function receiveMultipleTeams(teams){
   return {
     type: TEAM_RECEIVE_MULTIPLE_TEAMS,
@@ -291,6 +235,13 @@ export function receiveMultipleTeams(teams){
   };
 }
 
+/**
+ * Sets the statsFetched property of the a specific team in the teamsByID store
+ * to true.
+ * @method confirmStatsFetched
+ * @param  {Integer} teamID A team ID
+ * @return {Action} type: TEAM_SET_STATS_FETCHED_TRUE
+ */
 export function confirmStatsFetched(teamID){
   return {
     type: TEAM_SET_STATS_FETCHED_TRUE,

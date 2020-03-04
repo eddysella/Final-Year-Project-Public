@@ -13,7 +13,31 @@ import { getFixturesByLeagueAndDate, getFutureTeamFixtures, } from '../../fetch/
 import { storeFixturesByID, storeFixtureIDsByDate, receiveFutureFixtures,
   requestFutureFixtures, processTeamFixtures, processLeagueFixtures,
 receiveTodayTeamFixtures, receiveTodayLeagueFixtures} from './fixtures'
+/**
+ * @module Redux Creators futureFixtures
+ */
 
+const todayTime = getTodayTime();
+counter = null;
+
+/**
+ * Calculates the timeStamp of today @ midnight.
+ * @method getTodayTime
+ * @return {Integer} A Millisecond timestamp
+ */
+function getTodayTime(){
+  today = new Date()
+  today.setHours(0,0,0,0)
+  return today.getTime()
+}
+
+/**
+ * Sets the fetchingFuture property of the specified league
+ * in the fixtureIDsByLeagueID store to true.
+ * @method resetLeagueFetch
+ * @param {Integer} leagueID
+ * @return {Action} type: FIXTURES_RESET_FUTURE_LEAGUE_FETCH
+ */
 export function resetLeagueFetch(leagueID){
   return {
     type: FIXTURES_RESET_FUTURE_LEAGUE_FETCH,
@@ -21,6 +45,13 @@ export function resetLeagueFetch(leagueID){
   }
 }
 
+/**
+ * Sets the shouldFetchFuture property of the specified league
+ * in the fixtureIDsByLeagueID store to true.
+ * @method setShouldFetchFutureTrue
+ * @param {Integer} leagueID
+ * @return {Action} type: FIXTURES_SET_SHOULD_FETCH_FUTURE_LEAGUE_TRUE
+ */
 export function setShouldFetchFutureTrue(leagueID){
   return {
     type: FIXTURES_SET_SHOULD_FETCH_FUTURE_LEAGUE_TRUE,
@@ -28,20 +59,20 @@ export function setShouldFetchFutureTrue(leagueID){
   }
 }
 
-counter = 0;
-today = new Date()
-today.setHours(0,0,0,0)
-const todayTime = today.getTime()
-
-export function initFutureFixtures(){
-  return (dispatch, getState) => {
-    Promise.resolve( dispatch( fetchFollowingFutureFixtures()))
-  }
-}
-
+/**
+ * Should fetch fixtures test for a league or team.
+ * @method shouldFetchFixtures
+ * @param  {Boolean} fetching True if entity is fetching already, False Otherwise
+ * @param  {Integer} lastDate TimeStamp of an entity's last received fixture
+ * @param  {Integer} currentDate TimeStamp of the last date the fixtures screen is displaying
+ * @return {Boolean}
+ */
 function shouldFetchFixtures(fetching, lastDate, currentDate){
-  if(fetching){
+  if(lastDate == 'STOP'){
     return false;
+  }else if(fetching){
+    return false;
+  // if the date the screen is currently at is older or equal to the last fetched date, return true
   }else if (new Date(parseInt(currentDate)).getTime() >= new Date(parseInt(lastDate)).getTime()) {
     return true;
   }else if(currentDate === undefined){
@@ -51,6 +82,12 @@ function shouldFetchFixtures(fetching, lastDate, currentDate){
   }
 }
 
+/**
+ * Concatenates an Array of timestamps to the futureDates store.
+ * @method storeFutureDates
+ * @param  {Array} dates A set of ms timestamps
+ * @return {Action} type: FIXTURES_STORE_FUTURE_DATES
+ */
 export function storeFutureDates(dates){
   return {
     type: FIXTURES_STORE_FUTURE_DATES,
@@ -58,20 +95,37 @@ export function storeFutureDates(dates){
   }
 }
 
+/**
+ * Top level dispatch:
+ * 1) Init counter of leagues+teams used for:
+ *    1.1) Checking if there are any teams or leagues to fetch
+ *    1.2) Signal to storeFutureDates that all entities have fetched and next
+ *         date should be moved from dates array to displayed dates array.
+ * 2) Sets the futureFetch property of the fixtureStatus store to true.
+ * 3) Fetch future league fixtures
+ * 4) Fetch future team fixtures
+ * @method fetchFollowingFutureFixtures
+ * @return {Function}
+ */
 export function fetchFollowingFutureFixtures(){
   return (dispatch, getState) => {
     teamIDs = getState().followingTeamIDs;
     leagueIDs = getState().followingLeagueIDs;
-    counter = teamIDs.length + leagueIDs.length;
-    // if any teams are followed, otherwise loads infinitely
+    counter = teamIDs.length + leagueIDs.length; // 1
     if(counter){
-      dispatch( requestFutureFixtures())
-      dispatch( fetchFutureLeagueFixtures(leagueIDs))
-      dispatch( fetchFutureTeamFixtures(teamIDs))
+      dispatch( requestFutureFixtures()) // 2
+      dispatch( fetchFutureLeagueFixtures(leagueIDs)) // 3
+      dispatch( fetchFutureTeamFixtures(teamIDs)) // 4
     }
   }
 }
 
+/**
+ * Sets the fetchingFuture property of the fixtureIDsByTeamID store to true.
+ * @method requestFutureTeamFixtures
+ * @param  {Integer} teamID A Team ID
+ * @return {Action} type: FIXTURES_REQUEST_FUTURE_TEAM
+ */
 export function requestFutureTeamFixtures(teamID){
   return {
     type: FIXTURES_REQUEST_FUTURE_TEAM,
@@ -79,15 +133,35 @@ export function requestFutureTeamFixtures(teamID){
   }
 }
 
-export function receiveFutureTeamFixtures(teamID, fixtures, lastDate){
+/**
+ * Sets the fetchingFuture property of the fixtureIDsByTeamID store to false.
+ * Adds the passed fixtures to the specified teamID.
+ * Updates the lastFutureDate property to lastDate.
+ * @method receiveFutureTeamFixtures
+ * @param  {Integer} teamID A Team ID
+ * @param  {Object} fixtures fixtureID : Object fixture
+ * @param  {Integer} timeStamp A UNIX timestamp in milliseconds
+ * @return {Action} type: FIXTURES_RECEIVE_FUTURE_TEAM
+ */
+export function receiveFutureTeamFixtures(teamID, fixtures, timeStamp){
   return {
     type: FIXTURES_RECEIVE_FUTURE_TEAM,
     teamID: teamID,
     fixtures: fixtures,
-    date: lastDate,
+    date: timeStamp,
   }
 }
 
+/**
+ * If counter is zero => all entities have fetched =>
+ * Adds the next date from the future dates store to the
+ * displayed dates (currentFutureDates) array in the fixtureStatus store.
+ * A counter is required because all the fetches are async and therefore only
+ * the last team/league to receive the fixtures must be allowed to update
+ * the displayed dates.
+ * @method storeFutureDate
+ * @return {Function}
+ */
 function storeFutureDate(){
   return (dispatch, getState) => {
     if(counter == 0){
@@ -98,40 +172,21 @@ function storeFutureDate(){
   }
 }
 
+/**
+ * Calls the fetchFutureTeam method for every teamID in the teamIDs array.
+ * @method fetchFutureTeamFixtures
+ * @param  {Array}                teamIDs A set of teamIDs
+ * @param  {Boolean} overrideCheck Used by the teams-fixtures screen to continue
+ * fetching data past what the fixtures tab is currently at.
+ * @return {Function}
+ */
 export function fetchFutureTeamFixtures(teamIDs, overrideCheck = false){
   return (dispatch, getState) => {
     currentDate = getState().futureDates[getState().fixturesStatus['currentFutureDates'].length];
     teamIDs.map( teamID => {
       team = getState().fixtureIDsByTeamID[teamID];
       if(shouldFetchFixtures(team.fetchingFuture, team.lastFutureDate, currentDate) || overrideCheck){
-        nextPage = team.nextFuturePage;
-        dispatch(requestFutureTeamFixtures(teamID))
-        return getFutureTeamFixtures(teamID, nextPage)
-        .then( data => processTeamFixtures(data, nextPage))
-        .then( processedData => {
-          if(processedData){
-            dispatch( storeFixturesByID(processedData[0]));
-            // works because objects iterate by order of insertion
-            // I receive the fixs in order so technically the last date is last item
-            // for teams have to iter over every date cause multiple dates received
-            for (date in processedData[1]){
-              for (league in processedData[1][date]){
-                  dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
-              }
-            }
-            dates = Object.keys(processedData[1])
-            const index = dates.indexOf("" + todayTime);
-            if (index >= 0) {
-              dates.splice(index, 1);
-            }
-            lastDate = dates[dates.length-1];
-            dispatch( storeFutureDates(dates))
-            dispatch( receiveTodayTeamFixtures(teamID, processedData[2]))
-            dispatch( receiveFutureTeamFixtures(teamID, Object.keys(processedData[0]), lastDate));
-            counter -= 1;
-            dispatch( storeFutureDate());
-          }
-        })
+        dispatch(fetchTeamFixtures(teamID, team.nextFuturePage));
       }else{
         counter -= 1;
         dispatch(storeFutureDate());
@@ -140,6 +195,52 @@ export function fetchFutureTeamFixtures(teamIDs, overrideCheck = false){
   }
 }
 
+/**
+ * Fetch sequence for future team fixtures.
+ * Team fixtures are fetched in sets of 20 fixtures.
+ * @method fetchTeamFixtures
+ * @param  {Integer} teamID Reference to a team
+ * @param  {Integer} nextPage The index of the next set of fixtures to be fetched
+ * @return {Function}
+ */
+function fetchTeamFixtures(teamID, nextPage){
+  return (dispatch, getState) => {
+    dispatch(requestFutureTeamFixtures(teamID))
+    return getFutureTeamFixtures(teamID, nextPage)
+    .then( data => processTeamFixtures(data, nextPage))
+    .then( processedData => {
+      if(processedData){
+        dispatch( storeFixturesByID(processedData[0]));
+        for (const date in processedData[1]){
+          for (const league in processedData[1][date]){
+              dispatch( storeFixtureIDsByDate(date, league, processedData[1][date][league]));
+          }
+        }
+        dates = Object.keys(processedData[1])
+        const index = dates.indexOf("" + todayTime);
+        if (index >= 0) {
+          dates.splice(index, 1);
+        }
+        // fixtures are in order, so last date in array = last date received
+        lastDate = dates[dates.length-1];
+        dispatch( storeFutureDates(dates)) // store all dates received
+        dispatch( receiveTodayTeamFixtures(teamID, processedData[2]))
+        dispatch( receiveFutureTeamFixtures(teamID, Object.keys(processedData[0]), lastDate));
+        counter -= 1;
+        dispatch( storeFutureDate());
+      }else{
+        dispatch( receiveFutureTeamFixtures(teamID, [], 'STOP'));
+      }
+    })
+  }
+}
+
+/**
+ * Sets the fetchingFuture property of the fixtureIDsByLeagueID store to true.
+ * @method requestFutureLeagueFixtures
+ * @param  {Integer} leagueID A League ID
+ * @return {Action} type: FIXTURES_REQUEST_FUTURE_LEAGUE
+ */
 export function requestFutureLeagueFixtures(leagueID){
   return {
     type: FIXTURES_REQUEST_FUTURE_LEAGUE,
@@ -147,15 +248,33 @@ export function requestFutureLeagueFixtures(leagueID){
   }
 }
 
-export function receiveFutureLeagueFixtures(leagueID, fixtures, lastDate){
+/**
+ * Sets the fetchingFuture property of the fixtureIDsByLeagueID store to false.
+ * Sets the shouldFetchFuture property to false.
+ * Adds the passed fixtures to the specified teamID.
+ * Updates the lastFutureDate property to timeStamp.
+ * Adds the new timeStamp to the futureDates array.
+ * @method receiveFutureLeagueFixtures
+ * @param  {Integer} teamID A Team ID
+ * @param  {Object} fixtures fixtureID : Object fixture
+ * @param  {Integer} timeStamp A UNIX timestamp in milliseconds
+ * @return {Action} type: FIXTURES_RECEIVE_FUTURE_LEAGUE
+ */
+export function receiveFutureLeagueFixtures(leagueID, fixtures, timeStamp){
   return {
     type: FIXTURES_RECEIVE_FUTURE_LEAGUE,
     leagueID: leagueID,
     fixtures: fixtures,
-    date: lastDate,
+    date: timeStamp,
   }
 }
 
+/**
+ * Calculates tomorrow @ midnight millisecond timestamp.
+ * @method getNextDate
+ * @param  {Integer} timeStamp An arbitrary timeStamp
+ * @return {Array} [yyyy-mm-dd, ms timeStamp]
+ */
 function getNextDate(timeStamp){
   const tomorrow = new Date(timeStamp);
   tomorrow.setDate(new Date(timeStamp).getDate() + 1)
@@ -164,7 +283,14 @@ function getNextDate(timeStamp){
   return [fetchDate, tomorrow.getTime()];
 }
 
-
+/**
+ * Calls the fetchFutureLeague method for every leagueID in the leagueIDs array.
+ * @method fetchFutureLeagueFixtures
+ * @param  {Array} leagueIDs A set of leagueIDs
+ * @param  {Boolean} overrideCheck Defaults to false, used by the
+ * leagues fixtures screen to override the fetch test.
+ * @return {Function}
+ */
 export function fetchFutureLeagueFixtures(leagueIDs, overrideCheck=false){
   return (dispatch, getState) => {
     currentDate = getState().futureDates[getState().fixturesStatus['currentFutureDates'].length];
@@ -204,8 +330,8 @@ function fetchLeagueFixtures(leagueID, lastDate, currentDate, seasonEnd, overrid
           switch(processedData[0]){
             case "VALID":
               dispatch( storeFixturesByID(processedData[1])); // (id: Object fixture)
-              for (date in processedData[2]){
-                for (league in processedData[2][date]){
+              for (const date in processedData[2]){
+                for (const league in processedData[2][date]){
                   dispatch( storeFixtureIDsByDate(date, league, processedData[2][date][league]));
                 }   // Array of fixtureIDS
               }

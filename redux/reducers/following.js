@@ -4,8 +4,19 @@ import {
   FOLLOWING_ADD_TEAM,
   FOLLOWING_REMOVE_TEAM,
 } from '../types/following'
+/**
+ * @module Redux Reducers following
+ */
 
-
+/**
+ * The following league IDs store is an array which holds a set of unique
+ * league IDs which the user 'follows'.
+ * @method followingLeagueIDs
+ * @param  {Array} state The current state of the store
+ * @param {Object} action (propertyName : property) The modification to
+ * make to the store
+ * @return {Object} The new state with the modification applied
+ */
 export function followingLeagueIDs(state = [], action){
   switch(action.type){
     case FOLLOWING_ADD_LEAGUE:
@@ -20,7 +31,15 @@ export function followingLeagueIDs(state = [], action){
   }
 }
 
-
+/**
+ * The following team IDs store is an array which holds a set of unique
+ * team IDs which the user 'follows'.
+ * @method followingTeamIDs
+ * @param  {Array} state The current state of the store
+ * @param {Object} action (propertyName : property) The modification to
+ * make to the store
+ * @return {Object} The new state with the modification applied
+ */
 export function followingTeamIDs(state = [], action){
   switch(action.type){
     case FOLLOWING_ADD_TEAM:

@@ -1,17 +1,37 @@
 import {
   PLAYER_RECEIVE_BY_ID,
 } from '../types/player'
+/**
+ * @module Redux Creators players
+ */
 
-export function receivePlayer(stats){
+/**
+ * Instantiates a new player property in the playersByID store referenced by
+ * the specified PlayerID.
+ * Stores all the passed properties in it.
+ * @method receivePlayer
+ * @param  {Object} info A set of player information
+ * @return {Action} type: PLAYER_RECEIVE_BY_ID
+ */
+export function receivePlayer(info){
   return {
     type: PLAYER_RECEIVE_BY_ID,
-    playerID: stats.playerID,
-    name: stats.name,
-    age: stats.age,
-    nationality: stats.nationality,
+    playerID: info.playerID,
+    name: info.name,
+    age: info.age,
+    nationality: info.nationality,
   };
 }
 
+/**
+ * Processes a set of players.
+ * @method processPlayers
+ * @param  {Object} data A parsed JSON Object
+ * @return {Array} [
+ * 0 : [Array] A set of player ids
+ * 1 : [Object] (PlayerID : data)
+ * ]
+ */
 export function processPlayers(data){
   collect=[];
   ids={

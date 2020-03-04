@@ -1,3 +1,6 @@
+/**
+ * This file contains all types belonging to the league functionality
+ */
 export const LEAGUE_REQUEST_BY_ID = 'LEAGUE_REQUEST_BY_ID'
 export const LEAGUE_RECEIVE_BY_ID = 'LEAGUE_RECEIVE_BY_ID'
 export const LEAGUE_REQUEST_TEAMS = 'LEAGUE_REQUEST_TEAMS'

@@ -1,3 +1,6 @@
+/**
+ * This file contains all types belonging to the search functionality
+ */
 export const SEARCH_UPDATE_INPUT = 'SEARCH_UPDATE_INPUT'
 export const SEARCH_CLEAR_LEAGUE = 'SEARCH_CLEAR_LEAGUE'
 export const SEARCH_CLEAR_TEAM = 'SEARCH_CLEAR_TEAM'

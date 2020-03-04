@@ -3,13 +3,29 @@ import {
   FIXTURES_RECEIVE_STATS,
 } from '../types/fixtures'
 import { getFixtureByID } from '../../fetch/FixturesV2';
+import { processFixtureStatus } from './fixtures'
+/**
+ * @module Redux Creators fixturesSpecific
+ */
 
-function requestFixtureStats(id){
+/**
+ * Sets the fetching property of the fixturesByID store to true.
+ * @method requestFixtureStats
+ * @return {Action} type: FIXTURES_REQUEST_STATS
+ */
+function requestFixtureStats(){
   return {
     type: FIXTURES_REQUEST_STATS,
   };
 }
 
+/**
+ * Adds a set of statistics to a fixture in the fixturesByID store.
+ * @method receiveFixtureStats
+ * @param  {Integer} id A Fixture ID
+ * @param  {Object} stats statName : String stat
+ * @return {Action} type: FIXTURES_RECEIVE_STATS
+ */
 function receiveFixtureStats(id, stats){
   return {
     type: FIXTURES_RECEIVE_STATS,
@@ -18,6 +34,12 @@ function receiveFixtureStats(id, stats){
   };
 }
 
+/**
+ * Fetch Sequence for fixture statistics.
+ * @method fetchSpecificFixture
+ * @param  {Integer} id A Fixture ID
+ * @return {Function}
+ */
 export function fetchSpecificFixture(id){
   return dispatch => {
     dispatch(requestFixtureStats(id))
@@ -27,6 +49,16 @@ export function fetchSpecificFixture(id){
   }
 }
 
+/**
+ * Converts the lineups JSON data into a more convenient layout for UI.
+ * @method createLineups
+ * @param  {Object} passedLineups (team : Object ((startXI/substitutes) : Object (stat: String stat)))
+ * @return {Object} [
+ * team : String name,
+ * starting : Object A set of player Objects
+ * substitutes : Object A set of player Objects
+ * ]
+ */
 function createLineups(passedLineups){
     lineups=[];
     if(!passedLineups){
@@ -38,6 +70,12 @@ function createLineups(passedLineups){
     return lineups;
 }
 
+/**
+ * Converts the statistics JSON data into a more convenient layout for UI.
+ * @method createStats
+ * @param  {Object} passedStats (stat : Object ((home/away) : Object (stat: String stat)))
+ * @return {Object} (stat : String stat)
+ */
 function createStats(passedStats){
     emptyStats=[]
     stats = [
@@ -71,26 +109,12 @@ function createStats(passedStats){
     return emptyStats
 }
 
-function processFixtureStatus(data){
-  status='';
-  if(data[0] == 'NS'){
-      var date = new Date(data[1]*1000);
-      // Hours part from the timestamp
-      var hours = date.getHours();
-      // Minutes part from the timestamp
-      var minutes = "0" + date.getMinutes();
-      // Will display time in 10:30:23 format
-      status = hours + ':' + minutes.substr(-2);
-  }else if (['HT', 'FT'].includes(data[0])){
-      status = String(data[2] + "  " + data[0] + "  " + data[3]);
-  }else if (['1H','2H','ET','P'].includes(data[0])){
-      status = String(data[2] + "  " + data[4] + "'  " + data[3]);
-  }else{
-    status = data[0];
-  }
-  return status
-}
-
+/**
+ * Processes a set of fixture statistics for a fixture.
+ * @method processFixture
+ * @param  {Object}       data JSON Object
+ * @return {Object} (stat : Object stat)
+ */
 function processFixture(data){
   collect=null;
   data = data.api;

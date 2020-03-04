@@ -4,14 +4,30 @@ import {
 } from '../types/statistics'
 import { getPlayerStatisticsByTeamID } from '../../fetch/Team';
 import { confirmStatsFetched } from './teams'
+/**
+ * @module Redux Creators statistics
+ */
 
-export function requestPlayersStatsForTeam(teamID, leagueID){
+/**
+ * Sets the fetching property of the playerStatsByID store to true.
+ * @method requestPlayersStatsForTeam
+ * @param  {Integer} teamID A team ID
+ * @return {Action} type: STATS_REQUEST_BY_PLAYER_ID
+ */
+export function requestPlayersStatsForTeam(teamID){
   return {
     type: STATS_REQUEST_BY_PLAYER_ID,
     teamID: teamID,
   };
 }
 
+/**
+ * Sets the fetching property of the playerStatsByID store to false.
+ * Adds a set of statistics referenced by "teamID + playerID" into the store.
+ * @method receivePlayerStatsForTeam
+ * @param  {Object} stats (playerID : data)
+ * @return {Action} type: STATS_RECEIVE_BY_PLAYER_ID
+ */
 export function receivePlayerStatsForTeam(stats){
   return {
     type: STATS_RECEIVE_BY_PLAYER_ID,
@@ -19,6 +35,12 @@ export function receivePlayerStatsForTeam(stats){
   };
 }
 
+/**
+ * Should fetch test for player statistics.
+ * @method shouldFetchStats
+ * @param  {Object} team A team with properties
+ * @return {Boolean}
+ */
 function shouldFetchStats(team){
   if(!(team.statsFetched)){
     return true;
@@ -29,6 +51,12 @@ function shouldFetchStats(team){
   }
 }
 
+/**
+ * Fetch sequence for player statistics for the specified team.
+ * @method fetchPlayerStatistics
+ * @param  {Integer} teamID A team ID
+ * @return {Function}
+ */
 export function fetchPlayerStatistics(teamID){
   return (dispatch, getState) => {
     if(shouldFetchStats(getState().teamsByID[teamID])){
@@ -43,6 +71,13 @@ export function fetchPlayerStatistics(teamID){
   }
 }
 
+/**
+ * Processes a set of player statistics for a team.
+ * @method processPlayerStats
+ * @param  {Object} data A parsed JSON Object
+ * @param  {Integer} teamID A team ID
+ * @return {Object} (playerID : data)
+ */
 function processPlayerStats(data, teamID){
   collect={};
   data = data.api;
@@ -74,6 +109,16 @@ function processPlayerStats(data, teamID){
   return collect;
 }
 
+/**
+ * Sums an old and new statistic.
+ * If either is NaN returns the other.
+ * If bother are NaN returns 0.
+ * @method sumStat
+ * @param  {Object} current (statName : stat) An object holding a set of statistics
+ * @param  {Object} additional (statName : stat) An object holding a set of statistics
+ * @param  {String} stat the statistic name
+ * @return {Integer}
+ */
 function sumStat(current=null, additional=null, stat){
   cur = current[stat];
   add = additional[stat];
@@ -87,6 +132,13 @@ function sumStat(current=null, additional=null, stat){
   return cur + add;
 }
 
+/**
+ * Sums a set of current and additional statistics pertaining to Cards.
+ * @method cards
+ * @param  {Object} current (statName : stat) An object holding a set of statistics
+ * @param  {Object} additional (statName : stat) An object holding a set of statistics
+ * @return {Object} (statName : stat)
+ */
 function cards(current, additional){
   return {
     red: sumStat(current, additional, 'red'),
@@ -94,6 +146,13 @@ function cards(current, additional){
   }
 }
 
+/**
+ * Sums a set of current and additional statistics pertaining to Dribbles.
+ * @method dribbles
+ * @param  {Object} current (statName : stat) An object holding a set of statistics
+ * @param  {Object} additional (statName : stat) An object holding a set of statistics
+ * @return {Object} (statName : stat)
+ */
 function dribbles(current, additional){
   return {
     attempts: sumStat(current, additional, 'attempts'),
@@ -101,6 +160,13 @@ function dribbles(current, additional){
   }
 }
 
+/**
+ * Sums a set of current and additional statistics pertaining to Fouls.
+ * @method fouls
+ * @param  {Object} current (statName : stat) An object holding a set of statistics
+ * @param  {Object} additional (statName : stat) An object holding a set of statistics
+ * @return {Object} (statName : stat)
+ */
 function fouls(current, additional){
   return {
     committed: sumStat(current, additional, 'committed'),
@@ -108,6 +174,13 @@ function fouls(current, additional){
   }
 }
 
+/**
+ * Sums a set of current and additional statistics pertaining to Games.
+ * @method games
+ * @param  {Object} current (statName : stat) An object holding a set of statistics
+ * @param  {Object} additional (statName : stat) An object holding a set of statistics
+ * @return {Object} (statName : stat)
+ */
 function games(current, additional){
   return {
     appearences: sumStat(current, additional, 'appearences'),
@@ -115,6 +188,13 @@ function games(current, additional){
   }
 }
 
+/**
+ * Sums a set of current and additional statistics pertaining to Goals.
+ * @method goals
+ * @param  {Object} current (statName : stat) An object holding a set of statistics
+ * @param  {Object} additional (statName : stat) An object holding a set of statistics
+ * @return {Object} (statName : stat)
+ */
 function goals(current, additional){
   return {
     assists: sumStat(current, additional, 'assists'),
@@ -122,6 +202,13 @@ function goals(current, additional){
   }
 }
 
+/**
+ * Sums the accuracy percentage of current and additional statistics.
+ * @method accuracy
+ * @param  {Object} current (statName : stat) An object holding a set of statistics
+ * @param  {Object} additional (statName : stat) An object holding a set of statistics
+ * @return {Integer} An accuracy value (2 digits)
+ */
 function accuracy(current=null, additional=null){
   if(!current.total || !additional.total){
     return current.accuracy < 1 ? (current.accuracy * 100) : current.accuracy ;
@@ -133,14 +220,28 @@ function accuracy(current=null, additional=null){
   }
 }
 
+/**
+ * Sums a set of current and additional statistics pertaining to Passes.
+ * Calculates the new passing accuracy.
+ * @method passes
+ * @param  {Object} current (statName : stat) An object holding a set of statistics
+ * @param  {Object} additional (statName : stat) An object holding a set of statistics
+ * @return {Object} (statName : stat)
+ */
 function passes(current, additional){
-
   return {
     key: sumStat(current, additional, 'key'),
     accuracy: accuracy(current, additional),
   }
 }
 
+/**
+ * Sums a set of current and additional statistics pertaining to Shots.
+ * @method shots
+ * @param  {Object} current (statName : stat) An object holding a set of statistics
+ * @param  {Object} additional (statName : stat) An object holding a set of statistics
+ * @return {Object} (statName : stat)
+ */
 function shots(current, additional){
   return {
     on: sumStat(current, additional, 'on'),
@@ -148,116 +249,16 @@ function shots(current, additional){
   }
 }
 
+/**
+ * Sums a set of current and additional statistics pertaining to Tackles.
+ * @method tackles
+ * @param  {Object} current (statName : stat) An object holding a set of statistics
+ * @param  {Object} additional (statName : stat) An object holding a set of statistics
+ * @return {Object} (statName : stat)
+ */
 function tackles(current, additional){
   return {
     interceptions: sumStat(current, additional, 'interceptions'),
     total: sumStat(current, additional, 'total'),
   }
 }
-
-//
-// export function requestTeamStatsByID(teamID, leagueID){
-//   key = "" + teamID + leagueID;
-//   return {
-//     type: REQUEST_TEAM_STATISTICS_BY_ID,
-//     key: key.hashCode(),
-//     teamID: teamID,
-//     leagueID: leagueID,
-//   };
-// }
-//
-// export function receiveTeamStatsByID(teamID, leagueID, team){
-//   key = "" + teamID + leagueID;
-//   return {
-//     type: RECEIVE_TEAM_STATISTICS_BY_ID,
-//     key: key.hashCode(),
-//     matchesPlayed: team.matchesPlayed,
-//     wins: team.wins,
-//     draws: team.draws,
-//     losses: team.losses,
-//     goals: team.goals,
-//     conceded: team.conceded,
-//   };
-// }
-//
-// export function fetchTeamStatistics(teamID, leagueID){
-//   return (dispatch, getState) => {
-//     dispatch( requestTeamStatsByID(teamID, leagueID))
-//     return getStatisticsForTeamInLeague(teamID, leagueID)
-//       .then( data => processTeamStatistics(data))
-//       .then( statistics => dispatch( receiveTeamStatsByID(teamID, leagueID, statistics)));
-//   }
-// }
-//
-// function processTeamStatistics(data){
-//   collect={};
-//   data = data.api;
-//   stats = data.statistics;
-//   games = stats.matchs
-//   goals = stats.goals
-//   stats.forEach( team => {
-//       collect = {
-//           gamesPlayed: games.matchsPlayed,
-//           gamesWon: games.wins,
-//           gamesDrawn: games.draws,
-//           gamesLost: games.loses,
-//           scored: goals.goalsFor,
-//           conceded: goals.goalsAgainst,
-//       };
-//   });
-//   return collect;
-// }
-
-//
-// function processPlayerStats(data, teamID){
-//   collect={};
-//   data = data.api;
-//   players = data.players;
-//
-//   if(!players){
-//     return {};
-//   }
-//
-//   players.forEach( player => {
-//     key = (teamID + "x" + player.player_id);
-//     if(!(key in collect)){
-//       collect[key]={};
-//     }
-//     Object.assign(collect[key], createStats(collect[key], player));
-//   });
-//   console.log(collect)
-//   return collect;
-// }
-//
-// function createStats(current=null, additional=null){
-//
-//   if(Object.entries(current).length === 0){
-//     return additional;
-//   }
-//
-//   stats={
-//   cards: ['red', 'yellow'],
-//   dribbles: ['attempts','success'],
-//   fouls: ['committed', 'drawn'],
-//   games: ['appearances', 'minutes_played'],
-//   goals: ['assists', 'total'],
-//   shots: ['on', 'total'],
-//   tackles: ['interceptions', 'total'],
-//
-//   for(group in stats){
-//     stats[group]=sumStat(current, additional, stats[group]);
-//   }
-//
-//   stats.passes.accuracy = accuracy(current, additional);
-//   return stats;
-// }
-//
-// function sumStat(current=null, additional=null, group){
-//   collect = {}
-//   for (stat in group){
-//     collect[stat] = current[stat] + additional[stat];
-//   }
-//   return collect;
-// }
-//
-//
