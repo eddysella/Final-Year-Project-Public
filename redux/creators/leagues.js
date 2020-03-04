@@ -45,18 +45,33 @@ export function fetchLeagues(leagueIDs){
         return getAllSeasonsForLeague(leagueID)
           // get latest season
         .then( data => processLeague(data))
-        .then( processedData => dispatch( receiveLeagueByID(processedData)))
+        .then( processedData => {
+          dispatch( receiveLeagueByID(processedData))
+        })
+        .then( () => dispatch(initLeague(leagueID)))
       }
     });
   }
 }
 
+/**
+ * Converts the received API date string to a ms timestamp.
+ * @method dateToTimeStamp
+ * @param  {String} date A date in dd-mm-yyyy format
+ * @return {Integer} A ms timestamp
+ */
 function dateToTimeStamp(date){
   pieces = date.trim().split('-');
   timeStamp = Date.UTC(parseInt(pieces[0]), parseInt(pieces[1], 10)-1, parseInt(pieces[2], 10));
   return timeStamp
 }
 
+/**
+ * Processes league data into a league Object.
+ * @method processLeague
+ * @param  {Object} data An formatted Object containing league data.
+ * @return {Object} (propertyName : property)
+ */
 function processLeague(data){
   data = data.api;
   leagues = data.leagues;
