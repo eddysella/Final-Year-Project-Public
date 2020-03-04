@@ -9,6 +9,7 @@ import AppNavigator from './navigation/AppNavigator';
 import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
+
 import store from './redux/store'
 import rootReducer from './redux/reducers/index'
 
@@ -30,7 +31,7 @@ export default function App(props) {
     );
   } else {
     return (
-        <View style={styles.container}>
+        <View style={{flex: 1}}>
           <Provider store={store}>
           <AppNavigator/>
           </Provider>
@@ -79,17 +80,9 @@ async function retrieveFollowing(){
 }
 
 function handleLoadingError(error) {
-  // In this case, you might want to report the error to your error reporting
-  // service, for example Sentry
   console.warn(error);
 }
 
 function handleFinishLoading(setLoadingComplete) {
   setLoadingComplete(true);
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex:1,
-  },
-});
