@@ -160,7 +160,6 @@ export const Main = props => {
           </Card>
         );
     }
-    console.log("fixtures " , props.fixtureIDs[date])
     return (
       <Card>
       {
@@ -180,8 +179,6 @@ export const Main = props => {
       </Card>
     );
   }
-
-  // const [pastFooter, setPastFooter] = useState(0);
 
   const RenderPastFixtures = () => {
     if(!shouldDisplayData()){

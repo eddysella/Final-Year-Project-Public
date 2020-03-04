@@ -74,7 +74,6 @@ export const Main = props => {
               name='remove'
               type='ion-icon'
               onPress={() => {
-                console.log("removed " + parseInt(item.item))
                 setRefresh(true);
                 props.followingRemoveTeam(parseInt(item.item))
               }}
@@ -85,7 +84,6 @@ export const Main = props => {
               name='add'
               type='ion-icon'
               onPress={() => {
-                console.log("added " + parseInt(item.item))
                 setRefresh(true);
                 props.followingAddTeam(parseInt(item.item))
               }}
