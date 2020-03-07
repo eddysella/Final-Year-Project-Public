@@ -10,12 +10,9 @@ import {
   FIXTURES_INIT_LEAGUE,
   FIXTURES_INIT_TEAM,
   FIXTURES_RESET,
-  FIXTURES_SET_LEAGUE_CURRENT_ROUND,
 } from '../types/fixtures'
 import { fetchPastTeamFixtures, fetchPastLeagueFixtures } from './pastFixtures';
 import { fetchFutureTeamFixtures, fetchFutureLeagueFixtures, receiveFutureLeagueFixtures } from './futureFixtures';
-import { getFixturesByLeagueAndRound, } from '../../fetch/FixturesV2';
-import { getLeagueCurrentRound, } from '../../fetch/League';
 /**
  * @module Redux Creators fixtures
  */
