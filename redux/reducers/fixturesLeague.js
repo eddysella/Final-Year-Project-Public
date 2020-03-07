@@ -15,6 +15,8 @@ import {
  */
 const todayTime = getTime(true);
 const yesterdayTime = getTime(false);
+// const todayTime = 1000; // values for testing
+// const yesterdayTime = 999; // values for testing
 
 /**
  * Calculates the timeStamp of today or yesterday @ midnight.

@@ -9,7 +9,10 @@
     "test": "jest --watchAll"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
+    }
   },
   "dependencies": {
     "@expo/samples": "~3.0.3",
@@ -46,6 +49,7 @@
   },
   "devDependencies": {
     "babel-preset-expo": "^7.0.0",
+    "jest": "^25.1.0",
     "jest-expo": "^35.0.0"
   },
   "private": true

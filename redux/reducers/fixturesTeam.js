@@ -12,6 +12,7 @@ import {
 // Source: https://github.com/jherax/array-sort-by
 import sortBy from 'array-sort-by';
 const todayTime = getTodayTime();
+// const todayTime = 1000; // values for testing
 
 /**
  * Calculates the timeStamp of today @ midnight.
