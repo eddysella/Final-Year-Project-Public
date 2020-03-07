@@ -134,8 +134,10 @@ export function requestPastTeamFixtures(teamID){
 
 /**
  * Sets the fetchingPast property of the fixtureIDsByTeamID store to false.
+ * Sets the shouldFetchPast property to false.
  * Adds the passed fixtures to the specified teamID.
- * Updates the lastPastDate property to lastDate.
+ * Updates the lastPastDate property to timeStamp.
+ * Adds the new timeStamp to the pastDates array.
  * @method receivePastTeamFixtures
  * @param  {Integer} teamID A Team ID
  * @param  {Object} fixtures fixtureID : Object fixture
