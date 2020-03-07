@@ -58,7 +58,7 @@ export const Main = props => {
       <TouchableHighlight onPress={ () => props.navigation.push('League', {id: item.item})}>
         <View flexDirection={'row'}>
           <RenderItem props={league}/>
-          <View style={{ position: 'absolute', right: 0,}}>
+          <View style={{ position: 'absolute', right: 0, alignSelf:'center'}}>
           {icon}
           </View>
         </View>
@@ -93,7 +93,7 @@ export const Main = props => {
       <TouchableHighlight onPress={ () => props.navigation.push('Team', {id: item.item})}>
         <View flexDirection={'row'}>
           <RenderItem props={team}/>
-          <View style={{ position: 'absolute', right: 0,}}>
+          <View style={{ position: 'absolute', right: 0, alignSelf:'center'}}>
           {icon}
           </View>
         </View>
