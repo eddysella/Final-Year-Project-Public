@@ -27,4 +27,8 @@ const Screen = ({leagues, teams, standings, fetchingExtraLeagueData, fetchingSta
   initFixtures={initFixtures} navigation={props.navigation}/>
 )
 
+Screen.navigationOptions = (props) => ({
+  title: props.navigation.getParam('name')
+})
+
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);

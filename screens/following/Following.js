@@ -31,7 +31,7 @@ export const Main = props => {
           borderWidth: 2,
           borderRadius: 5,
         }}
-        onPress={ () => props.navigation.push('League', {id: item.item})}>
+        onPress={ () => props.navigation.push('League', {id: item.item, name: props.leagues[item.item].name})}>
         <View style={{padding:10 , alignItems:'center',}}>
           <View style={{
             position: 'absolute',
@@ -78,7 +78,7 @@ export const Main = props => {
           borderWidth: 2,
           borderRadius: 5,
         }}
-        onPress={ () => props.navigation.push('Team', {id: item.item})}>
+        onPress={ () => props.navigation.push('Team', {id: item.item, name: props.teams[item.item].name})}>
         <View style={{padding:10 , alignItems:'center',}}>
           <View style={{
             position: 'absolute',

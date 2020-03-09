@@ -21,5 +21,8 @@ const Screen = ({teamIDs, leagueIDs, teams, leagues, removeTeam, removeLeague, .
   removeLeague={removeLeague} navigation={props.navigation}/>
 )
 
+Screen.navigationOptions = () => ({
+  title: "Following"
+})
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);

@@ -24,18 +24,6 @@ export const Main = props => {
     );
   };
 
-  const RenderTopBar = (item) => {
-    player = item.item;
-    return (
-      <View style={{flex:1}}>
-        <View style={{flex:1, padding:10, justifyContent: 'space-around'}}>
-          <Text style={{textAlign:'center', fontSize: 30,}}>{player.name}</Text>
-        </View>
-      </View>
-
-    );
-  }
-
   function renderItem(stat) {
     stat = stat.item
     return (
@@ -163,13 +151,8 @@ export const Main = props => {
 
   if(props.fetching){
     return(
-      <View style={{flex:1}}>
-        <View style={{flex:props.topBarFlex}}>
-          <RenderTopBar item={player}/>
-        </View>
-        <View style={{flex:props.screenFlex}}>
-          <MaterialIndicator/>
-        </View>
+      <View style={{flex:props.screenFlex}}>
+        <MaterialIndicator/>
       </View>
     );
     }else{
@@ -179,13 +162,8 @@ export const Main = props => {
       }
       stats = props.playerStats[(teamID + "x" + playerID)];
       return (
-        <View style={{flex:1}}>
-          <View style={{flex:props.topBarFlex}}>
-            <RenderTopBar item={player}/>
-          </View>
-          <View style={{flex:props.screenFlex}}>
-            <RenderStatistics item={stats}/>
-          </View>
+        <View style={{flex:props.screenFlex}}>
+          <RenderStatistics item={stats}/>
         </View>
       );
     }

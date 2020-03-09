@@ -35,5 +35,8 @@ const Screen = ({curPastDates, curFutureDates, fetchingFuture, fetchingPast,
   leaguesByID={leaguesByID} navigation={props.navigation}/>
 )
 
+Screen.navigationOptions = () => ({
+  title: "Fixtures"
+})
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);

@@ -50,9 +50,6 @@ export const Main = props => {
 
     return (
       <View style={{flex:1}}>
-        <View style={{flex:1, padding:10, justifyContent: 'space-around'}}>
-          <Text style={{textAlign:'center', fontSize: 20,}}>{league.name}</Text>
-        </View>
         <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
           <TouchableHighlight onPress={() => setTab(0)}
           style={{flex:1, borderBottomWidth:fixturesBorder, justifyContent:'center'}}>
@@ -168,11 +165,11 @@ export const Main = props => {
     );
   }
 
-  function renderTeamsItem(teamID) {
-    team = props.teams[teamID.item];
+  function renderTeamsItem(item) {
+    team = props.teams[item.item];
     return (
       <TouchableHighlight onPress={ () =>{
-            props.navigation.push('Team', {id: teamID.item});
+            props.navigation.push('Team', {id: item.item, name: props.teams[item.item].name});
         }}>
         <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
           <Avatar

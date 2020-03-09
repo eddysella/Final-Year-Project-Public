@@ -14,8 +14,12 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const Screen = ({fetchStatistics, fetching, players, playerStats, ...props}) => (
-  <Main screenFlex={9} topBarFlex={1} playerStats={playerStats}
+  <Main screenFlex={1} playerStats={playerStats}
   fetchStatistics={fetchStatistics} players={players} fetching={fetching} navigation={props.navigation}/>
 )
+
+Screen.navigationOptions = (props) => ({
+  title: props.navigation.getParam('name')
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Screen);

@@ -45,5 +45,8 @@ const Screen = ({followingTeamIDs, followingLeagueIDs,teamIDs,
   </View>
 )
 
+Screen.navigationOptions = () => ({
+  title: "Search"
+})
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);
