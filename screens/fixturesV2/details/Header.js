@@ -20,7 +20,7 @@ export const Header = props => {
         <Text style={{flex:1, textAlign:'center', fontSize:20, padding:10}}>{homeTeam.team_name}</Text>
       </View>
 
-      <View style={{flex:1, margin: 5, padding:10, alignItems:'center', justifyContent:'center'}}>
+      <View style={{flex:1, margin: 5, alignItems:'center', justifyContent:'center'}}>
         <Text style={{fontSize:20}}>{fixture.status}</Text>
       </View>
 
