@@ -17,4 +17,9 @@ const Screen = ({fixturesByID, fetching, ...props}) => (
   </View>
 )
 
+
+Screen.navigationOptions = (props) => ({
+  title: props.navigation.getParam('name')
+})
+
 export default connect(mapStateToProps)(Screen)

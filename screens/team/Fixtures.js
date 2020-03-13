@@ -68,7 +68,7 @@ export const Main = props => {
         <View style={{alignItems: 'center'}}>
           <TouchableHighlight onPress={ () => {
               props.fetchSpecificFixture(item.item)
-              props.navigation.push('Fixture', {id: item.item});
+              props.navigation.push('Fixture', {id: item.item, name: props.fixturesByID[item.item].league.name});
           }}>
             <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
               <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
