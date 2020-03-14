@@ -4,7 +4,9 @@ import {Card} from 'react-native-elements';
 import { scale, } from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
 const screenWidth = Math.round(Dimensions.get('window').width);
-const itemWidth = screenWidth - scale(screenWidth/5);
+const itemWidth = screenWidth/1.3
+const screenHeight = Math.round(Dimensions.get('window').height);
+const itemHeight = scale(screenHeight/15);
 
 export const Main = props => {
 
@@ -63,17 +65,17 @@ export const Main = props => {
   function renderItem(item){
     fixture = props.fixturesByID[item.item]
     return (
-      <Card title={new Date(parseInt(fixture.date)).toLocaleDateString()}>
+      <Card title={new Date(parseInt(fixture.date)).toLocaleDateString()} titleStyle={{fontSize:18}}>
       {
         <View style={{alignItems: 'center'}}>
           <TouchableHighlight onPress={ () => {
               props.fetchSpecificFixture(item.item)
               props.navigation.push('Fixture', {id: item.item, name: props.fixturesByID[item.item].league.name});
           }}>
-            <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
-              <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
-              <Text style={{flex:1, textAlign:'center', alignSelf: 'center',}}>{fixture.status}</Text>
-              <Text style={{flex:1,   textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
+            <View  width={itemWidth} minHeight={itemHeight} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
+              <Text style={{fontSize:16, flex:1,   textAlign:'center', alignSelf: 'center'}}>{fixture.homeTeam.team_name}</Text>
+              <Text style={{fontSize:16, flex:1, textAlign:'center', alignSelf: 'center',}}>{fixture.status}</Text>
+              <Text style={{fontSize:16, flex:1,   textAlign:'center', alignSelf: 'center'}}>{fixture.awayTeam.team_name}</Text>
             </View>
           </TouchableHighlight>
         </View>
@@ -122,10 +124,10 @@ export const Main = props => {
               props.fetchSpecificFixture(fixID)
               props.navigation.push('Inner', {id: fixID});
           }}>
-            <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
-              <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
-              <Text style={{flex:1, textAlign:'center', alignSelf: 'center',}}>{fixture.status}</Text>
-              <Text style={{flex:1,   textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
+            <View  width={itemWidth} minHeight={itemHeight} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
+              <Text style={{fontSize:16, flex:1,   textAlign:'center', alignSelf: 'center'}}>{fixture.homeTeam.team_name}</Text>
+              <Text style={{fontSize:16, flex:1, textAlign:'center', alignSelf: 'center',}}>{fixture.status}</Text>
+              <Text style={{fontSize:16, flex:1,   textAlign:'center', alignSelf: 'center'}}>{fixture.awayTeam.team_name}</Text>
             </View>
           </TouchableHighlight>
         </View>

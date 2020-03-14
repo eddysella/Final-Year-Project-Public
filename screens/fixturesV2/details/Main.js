@@ -40,17 +40,17 @@ export const Main = props => {
       <View style={{flex:1}}>
         <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
           <TouchableHighlight onPress={() => setTab(0)}
-          style={{flex:1, borderBottomWidth:statsBorder}}>
+          style={{flex:1, borderBottomWidth:statsBorder, justifyContent:'center'}}>
           <Text style={{textAlign: 'center', fontSize:18,}}>Stats</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(1)}
-            style={{flex:1, alignItems: 'center', borderBottomWidth:eventsBorder}}>
+            style={{flex:1, alignItems: 'center', borderBottomWidth:eventsBorder, justifyContent:'center'}}>
           <Text style={{textAlign:'center', fontSize:18,}}>Events</Text>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => setTab(2)}
-          style={{flex:1, borderBottomWidth:lineupBorder}}>
+          style={{flex:1, borderBottomWidth:lineupBorder, justifyContent:'center'}}>
           <Text style={{textAlign: 'center', fontSize:18,}}>Line-Up</Text>
           </TouchableHighlight>
         </View>
@@ -121,9 +121,31 @@ export const Main = props => {
 
   function renderLineupItem(player) {
     player=player.item;
+    position = null;
+    switch(player.pos){
+      case 'G':
+        position = 'Goalkeeper: ';
+        break;
+      case 'D':
+        position = 'Defender: ';
+        break;
+      case 'M':
+        position = 'Mid: ';
+        break;
+      case 'F':
+        position = 'Forward: ';
+        break;
+      case 'A':
+        position = 'Attacker: ';
+        break;
+      default:
+        position = 'n/a: '
+        break;
+    }
     return (
-      <View style={{ justifyContent: 'space-around'}}>
-        <Text style={{flex:1}}>{player.pos} {player.player}</Text>
+      <View flexDirection='row' style={{ justifyContent: 'center'}}>
+        <Text style={{fontWeight: 'bold'}}>{position}</Text>
+        <Text> {player.player}</Text>
       </View>
     );
   };
@@ -131,13 +153,15 @@ export const Main = props => {
   function renderLineupCards(team) {
     team = team.item;
     return (
-      <Card title={team.team}>
+      <Card title={team.team} titleStyle={{fontSize:18}}>
         <SectionList
           sections={[
            { title: 'Starting', data: team.starting },
            { title: 'Substitutes', data: team.subs },
           ]}
-          renderSectionHeader={ ({section}) => <Text> { section.title } </Text> }
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={{alignSelf: 'center', fontSize:18, padding:10}}>{title}</Text>
+          )}
           renderItem={renderLineupItem}
           keyExtractor={ (item, index) => item+index.toString() }
         />

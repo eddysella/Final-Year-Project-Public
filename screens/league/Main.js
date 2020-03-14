@@ -5,14 +5,16 @@ import { scale, } from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
 import Fixtures from '../../containers/league/Fixtures'
 const screenWidth = Math.round(Dimensions.get('window').width);
-const itemWidth = scale(screenWidth/10); // screen / 2 / 4 sections
+const itemWidth = scale(screenWidth/9); // screen / 2 / 4 sections
+const screenHeight = Math.round(Dimensions.get('window').height);
+const itemHeight = scale(screenHeight/15);
 
 export const Main = props => {
 
   function ItemSeparator(){
     return (
       <View style={{
-        height: scale(2),
+        height: 2,
         width: '100%',
         backgroundColor: "#000",
       }}/>
@@ -22,7 +24,7 @@ export const Main = props => {
   function VItemSeparator(){
     return (
       <View style={{
-        width: scale(2),
+        width: 2,
         height: '100%',
         backgroundColor: "#000",
       }}/>
@@ -81,25 +83,25 @@ export const Main = props => {
       "Points"
     ];
     return (
-      <View style={{flexDirection:'row', margin: 10}}>
-        <View style={{flex: 1}}>
-          <Text style={{alignSelf: 'flex-start', marginLeft:5}}>{titles[0]} </Text>
+      <View style={{height: itemHeight, flexDirection:'row'}}>
+        <View style={{flex:1, justifyContent:'center'}}>
+          <Text style={{marginLeft: 10}}>{titles[0]} </Text>
         </View>
-        <View style={{flex: 1, flexDirection:'row',}}>
-          <View style={{width: itemWidth}}>
-            <Text h3 style={{textAlign:'center'}}>{titles[3]} </Text>
+        <View style={{flex: 1, flexDirection:'row', marginRight:10}}>
+          <View style={{width: itemWidth, justifyContent:'center', alignItems:'center'}}>
+            <Text>{titles[3]} </Text>
           </View>
           <VItemSeparator/>
-          <View style={{width: itemWidth}}>
-            <Text h3 style={{textAlign:'center'}}>{titles[4]} </Text>
+          <View style={{width: itemWidth, justifyContent:'center', alignItems:'center'}}>
+            <Text>{titles[4]} </Text>
           </View>
           <VItemSeparator/>
-          <View style={{width: itemWidth}}>
-            <Text h3 style={{textAlign:'center'}}>{titles[5]} </Text>
+          <View style={{width: itemWidth, justifyContent:'center', alignItems:'center'}}>
+            <Text>{titles[5]} </Text>
           </View>
           <VItemSeparator/>
-          <View style={{width: itemWidth}}>
-            <Text h3 style={{textAlign:'center'}}>{titles[6]} </Text>
+          <View style={{width: itemWidth, justifyContent:'center', alignItems:'center'}}>
+            <Text>{titles[6]} </Text>
           </View>
         </View>
       </View>
@@ -110,8 +112,8 @@ export const Main = props => {
     team = standing.item
     return (
       <View
-      style={{margin: 10, flexDirection: 'row'}}>
-        <View style={{flex:1, flexDirection:'row'}}>
+      style={{flexDirection: 'row'}}>
+        <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
           <Text h3 style={{marginLeft:10, marginRight:10,}}>{team[0]}</Text>
           <Avatar
             size = 'small'
@@ -120,22 +122,22 @@ export const Main = props => {
           />
           <Text h3 style={{marginLeft: 10,}}>{team[2]} </Text>
         </View>
-        <View style={{flex: 1, flexDirection:'row'}}>
-        <View style={{width: itemWidth}}>
-          <Text h3 style={{textAlign:'center'}}>{team[3]} </Text>
-        </View>
-        <VItemSeparator/>
-        <View style={{width: itemWidth}}>
-          <Text h3 style={{textAlign:'center'}}>{team[4]} </Text>
-        </View>
-        <VItemSeparator/>
-        <View style={{width: itemWidth}}>
-          <Text h3 style={{textAlign:'center'}}>{team[5]} </Text>
-        </View>
-        <VItemSeparator/>
-        <View style={{width: itemWidth}}>
-          <Text h3 style={{textAlign:'center'}}>{team[6]} </Text>
-        </View>
+        <View style={{flex: 1, flexDirection:'row', marginRight:10}}>
+          <View style={{borderBottomWidth:2, width: itemWidth, height:itemHeight, justifyContent:'center', alignItems:'center'}}>
+            <Text>{team[3]} </Text>
+          </View>
+          <VItemSeparator/>
+          <View style={{borderBottomWidth:2, width: itemWidth, height:itemHeight, justifyContent:'center', alignItems:'center'}}>
+            <Text>{team[4]} </Text>
+          </View>
+          <VItemSeparator/>
+          <View style={{borderBottomWidth:2, width: itemWidth, height:itemHeight, justifyContent:'center', alignItems:'center'}}>
+            <Text>{team[5]} </Text>
+          </View>
+          <VItemSeparator/>
+          <View style={{borderBottomWidth:2, width: itemWidth, height:itemHeight, justifyContent:'center', alignItems:'center'}}>
+            <Text>{team[6]} </Text>
+          </View>
         </View>
       </View>
     );
@@ -155,7 +157,6 @@ export const Main = props => {
       <View style={{flex:1}}>
         <StandingsHeader/>
         <FlatList
-        ItemSeparatorComponent={ItemSeparator}
         ref={(ref) => { this.teamList = ref; }}
         data={standings.data}
         renderItem={renderStandingsItem}
@@ -167,18 +168,19 @@ export const Main = props => {
 
   function renderTeamsItem(item) {
     team = props.teams[item.item];
+    name = "    " + props.teams[item.item].name
     return (
       <TouchableHighlight onPress={ () =>{
             props.navigation.push('Team', {id: item.item, name: props.teams[item.item].name});
         }}>
-        <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
+        <View flexDirection={'row'} style={{margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
           <Avatar
             size = 'medium'
             source={{ uri: `${team.logo}`}}
             rounded
           />
-          <Text h3>
-            {team.name}
+          <Text style={{fontSize:16}}>
+            {name}
           </Text>
         </View>
       </TouchableHighlight>

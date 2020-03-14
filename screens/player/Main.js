@@ -27,7 +27,7 @@ export const Main = props => {
   function renderItem(stat) {
     stat = stat.item
     return (
-        <View style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
+        <View style={{margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
           <Text h3>{stat}</Text>
         </View>
       );
@@ -138,7 +138,7 @@ export const Main = props => {
       renderItem={renderItem}
       keyExtractor={(item,index) => item.toString()}
       renderSectionHeader={({ section: { title } }) => (
-        <Text style={{padding:10, textAlign:'center', fontSize: 20,}}>{title}</Text>
+        <Text style={{alignSelf: 'center', fontSize:18, padding:10}}>{title}</Text>
       )}
       />
     );

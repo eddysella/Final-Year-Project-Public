@@ -4,7 +4,9 @@ import {Card} from 'react-native-elements';
 import { scale,} from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
 const screenWidth = Math.round(Dimensions.get('window').width);
-const itemWidth = screenWidth - scale(screenWidth/5);
+const itemWidth = screenWidth/1.3
+const screenHeight = Math.round(Dimensions.get('window').height);
+const itemHeight = screenHeight/19
 
 export const Main = props => {
 
@@ -71,11 +73,11 @@ export const Main = props => {
           props.fetchSpecificFixture(item.item)
           props.navigation.push('Inner', {id: item.item, name: props.fixturesByID[item.item].league.name});
       }}>
-        <View  width={itemWidth} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
-          <Text style={{flex:1,   textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
-          <Text style={{flex:1, textAlign:'center', alignSelf: 'center',}}>{fixture.status}</Text>
-          <Text style={{flex:1,   textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
-        </View>
+      <View  width={itemWidth} minHeight={itemHeight} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
+        <Text style={{fontSize:16, flex:1,   textAlign:'center', alignSelf: 'center'}}>{fixture.homeTeam.team_name}</Text>
+        <Text style={{fontSize:16, flex:1, textAlign:'center', alignSelf: 'center',}}>{fixture.status}</Text>
+        <Text style={{fontSize:16, flex:1,   textAlign:'center', alignSelf: 'center'}}>{fixture.awayTeam.team_name}</Text>
+      </View>
       </TouchableHighlight>
     );
   };
@@ -97,7 +99,7 @@ export const Main = props => {
   function renderDates(item){
     date = item.item
     return (
-      <Card title={new Date(parseInt(date)).toLocaleDateString()}>
+      <Card title={new Date(parseInt(date)).toLocaleDateString()} titleStyle={{fontSize:18}}>
       {
         <View style={{alignItems: 'center'}}>
           <SectionList

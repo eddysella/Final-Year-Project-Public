@@ -60,7 +60,7 @@ export const Main = props => {
       <TouchableHighlight onPress={ () =>{
             props.navigation.push('Player', {playerID: item.item, teamID:teamID, name: props.players[item.item].name});
         }}>
-        <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
+        <View style={{borderWidth:1, alignSelf: 'center', flex: 1, margin: 5, marginLeft: 20, marginRight:20, padding: 10}}>
           <Text h3>{player.name}</Text>
         </View>
       </TouchableHighlight>
@@ -86,25 +86,28 @@ export const Main = props => {
       renderItem={renderPlayersItem}
       keyExtractor={(item,index) => item.toString()}
       renderSectionHeader={({ section: { title } }) => (
-        <Text>{title}</Text>
+        <Text style={{alignSelf: 'center', fontSize:18, padding:10}}>{title}</Text>
       )}
       />
     );
   }
 
-  function renderLeaguesItem(leagueID) {
-      league = props.leagues[leagueID.item];
+  function renderLeaguesItem(item) {
+      league = props.leagues[item.item];
+      name = "    " + props.leagues[item.item].name
       return (
         <TouchableHighlight onPress={ () =>{
-              props.navigation.push('League', {id: leagueID.item});
+              props.navigation.push('League', {id: item.item});
           }}>
-          <View flexDirection={'row'} style={{borderWidth: 2, margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
+          <View flexDirection={'row'} style={{margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
             <Avatar
                 size = 'medium'
                 source={{ uri: `${league.logo}`}}
                 rounded
             />
-            <Text h3>{league.name}</Text>
+            <Text style={{fontSize:16}}>
+              {name}
+            </Text>
           </View>
         </TouchableHighlight>
         );

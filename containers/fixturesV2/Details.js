@@ -12,7 +12,7 @@ const mapStateToProps = state =>({
 const Screen = ({fixturesByID, fetching, ...props}) => (
   <View style={{flex:1}}>
     <Header headerFlex={1} fixturesByID={fixturesByID} navigation={props.navigation}/>
-    <Main viewFlex={2} screenFlex={8} topBarFlex={1} fixturesByID={fixturesByID}
+    <Main viewFlex={2} screenFlex={9} topBarFlex={2} fixturesByID={fixturesByID}
     fetching ={fetching} navigation={props.navigation}/>
   </View>
 )
