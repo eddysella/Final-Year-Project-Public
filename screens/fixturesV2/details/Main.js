@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import {TouchableHighlight, SectionList, FlatList, View, Text, Dimensions } from 'react-native';
-import {Card} from 'react-native-elements';
+import {Card, ButtonGroup} from 'react-native-elements';
 import { MaterialIndicator,} from 'react-native-indicators';
 
 export const Main = props => {
@@ -17,46 +17,20 @@ export const Main = props => {
     );
   };
 
-
-  const RenderTopBar = (item) => {
-    fixture = item.item;
-    statsBorder=0;
-    eventsBorder=0;
-    lineupBorder=0;
-    if(currentTab == 0){
-      statsBorder=2;
-      eventsBorder=0;
-      lineupBorder=0;
-    }else if(currentTab == 1){
-      statsBorder=0;
-      eventsBorder=2;
-      lineupBorder=0;
-    }else if(currentTab == 2){
-      statsBorder=0;
-      eventsBorder=0;
-      lineupBorder=2;
+  const buttons = ['Statistics', 'Events', 'Line-Ups']
+    const RenderTopBar = () => {
+        return (
+          <ButtonGroup
+          onPress={setTab}
+          selectedIndex={currentTab}
+          buttons={buttons}
+          containerStyle={{flex:1}}
+          selectedButtonStyle={{borderBottomWidth:2, borderColor:'black', backgroundColor:'white'}}
+          textStyle={{color:'black'}}
+          selectedTextStyle={{color:'black'}}
+          />
+      );
     }
-    return (
-      <View style={{flex:1}}>
-        <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
-          <TouchableHighlight onPress={() => setTab(0)}
-          style={{flex:1, borderBottomWidth:statsBorder, justifyContent:'center'}}>
-          <Text style={{textAlign: 'center', fontSize:18,}}>Stats</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight onPress={() => setTab(1)}
-            style={{flex:1, alignItems: 'center', borderBottomWidth:eventsBorder, justifyContent:'center'}}>
-          <Text style={{textAlign:'center', fontSize:18,}}>Events</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight onPress={() => setTab(2)}
-          style={{flex:1, borderBottomWidth:lineupBorder, justifyContent:'center'}}>
-          <Text style={{textAlign: 'center', fontSize:18,}}>Line-Up</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-    );
-  }
 
   function renderNoData(data) {
     title="There are no " + data + " available";
@@ -187,12 +161,17 @@ export const Main = props => {
   fixtureID = props.navigation.getParam('id');
   fixture = props.fixturesByID[fixtureID];
   const [currentTab, setTab] = useState(0);
+  const [fetched, setFetched] = useState(false);
+  if(!fetched){
+    props.fetchSpecificFixture(fixtureID)
+    setFetched(true);
+  }
 
   if(props.fetching){
     return(
       <View style={{flex:1}}>
         <View style={{flex:props.topBarFlex}}>
-          <RenderTopBar item={props.topBar}/>
+          <RenderTopBar/>
         </View>
         <View style={{flex:props.screenFlex}}>
           <MaterialIndicator/>

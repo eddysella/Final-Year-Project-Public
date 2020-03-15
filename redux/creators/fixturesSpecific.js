@@ -34,6 +34,10 @@ function receiveFixtureStats(id, stats){
   };
 }
 
+function shouldFetchMoreInfo(fixture){
+  return !fixture.stats;
+}
+
 /**
  * Fetch Sequence for fixture statistics.
  * @method fetchSpecificFixture
@@ -41,11 +45,13 @@ function receiveFixtureStats(id, stats){
  * @return {Function}
  */
 export function fetchSpecificFixture(id){
-  return dispatch => {
-    dispatch(requestFixtureStats(id))
-    return getFixtureByID(id)
-    .then( data => processFixture(data))
-    .then( processedData => dispatch(receiveFixtureStats(id, processedData)))
+  return (dispatch, getState) => {
+    if(shouldFetchMoreInfo(getState().fixturesByID[id])){
+      dispatch(requestFixtureStats(id))
+      return getFixtureByID(id)
+      .then( data => processFixture(data))
+      .then( processedData => dispatch(receiveFixtureStats(id, processedData)))
+    }
   }
 }
 

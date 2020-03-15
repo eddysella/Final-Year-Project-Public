@@ -55,7 +55,6 @@ export const Main = props => {
         }
         type='outline'
         onPress={ () =>{
-          props.fetchSpecificFixture(item.item)
           props.navigation.push('Fixture', {id: item.item, name: props.fixturesByID[item.item].league.name});
           }}>
         </Button>
@@ -112,7 +111,6 @@ export const Main = props => {
         }
         type='outline'
         onPress={ () =>{
-          props.fetchSpecificFixture(fixID)
           props.navigation.push('Fixture', {id: fixID, name: props.fixturesByID[fixID].league.name});
           }}>
         </Button>
