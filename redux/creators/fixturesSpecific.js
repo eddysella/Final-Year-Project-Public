@@ -34,6 +34,12 @@ function receiveFixtureStats(id, stats){
   };
 }
 
+/**
+ * Returns true if there is a stats object within the fixtures object. False otherwise.
+ * @method shouldFetchMoreInfo
+ * @param  {Object} fixture (propertyName : property)
+ * @return {Boolean}
+ */
 function shouldFetchMoreInfo(fixture){
   return !fixture.stats;
 }
