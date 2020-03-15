@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import { TouchableHighlight, SectionList, FlatList, View, Text,} from 'react-native';
-import { Avatar } from 'react-native-elements';
+import { Avatar, Button, ButtonGroup } from 'react-native-elements';
 import { scale,} from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
 import Fixtures from '../../containers/team/Fixtures'
@@ -13,57 +13,35 @@ export const Main = props => {
     );
   };
 
-  const RenderTopBar = (item) => {
-    team = item.item;
-    fixturesBorder=0;
-    leaguesBorder=0;
-    playersBorder=0;
-    if(currentTab == 0){
-      fixturesBorder=2;
-      leaguesBorder=0;
-      playersBorder=0;
-    }else if(currentTab == 1){
-      fixturesBorder=0;
-      leaguesBorder=2;
-      playersBorder=0;
-    }else if(currentTab == 2){
-      fixturesBorder=0;
-      leaguesBorder=0;
-      playersBorder=2;
+  const buttons = ['Fixtures', 'Leagues', 'Players']
+    const RenderTopBar = () => {
+        return (
+          <ButtonGroup
+          onPress={setTab}
+          selectedIndex={currentTab}
+          buttons={buttons}
+          containerStyle={{flex:1}}
+          selectedButtonStyle={{borderBottomWidth:2, borderColor:'black', backgroundColor:'white'}}
+          textStyle={{color:'black'}}
+          selectedTextStyle={{color:'black'}}
+          />
+      );
     }
-    return (
-      <View style={{flex:1}}>
-        <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
-          <TouchableHighlight onPress={() => setTab(0)}
-          style={{flex:1, borderBottomWidth:fixturesBorder, justifyContent:'center'}}>
-          <Text style={{textAlign: 'center', fontSize:18}}>Fixtures</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight onPress={() => setTab(1)}
-              style={{flex:1, alignItems: 'center', borderBottomWidth:leaguesBorder, justifyContent:'center'}}>
-          <Text style={{textAlign:'center', fontSize:18}}>Leagues</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight onPress={() => setTab(2)}
-          style={{flex:1, borderBottomWidth:playersBorder, justifyContent:'center'}}>
-          <Text style={{textAlign: 'center', fontSize:18}}>Players</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-
-    );
-  }
 
   function renderPlayersItem(item) {
     player = props.players[item.item];
     return (
-      <TouchableHighlight onPress={ () =>{
-            props.navigation.push('Player', {playerID: item.item, teamID:teamID, name: props.players[item.item].name});
-        }}>
-        <View style={{borderWidth:1, alignSelf: 'center', flex: 1, margin: 5, marginLeft: 20, marginRight:20, padding: 10}}>
-          <Text h3>{player.name}</Text>
-        </View>
-      </TouchableHighlight>
+        <Button
+        raised
+        containerStyle={{marginVertical: 5, marginHorizontal:20}}
+        buttonStyle={{borderColor:'#0f0f0f'}}
+        titleStyle={{color:'#0f0f0f'}}
+        title = {player.name}
+        type='outline'
+        onPress={ () =>{
+              props.navigation.push('Player', {playerID: item.item, teamID:teamID, name: props.players[item.item].name});
+          }}>
+        </Button>
       );
   };
 
@@ -96,20 +74,24 @@ export const Main = props => {
       league = props.leagues[item.item];
       name = "    " + props.leagues[item.item].name
       return (
-        <TouchableHighlight onPress={ () =>{
+        <Button
+        raised
+        containerStyle={{marginVertical: 5, marginHorizontal:20}}
+        buttonStyle={{borderColor:'#0f0f0f'}}
+        titleStyle={{color:'#0f0f0f'}}
+        title = {name}
+        icon = {
+          <Avatar
+              size = 'medium'
+              source={{ uri: `${league.logo}`}}
+              rounded
+          />
+        }
+        type='outline'
+        onPress={ () =>{
               props.navigation.push('League', {id: item.item});
           }}>
-          <View flexDirection={'row'} style={{margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
-            <Avatar
-                size = 'medium'
-                source={{ uri: `${league.logo}`}}
-                rounded
-            />
-            <Text style={{fontSize:16}}>
-              {name}
-            </Text>
-          </View>
-        </TouchableHighlight>
+        </Button>
         );
   };
 
@@ -145,7 +127,7 @@ export const Main = props => {
     return(
       <View style={{flex:1}}>
         <View style={{flex:props.topBarFlex}}>
-          <RenderTopBar item={team}/>
+          <RenderTopBar/>
         </View>
         <View style={{flex:props.screenFlex}}>
           <MaterialIndicator/>
@@ -172,7 +154,7 @@ export const Main = props => {
     return (
     <View style={{flex:1}}>
       <View style={{flex:props.topBarFlex}}>
-        <RenderTopBar item={team}/>
+        <RenderTopBar/>
       </View>
       <View style={{flex:props.screenFlex}}>
         {bottomPage}

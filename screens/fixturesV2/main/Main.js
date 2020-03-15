@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import {TouchableHighlight, SectionList, FlatList, View, Text, Dimensions } from 'react-native';
-import {Card} from 'react-native-elements';
+import {Card, Button, ButtonGroup} from 'react-native-elements';
 import { scale,} from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
 const screenWidth = Math.round(Dimensions.get('window').width);
@@ -26,59 +26,25 @@ export const Main = props => {
     return props.followedTeams.length || props.followedLeagues.length;
   }
 
-  const RenderTopBar = () => {
-    pastBorder=0;
-    todayBorder=0;
-    futureBorder=0;
-    if(currentTab == 0){
-      pastBorder=2;
-      todayBorder=0;
-      futureBorder=0;
-    }else if(currentTab == 1){
-      pastBorder=0;
-      todayBorder=2;
-      futureBorder=0;
-    }else if(currentTab == 2){
-      pastBorder=0;
-      todayBorder=0;
-      futureBorder=2;
-    }
-
-    return (
-      <View style={{flex:1}}>
-        <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
-          <TouchableHighlight onPress={() => setTab(0)}
-          style={{flex:1, borderBottomWidth:pastBorder, justifyContent:'center'}}>
-          <Text style={{textAlign: 'center', fontSize:18,}}>Past</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight onPress={() => setTab(1)}
-            style={{flex:1, alignItems: 'center', borderBottomWidth:todayBorder, justifyContent:'center'}}>
-          <Text style={{textAlign:'center', fontSize:18,}}>Today</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight onPress={() => setTab(2)}
-          style={{flex:1, borderBottomWidth:futureBorder,  justifyContent:'center'}}>
-          <Text style={{textAlign: 'center', fontSize:18,}}>Future</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-    );
-  }
-
   function renderItem(item) {
     fixture = props.fixturesByID[item.item]
     return (
-      <TouchableHighlight style={{padding:7}}onPress={ () => {
-          props.fetchSpecificFixture(item.item)
-          props.navigation.push('Inner', {id: item.item, name: props.fixturesByID[item.item].league.name});
-      }}>
-      <View  width={itemWidth} minHeight={itemHeight} flexDirection={'row'} style={{ justifyContent: 'space-around'}}>
-        <Text style={{fontSize:16, flex:1,   textAlign:'center', alignSelf: 'center'}}>{fixture.homeTeam.team_name}</Text>
-        <Text style={{fontSize:16, flex:1, textAlign:'center', alignSelf: 'center',}}>{fixture.status}</Text>
-        <Text style={{fontSize:16, flex:1,   textAlign:'center', alignSelf: 'center'}}>{fixture.awayTeam.team_name}</Text>
-      </View>
-      </TouchableHighlight>
+      <Button
+      raised
+      containerStyle={{marginVertical: 5, marginHorizontal:20}}
+      buttonStyle={{borderColor:'#0f0f0f'}}
+      icon = {
+        <View  width={itemWidth} minHeight={itemHeight} flexDirection={'row'} style={{ justifyContent: 'space-around', alignItems:'center'}}>
+          <Text style={{flex:1, fontSize:16, textAlign:'center'}}>{fixture.homeTeam.team_name}</Text>
+          <Text style={{flex:1, fontSize:16, textAlign:'center'}}>{fixture.status}</Text>
+          <Text style={{flex:1, fontSize:16, textAlign:'center'}}>{fixture.awayTeam.team_name}</Text>
+        </View>
+      }
+      type='outline'
+      onPress={ () =>{
+            props.navigation.push('Inner', {id: item.item, name: props.fixturesByID[item.item].league.name});
+        }}>
+      </Button>
     );
   };
 
@@ -103,7 +69,6 @@ export const Main = props => {
       {
         <View style={{alignItems: 'center'}}>
           <SectionList
-          ItemSeparatorComponent={ItemSeparator}
           sections={processDate(props.fixtureIDs[date])}
           renderItem={renderItem}
           keyExtractor={(item,index) => item.toString()}
@@ -167,7 +132,6 @@ export const Main = props => {
       {
         <View style={{alignItems: 'center'}}>
           <SectionList
-          ItemSeparatorComponent={ItemSeparator}
           ref={(ref) => { this.leagueList = ref; }}
           sections={processDate(props.fixtureIDs[date])}
           renderItem={renderItem}
@@ -207,13 +171,28 @@ export const Main = props => {
     );
   }
 
+  const buttons = ['Past', 'Today', 'Future']
+    const RenderTopBar = () => {
+        return (
+          <ButtonGroup
+          onPress={setTab}
+          selectedIndex={currentTab}
+          buttons={buttons}
+          containerStyle={{flex:1}}
+          selectedButtonStyle={{borderBottomWidth:2, borderColor:'black', backgroundColor:'white'}}
+          textStyle={{color:'black'}}
+          selectedTextStyle={{color:'black'}}
+          />
+      );
+    }
+
   const [currentTab, setTab] = useState(1);
 
   if(props.fetchingFuture || props.fetchingPast){
     return(
       <View style={{flex:1}}>
         <View style={{flex:props.topBarFlex}}>
-          <RenderTopBar item={props.topBar}/>
+          <RenderTopBar/>
         </View>
         <View style={{flex:props.screenFlex}}>
           <MaterialIndicator/>

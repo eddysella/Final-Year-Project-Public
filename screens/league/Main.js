@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import { TouchableHighlight, FlatList, View, Text, Dimensions } from 'react-native';
-import { Avatar} from 'react-native-elements';
+import { Avatar, Button, ButtonGroup} from 'react-native-elements';
 import { scale, } from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
 import Fixtures from '../../containers/league/Fixtures'
@@ -31,46 +31,20 @@ export const Main = props => {
     );
   };
 
-  const RenderTopBar = (item) => {
-    league = item.item;
-    fixturesBorder=0;
-    teamsBorder=0;
-    standingsBorder=0;
-    if(currentTab == 0){
-      fixturesBorder=2;
-      teamsBorder=0;
-      standingsBorder=0;
-    }else if(currentTab == 1){
-      fixturesBorder=0;
-      teamsBorder=2;
-      standingsBorder=0;
-    }else if(currentTab == 2){
-      fixturesBorder=0;
-      teamsBorder=0;
-      standingsBorder=2;
+  const buttons = ['Fixtures', 'Teams', 'Standings']
+    const RenderTopBar = () => {
+        return (
+          <ButtonGroup
+          onPress={setTab}
+          selectedIndex={currentTab}
+          buttons={buttons}
+          containerStyle={{flex:1}}
+          selectedButtonStyle={{borderBottomWidth:2, borderColor:'black', backgroundColor:'white'}}
+          textStyle={{color:'black'}}
+          selectedTextStyle={{color:'black'}}
+          />
+      );
     }
-
-    return (
-      <View style={{flex:1}}>
-        <View flexDirection={'row'} style={{flex:1, justifyContent: 'space-around'}}>
-          <TouchableHighlight onPress={() => setTab(0)}
-          style={{flex:1, borderBottomWidth:fixturesBorder, justifyContent:'center'}}>
-          <Text style={{textAlign: 'center', fontSize:18}}>Fixtures</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight onPress={() => setTab(1)}
-            style={{flex:1, alignItems: 'center', borderBottomWidth:teamsBorder, justifyContent:'center'}}>
-          <Text style={{textAlign:'center', fontSize:18}}>Teams</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight onPress={() => setTab(2)}
-          style={{flex:1, borderBottomWidth:standingsBorder, justifyContent:'center'}}>
-          <Text style={{textAlign: 'center', fontSize:18}}>Standings</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-    );
-  }
 
   const StandingsHeader = () =>{
     titles = [
@@ -144,8 +118,7 @@ export const Main = props => {
   };
 
   const RenderStandings = (item) =>{
-    leagueID = item.leagueID;
-    standings = props.standings[leagueID]
+    standings = item.item
     if(!standings){
       return(
         <Text style={{alignSelf: 'center',  textAlign:'center'}}>
@@ -170,26 +143,30 @@ export const Main = props => {
     team = props.teams[item.item];
     name = "    " + props.teams[item.item].name
     return (
-      <TouchableHighlight onPress={ () =>{
-            props.navigation.push('Team', {id: item.item, name: props.teams[item.item].name});
-        }}>
-        <View flexDirection={'row'} style={{margin: 5, padding: 10, alignItems: 'center',  alignSelf: 'stretch'}}>
-          <Avatar
+      <Button
+      raised
+      containerStyle={{marginVertical: 5, marginHorizontal:20}}
+      buttonStyle={{borderColor:'#0f0f0f'}}
+      titleStyle={{color:'#0f0f0f'}}
+      title = {name}
+      icon = {
+        <Avatar
             size = 'medium'
             source={{ uri: `${team.logo}`}}
             rounded
-          />
-          <Text style={{fontSize:16}}>
-            {name}
-          </Text>
-        </View>
-      </TouchableHighlight>
+        />
+      }
+      type='outline'
+      onPress={ () =>{
+            props.navigation.push('Team', {id: item.item, name: props.teams[item.item].name});
+        }}>
+      </Button>
     );
   };
 
   const RenderTeams = (item) => {
-    league = item.item;
-    if(!league.teamIDs){
+    teamIDs = item.item
+    if(!teamIDs || teamIDs == null){
       return(
         <Text style={{alignSelf: 'center',  textAlign:'center'}}>No Teams Available</Text>
       );
@@ -197,7 +174,7 @@ export const Main = props => {
     return (
       <FlatList
       ref={(ref) => { this.teamList = ref; }}
-      data={league.teamIDs}
+      data={teamIDs}
       renderItem={renderTeamsItem}
       keyExtractor={(item,index) => index.toString()}
       />
@@ -215,7 +192,7 @@ export const Main = props => {
     return(
       <View style={{flex:1}}>
         <View style={{flex:props.topBarFlex}}>
-          <RenderTopBar item={league}/>
+          <RenderTopBar/>
         </View>
         <View style={{flex:props.screenFlex}}>
           <MaterialIndicator/>
@@ -233,20 +210,20 @@ export const Main = props => {
             setTeamsFetched(true);
             props.fetchTeams(leagueID)
           }
-          bottomPage = <RenderTeams item={league}/>
+          bottomPage = <RenderTeams item={league.teamIDs}/>
           break;
         case 2:
           if(!standingsFetched){
             setStandingsFetched(true);
             props.fetchStandings(leagueID)
           }
-          bottomPage = <RenderStandings leagueID={leagueID}/>
+          bottomPage = <RenderStandings item={props.standings[leagueID]}/>
           break;
       }
       return (
         <View style={{flex:1}}>
           <View style={{flex:props.topBarFlex}}>
-            <RenderTopBar item={league}/>
+            <RenderTopBar/>
           </View>
           <View style={{flex:props.screenFlex}}>
             {bottomPage}
