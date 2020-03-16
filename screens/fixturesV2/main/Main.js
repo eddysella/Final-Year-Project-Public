@@ -3,8 +3,9 @@ import {TouchableHighlight, SectionList, FlatList, View, Text, Dimensions } from
 import {Card, Button, ButtonGroup} from 'react-native-elements';
 import { scale,} from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
+import { mainColor } from '../../styles/root'
 const screenWidth = Math.round(Dimensions.get('window').width);
-const itemWidth = screenWidth/1.3
+const itemWidth = screenWidth/1.5
 const screenHeight = Math.round(Dimensions.get('window').height);
 const itemHeight = screenHeight/19
 
@@ -179,7 +180,7 @@ export const Main = props => {
           selectedIndex={currentTab}
           buttons={buttons}
           containerStyle={{flex:1}}
-          selectedButtonStyle={{borderBottomWidth:2, borderColor:'black', backgroundColor:'white'}}
+          selectedButtonStyle={{borderBottomWidth:2, borderColor:mainColor, backgroundColor:'white'}}
           textStyle={{color:'black'}}
           selectedTextStyle={{color:'black'}}
           />

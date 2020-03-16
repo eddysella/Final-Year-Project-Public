@@ -2,6 +2,7 @@ import React, { Component, useState } from 'react';
 import {TouchableHighlight, SectionList, FlatList, View, Text, Dimensions } from 'react-native';
 import {Card, ButtonGroup} from 'react-native-elements';
 import { MaterialIndicator,} from 'react-native-indicators';
+import { mainColor } from '../../styles/root'
 
 export const Main = props => {
 
@@ -25,7 +26,7 @@ export const Main = props => {
           selectedIndex={currentTab}
           buttons={buttons}
           containerStyle={{flex:1}}
-          selectedButtonStyle={{borderBottomWidth:2, borderColor:'black', backgroundColor:'white'}}
+          selectedButtonStyle={{borderBottomWidth:2, borderColor:mainColor, backgroundColor:'white'}}
           textStyle={{color:'black'}}
           selectedTextStyle={{color:'black'}}
           />

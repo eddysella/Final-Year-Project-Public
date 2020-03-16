@@ -4,6 +4,7 @@ import { Avatar, Button, ButtonGroup } from 'react-native-elements';
 import { scale,} from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
 import Fixtures from '../../containers/team/Fixtures'
+import { mainColor } from '../styles/root'
 
 export const Main = props => {
 
@@ -21,7 +22,7 @@ export const Main = props => {
           selectedIndex={currentTab}
           buttons={buttons}
           containerStyle={{flex:1}}
-          selectedButtonStyle={{borderBottomWidth:2, borderColor:'black', backgroundColor:'white'}}
+          selectedButtonStyle={{borderBottomWidth:2, borderColor:mainColor, backgroundColor:'white'}}
           textStyle={{color:'black'}}
           selectedTextStyle={{color:'black'}}
           />

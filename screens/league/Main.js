@@ -4,6 +4,7 @@ import { Avatar, Button, ButtonGroup} from 'react-native-elements';
 import { scale, } from 'react-native-size-matters';
 import { MaterialIndicator,} from 'react-native-indicators';
 import Fixtures from '../../containers/league/Fixtures'
+import { mainColor } from '../styles/root'
 const screenWidth = Math.round(Dimensions.get('window').width);
 const itemWidth = scale(screenWidth/9); // screen / 2 / 4 sections
 const screenHeight = Math.round(Dimensions.get('window').height);
@@ -39,7 +40,7 @@ export const Main = props => {
           selectedIndex={currentTab}
           buttons={buttons}
           containerStyle={{flex:1}}
-          selectedButtonStyle={{borderBottomWidth:2, borderColor:'black', backgroundColor:'white'}}
+          selectedButtonStyle={{borderBottomWidth:2, borderColor:mainColor, backgroundColor:'white'}}
           textStyle={{color:'black'}}
           selectedTextStyle={{color:'black'}}
           />
