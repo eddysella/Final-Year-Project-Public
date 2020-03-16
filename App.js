@@ -2,7 +2,7 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
+import { Platform, StyleSheet, View, AsyncStorage } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
 
@@ -33,7 +33,7 @@ export default function App(props) {
     return (
         <View style={{flex: 1}}>
           <Provider store={store}>
-          <AppNavigator/>
+            <AppNavigator/>
           </Provider>
         </View>
     );
@@ -43,7 +43,6 @@ export default function App(props) {
 async function loadResourcesAsync() {
   await Promise.all([
     retrieveFollowing(),
-    store.dispatch(initFixtures()),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,
