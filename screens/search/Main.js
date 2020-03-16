@@ -3,6 +3,7 @@ import { TouchableHighlight, SectionList, View, Text,} from 'react-native';
 import { Avatar, Icon} from 'react-native-elements';
 import { MaterialIndicator,} from 'react-native-indicators';
 import { scale,} from 'react-native-size-matters';
+import { mainColor } from '../styles/root'
 export const Main = props => {
 
   function ItemSeparator(){
@@ -131,7 +132,7 @@ export const Main = props => {
           keyExtractor={(item,index) => item.toString()}
           extraData={refresh}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={{textAlign:'center', fontSize: 30,}}>{title}</Text>
+            <Text style={{textAlign:'center', fontSize: 27}}>{title}</Text>
           )}
           />
       </View>
