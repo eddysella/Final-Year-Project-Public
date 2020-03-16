@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { View } from 'react-native'
 import { Main } from '../../screens/search/Main'
 import { TopBar } from '../../screens/search/TopBar'
+import header from '../../screens/styles/header';
 
 const mapStateToProps = state => ({
   followingTeamIDs: state.followingTeamIDs,
@@ -46,7 +47,10 @@ const Screen = ({followingTeamIDs, followingLeagueIDs,teamIDs,
 )
 
 Screen.navigationOptions = () => ({
-  title: "Search"
+  title: "Search",
+  headerStyle: header.headerStyle,
+  headerTitleStyle: header.headerTitleStyle,
+  headerTitleContainerStyle: header.headerTitleContainerStyle,
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);

@@ -2,6 +2,7 @@ import React from 'react';
 import { removeLeagueFromFollowing, removeTeamFromFollowing  } from '../../redux/creators/following'
 import { connect } from 'react-redux'
 import { Main } from '../../screens/following/Following';
+import header from '../../screens/styles/header';
 
 const mapStateToProps = state => ({
   teamIDs: state.followingTeamIDs,
@@ -16,13 +17,16 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const Screen = ({teamIDs, leagueIDs, teams, leagues, removeTeam, removeLeague, ...props}) => (
-  <Main teamIDs={teamIDs} leagueIDs={leagueIDs}
+  <Main screenFlex={7} topBarFlex={1} teamIDs={teamIDs} leagueIDs={leagueIDs}
   teams={teams} leagues={leagues} removeTeam={removeTeam}
   removeLeague={removeLeague} navigation={props.navigation}/>
 )
 
 Screen.navigationOptions = () => ({
-  title: "Following"
+  title: "Following",
+  headerStyle: header.headerStyle,
+  headerTitleStyle: header.headerTitleStyle,
+  headerTitleContainerStyle: header.headerTitleContainerStyle,
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);

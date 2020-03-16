@@ -41,5 +41,4 @@ const Screen = ({curPastDates, curFutureDates, fetchingFuture, fetchingPast,
     setShouldFetchFutureTrue={setShouldFetchFutureTrue} navigation={props.navigation}/>
 )
 
-
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);

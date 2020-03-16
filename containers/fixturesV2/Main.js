@@ -4,6 +4,7 @@ import { fetchFollowingPastFixtures , } from '../../redux/creators/pastFixtures'
 import { fetchSpecificFixture , } from '../../redux/creators/fixturesSpecific'
 import { connect } from 'react-redux'
 import { Main } from '../../screens/fixturesV2/main/Main';
+import header from '../../screens/styles/header';
 
 const mapStateToProps = state => ({
     curPastDates: state.fixturesStatus['currentPastDates'],
@@ -36,7 +37,10 @@ const Screen = ({curPastDates, curFutureDates, fetchingFuture, fetchingPast,
 )
 
 Screen.navigationOptions = () => ({
-  title: "Fixtures"
+  title: "Fixtures",
+  headerStyle: header.headerStyle,
+  headerTitleStyle: header.headerTitleStyle,
+  headerTitleContainerStyle: header.headerTitleContainerStyle,
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);

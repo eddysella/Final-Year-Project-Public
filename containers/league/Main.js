@@ -4,6 +4,7 @@ import { fetchTeams } from '../../redux/creators/leagues'
 import { fetchStandings, } from '../../redux/creators/standings'
 import { initLeague } from '../../redux/creators/fixtures'
 import { Main } from '../../screens/league/Main';
+import header from '../../screens/styles/header';
 
 const mapStateToProps = state => ({
     leagues: state.leaguesByID,
@@ -28,7 +29,10 @@ const Screen = ({leagues, teams, standings, fetchingExtraLeagueData, fetchingSta
 )
 
 Screen.navigationOptions = (props) => ({
-  title: props.navigation.getParam('name')
+  title: props.navigation.getParam('name'),
+  headerStyle: header.headerStyle,
+  headerTitleStyle: header.headerTitleStyle,
+  headerTitleContainerStyle: header.headerTitleContainerStyle,
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(Screen);
