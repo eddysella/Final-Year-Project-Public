@@ -127,12 +127,28 @@ export const Main = props => {
 
   function renderLineupCards(team) {
     team = team.item;
+    if((!(team.starting)) && (!(team.subs))){
+      return (
+        <Card title={team.team} titleStyle={{fontSize:18}}>
+          <View style={{justifyContent:'center', alignItems:'center'}}>
+          <Text> There are no line-ups available </Text>
+          </View>
+        </Card>
+      );
+    }else{
+      if(!(team.starting)){
+        team.starting = []
+      }
+      if(!(team.subs)){
+        team.subs = []
+      }
+    }
     return (
       <Card title={team.team} titleStyle={{fontSize:18}}>
         <SectionList
           sections={[
-           { title: 'Starting', data: team.starting },
-           { title: 'Substitutes', data: team.subs },
+           { title: 'Starting', data: team.starting},
+           { title: 'Substitutes', data: team.subs},
           ]}
           renderSectionHeader={({ section: { title } }) => (
             <Text style={{alignSelf: 'center', fontSize:18, padding:10}}>{title}</Text>
