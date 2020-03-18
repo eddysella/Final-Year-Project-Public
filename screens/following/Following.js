@@ -56,14 +56,14 @@ export const Main = props => {
         <FlatGrid
         itemDimension={itemWidth}
         items={props.teamIDs}
-        renderItem={renderLeague}
+        renderItem={renderTeam}
         />
       </View>
     );
   }
 
   function renderTeam(item){
-    league = props.teams[item.item]
+    team = props.teams[item.item]
     return(
       <TouchableHighlight
         style={{borderWidth: 2, borderRadius: 5, borderColor: mainColor }}

@@ -119,6 +119,7 @@ export const Main = props => {
   const [leaguesFetched, setLeaguesFetched] = useState(false);
   const [playersFetched, setPlayersFetched] = useState(false);
   props.initFixtures(teamID);
+  
   if(!leaguesFetched){
     props.fetchLeagues(teamID)
     setLeaguesFetched(true);

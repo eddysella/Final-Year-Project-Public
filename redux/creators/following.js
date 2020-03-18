@@ -136,7 +136,6 @@ function removeLeague(leagueID){
  */
 export function addTeamToFollowing(teamID){
   return dispatch => {
-    teamArray = [];
     dispatch(addTeam(teamID)) // 1
     dispatch(updateTeamStorage())
     dispatch(fetchTeams([teamID])) // 2

@@ -55,22 +55,18 @@ async function loadResourcesAsync() {
 
 async function retrieveFollowing(){
   try {
-        console.log( "Retrieving leagues from storage" );
         AsyncStorage.getItem( 'FOLLOWINGLEAGUES' )
         .then(leagues => {
           if ( leagues !== null ) {
-            console.log( "Retrieved leagues from storage" );
               leagueArray = JSON.parse(leagues)
               store.dispatch(initFollowedLeagues(leagueArray))
           }
         })
   } catch ( e ) {}
   try {
-        console.log( "Retrieving teams from storage" );
         AsyncStorage.getItem( 'FOLLOWINGTEAMS' )
         .then(teams => {
           if ( teams !== null ) {
-            console.log( "Retrieved teams from storage" );
               teamArray = JSON.parse(teams)
               store.dispatch(initFollowedTeams(teamArray))
           }
