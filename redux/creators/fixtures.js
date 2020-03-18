@@ -11,8 +11,8 @@ import {
   FIXTURES_INIT_TEAM,
   FIXTURES_RESET,
 } from '../types/fixtures'
-import { fetchPastTeamFixtures, fetchPastLeagueFixtures } from './pastFixtures';
-import { fetchFutureTeamFixtures, fetchFutureLeagueFixtures, receiveFutureLeagueFixtures } from './futureFixtures';
+import { fetchFollowingPastFixtures, fetchPastTeamFixtures, fetchPastLeagueFixtures } from './pastFixtures';
+import { fetchFollowingFutureFixtures, fetchFutureTeamFixtures, fetchFutureLeagueFixtures, receiveFutureLeagueFixtures } from './futureFixtures';
 /**
  * @module Redux Creators fixtures
  */
@@ -178,17 +178,20 @@ export function initFixturesForTeam(teamID){
   }
 }
 
-/**
- * Top level dispatch:
- * 1) Initialization of fixtures stores
- * 2) Initial fetch for followed entities
- * @method initFixtures
- * @return Function
- */
+let counter = 0;
+let initCounter = 2;
+
 export function initFixtures(){
   return (dispatch, getState) => {
-    dispatch(initLeagues()) // 1
-    dispatch(initTeams()) // 2
+    if(initCounter == 1){
+      teamIDs = getState().followingTeamIDs.length
+      leagueIDs = getState().followingLeagueIDs.length
+      counter = teamIDs + leagueIDs
+      dispatch(initLeagues())
+      dispatch(initTeams())
+    }else{
+      initCounter -=1;
+    }
   }
 }
 
@@ -197,11 +200,15 @@ export function initFixtures(){
  * @method initLeagues
  * @return {Function}
  */
-function initLeagues(){
+export function initLeagues(){
   return (dispatch, getState) => {
-    leagueIDs = getState().followingLeagueIDs;
+    leagueIDs = [...getState().followingLeagueIDs];
     leagueIDs.map( leagueID => {
-      dispatch(initLeague(leagueID))
+      if(!(leagueID in getState().fixtureIDsByLeagueID)){
+        dispatch(initFixturesForLeague(leagueID))
+      }
+      counter-=1;
+      dispatch(fetchFixtures())
     })
   }
 }
@@ -217,7 +224,7 @@ function initLeagues(){
  */
 export function initLeague(leagueID){
   return (dispatch, getState) => {
-    if(getState().fixtureIDsByLeagueID[leagueID] === undefined){
+    if(!(leagueID in getState().fixtureIDsByLeagueID)){
       dispatch(initFixturesForLeague(leagueID))
       dispatch(fetchFutureLeagueFixtures([leagueID]))
     }
@@ -229,11 +236,15 @@ export function initLeague(leagueID){
  * @method initTeams
  * @return {Function}
  */
-function initTeams(){
+export function initTeams(){
   return (dispatch, getState) => {
     teamIDs = getState().followingTeamIDs;
     teamIDs.map( teamID => {
-      dispatch(initTeam(teamID))
+      if(!(teamID in getState().fixtureIDsByTeamID)){
+        dispatch(initFixturesForTeam(teamID))
+      }
+      counter-=1;
+      dispatch(fetchFixtures())
     })
   }
 }
@@ -249,10 +260,23 @@ function initTeams(){
  */
 export function initTeam(teamID){
   return (dispatch, getState) => {
-    if(getState().fixtureIDsByTeamID[teamID] === undefined){
+    if(!(teamID in getState().fixtureIDsByTeamID)){
       dispatch(initFixturesForTeam(teamID))
       dispatch(fetchPastTeamFixtures([teamID]))
       dispatch(fetchFutureTeamFixtures([teamID]))
+    }
+  }
+}
+
+/**
+ * @method fetchFixtures
+ * @return Function
+ */
+export function fetchFixtures(){
+  return (dispatch, getState) => {
+    if(counter == 0){
+      dispatch(fetchFollowingPastFixtures())
+      dispatch(fetchFollowingFutureFixtures())
     }
   }
 }

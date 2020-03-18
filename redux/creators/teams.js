@@ -17,7 +17,7 @@ import { getTeamByID, getLastTwentyFixtures, getNextTenFixtures,
   getPlayersByTeamID } from '../../fetch/Team'
 import { processLeagues, receiveMultipleLeagues } from './leagues'
 import { processPlayers, receivePlayer } from './players'
-import { initTeam,} from './fixtures'
+import { initFixtures } from './fixtures'
 /**
  * @module Redux Creators Teams
  */
@@ -83,6 +83,8 @@ function shouldFetchTeam(team){
   }
 }
 
+let counter = 0
+
 /**
  * Fetch sequence for a set of teams.
  * @method fetchTeams
@@ -91,6 +93,7 @@ function shouldFetchTeam(team){
  */
 export function fetchTeams(teamIDs){
   return (dispatch, getState) => {
+    counter = teamIDs.length
     teamIDs.map( teamID => {
       team = getState().teamsByID[teamID]
       if(shouldFetchTeam(team)){
@@ -104,6 +107,33 @@ export function fetchTeams(teamIDs){
         dispatch(fetchLeaguesForTeam(teamID))
       }
     });
+  }
+}
+
+/**
+ * Fetch sequence for the leagues of a team.
+ * @method fetchLeaguesForTeam
+ * @param  {Integer} teamID A team ID
+ * @return {Function}
+ */
+export function fetchLeaguesForTeam(teamID){
+  return (dispatch, getState) => {
+    if(shouldFetchLeagues(getState().teamsByID[teamID])){
+      dispatch(requestLeagues())
+      return getAllLeaguesForTeam(teamID)
+      .then( data => processLeagues(data))
+      .then( processedData => {
+        dispatch( receiveMultipleLeagues(processedData[1]));
+        dispatch( receiveLeagueIDs(teamID, processedData[0]));
+        // initteam is from fixtures this is as far down the chain as I could put it
+      })
+      .then(() => {
+        counter-=1
+        if(counter == 0){
+          dispatch(initFixtures())
+        }
+      })
+    }
   }
 }
 
@@ -149,28 +179,6 @@ function shouldFetchLeagues(team){
     return false;
   }else{
     return true;
-  }
-}
-
-/**
- * Fetch sequence for the leagues of a team.
- * @method fetchLeaguesForTeam
- * @param  {Integer} teamID A team ID
- * @return {Function}
- */
-export function fetchLeaguesForTeam(teamID){
-  return (dispatch, getState) => {
-    if(shouldFetchLeagues(getState().teamsByID[teamID])){
-      dispatch(requestLeagues())
-      return getAllLeaguesForTeam(teamID)
-      .then( data => processLeagues(data))
-      .then( processedData => {
-        dispatch( receiveMultipleLeagues(processedData[1]));
-        dispatch( receiveLeagueIDs(teamID, processedData[0]));
-        // initteam is from fixtures this is as far down the chain as I could put it
-        dispatch(initTeam(teamID));
-      })
-    }
   }
 }
 

@@ -31,6 +31,7 @@ function getTime(bool){
   }else{
     yesterday = new Date();
     yesterday.setDate(today.getDate() - 1)
+    yesterday.setHours(0,0,0,0)
     return yesterday.getTime();
   }
 }

@@ -11,7 +11,7 @@ import { getAllSeasonsForLeague } from '../../fetch/League'
 import { getFixturesByLeagueAndDate } from '../../fetch/Fixtures'
 import { getTeamsByLeagueID } from '../../fetch/Team'
 import { receiveMultipleTeams } from './teams'
-import { initLeague } from './fixtures'
+import { initFixtures } from './fixtures'
 /**
  * @module Redux Creators leagues
  */
@@ -72,6 +72,7 @@ function shouldFetchLeague(league){
  */
 export function fetchLeagues(leagueIDs){
   return (dispatch, getState) => {
+    let counter = leagueIDs.length
     leagueIDs.map( leagueID => {
       if(shouldFetchLeague(getState().leaguesByID[leagueID])){
         dispatch(requestLeagueByID(leagueID))
@@ -79,9 +80,12 @@ export function fetchLeagues(leagueIDs){
           // get latest season
         .then( data => processLeague(data))
         .then( processedData => {
-          dispatch( receiveLeagueByID(processedData))
+          dispatch( receiveLeagueByID(processedData));
+          counter-=1;
+          if(counter == 0){
+            dispatch(initFixtures())
+          }
         })
-        .then( () => dispatch(initLeague(leagueID)))
       }
     });
   }
