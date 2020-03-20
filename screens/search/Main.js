@@ -43,6 +43,7 @@ export const Main = props => {
                 setRefresh(true);
                 props.followingRemoveLeague(parseInt(item.item))
               }}
+              color={mainColor}
               />
     }else{
       icon = <Icon
@@ -53,6 +54,7 @@ export const Main = props => {
                 setRefresh(true);
                 props.followingAddLeague(parseInt(item.item))
               }}
+              color={mainColor}
               />
     }
     return(
@@ -78,6 +80,7 @@ export const Main = props => {
                 setRefresh(true);
                 props.followingRemoveTeam(parseInt(item.item))
               }}
+              color={mainColor}
               />
     }else{
       icon = <Icon
@@ -88,6 +91,7 @@ export const Main = props => {
                 setRefresh(true);
                 props.followingAddTeam(parseInt(item.item))
               }}
+              color={mainColor}
               />
     }
     return(
