@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { Platform, Text } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
-import TabBarIcon from '../components/TabBarIcon';
 
 import FixturesContainer from '../containers/fixturesV2/Main';
 import FixturesDetailsContainer from '../containers/fixturesV2/Details';
