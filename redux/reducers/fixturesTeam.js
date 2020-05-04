@@ -9,10 +9,11 @@ import {
 /**
  * @module Redux Reducers fixturesTeam
  */
+
 // Source: https://github.com/jherax/array-sort-by
 import sortBy from 'array-sort-by';
-const todayTime = getTodayTime();
-// const todayTime = 1000; // values for testing
+const todayTime = getTodayTime(); // comment out for testing
+// const todayTime = 1000; // uncomment for testing
 
 /**
  * Calculates the timeStamp of today @ midnight.

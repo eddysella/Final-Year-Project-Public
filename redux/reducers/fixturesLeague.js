@@ -13,6 +13,7 @@ import {
 /**
  * @module Redux Reducers fixturesLeague
  */
+
 const todayTime = getTime(true);
 const yesterdayTime = getTime(false);
 // const todayTime = 1000; // values for testing

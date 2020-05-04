@@ -1,6 +1,4 @@
-/**
- * This file contains all types belonging to the fixtures functionality
- */
+// This file contains all types belonging to the fixtures functionality
 export const FIXTURES_RESET = 'FIXTURES_RESET'
 export const FIXTURES_STORE_BY_ID = 'FIXTURES_STORE_BY_ID'
 export const FIXTURES_STORE_BY_DATE = 'FIXTURES_STORE_BY_DATE'

@@ -151,9 +151,14 @@ function processFixture(data){
   return collect;
 }
 
+/**
+ * Replaces subsitution event with neater representation
+ * @method processEvents
+ * @param  {Array} events A set of event objects
+ * @return {Array}
+ */
 function processEvents(events){
   events.forEach(event => {
-    console.log(event.type)
     if(event.type == 'subst'){
       event.player = event.player + " > " + event.detail
       event.detail = 'Substitution'
