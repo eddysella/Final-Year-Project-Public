@@ -144,9 +144,20 @@ function processFixture(data){
       collect = {
           status: status,
           stats:stats,
-          events:fixture.events,
+          events: processEvents(fixture.events),
           lineups:lineups,
       };
   });
   return collect;
+}
+
+function processEvents(events){
+  events.forEach(event => {
+    console.log(event.type)
+    if(event.type == 'subst'){
+      event.player = event.player + " > " + event.detail
+      event.detail = 'Substitution'
+    }
+  })
+  return events
 }

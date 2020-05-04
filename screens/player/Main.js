@@ -17,7 +17,7 @@ export const Main = props => {
   function ItemSeparator(){
     return (
       <View style={{
-        height: scale(2),
+        height: 2,
         width: '100%',
         backgroundColor: "#000",
       }}/>
@@ -137,6 +137,7 @@ export const Main = props => {
       ]}
       renderItem={renderItem}
       keyExtractor={(item,index) => item.toString()}
+      SectionSeparatorComponent={ItemSeparator}
       renderSectionHeader={({ section: { title } }) => (
         <Text style={{alignSelf: 'center', fontSize:18, padding:10}}>{title}</Text>
       )}
