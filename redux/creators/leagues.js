@@ -72,22 +72,26 @@ function shouldFetchLeague(league){
  */
 export function fetchLeagues(leagueIDs){
   return (dispatch, getState) => {
-    let counter = leagueIDs.length
-    leagueIDs.map( leagueID => {
-      if(shouldFetchLeague(getState().leaguesByID[leagueID])){
-        dispatch(requestLeagueByID(leagueID))
-        return getAllSeasonsForLeague(leagueID)
-          // get latest season
-        .then( data => processLeague(data))
-        .then( processedData => {
-          dispatch( receiveLeagueByID(processedData));
-          counter-=1;
-          if(counter == 0){
-            dispatch(initFixtures())
-          }
-        })
-      }
-    });
+    if(leagueIDs.length){
+      let counter = leagueIDs.length
+      leagueIDs.map( leagueID => {
+        if(shouldFetchLeague(getState().leaguesByID[leagueID])){
+          dispatch(requestLeagueByID(leagueID))
+          return getAllSeasonsForLeague(leagueID)
+            // get latest season
+          .then( data => processLeague(data))
+          .then( processedData => {
+            dispatch( receiveLeagueByID(processedData));
+            counter-=1;
+            if(counter == 0){
+              dispatch(initFixtures())
+            }
+          })
+        }
+      });
+    }else{
+        dispatch(initFixtures())
+    }
   }
 }
 

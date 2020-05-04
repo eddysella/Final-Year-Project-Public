@@ -93,20 +93,24 @@ let counter = 0
  */
 export function fetchTeams(teamIDs){
   return (dispatch, getState) => {
-    counter = teamIDs.length
-    teamIDs.map( teamID => {
-      team = getState().teamsByID[teamID]
-      if(shouldFetchTeam(team)){
-        dispatch(requestTeamByID(teamID))
-        getTeamByID(teamID)
-          // get latest season
-        .then( data => processTeam(data))
-        .then( processedData => dispatch( receiveTeamByID(processedData)))
-        .then(() => dispatch(fetchLeaguesForTeam(teamID)))
-      }else if(!(team.leagueIDs)){
-        dispatch(fetchLeaguesForTeam(teamID))
-      }
-    });
+    if(teamIDs.length){
+      counter = teamIDs.length
+      teamIDs.map( teamID => {
+        team = getState().teamsByID[teamID]
+        if(shouldFetchTeam(team)){
+          dispatch(requestTeamByID(teamID))
+          getTeamByID(teamID)
+            // get latest season
+          .then( data => processTeam(data))
+          .then( processedData => dispatch( receiveTeamByID(processedData)))
+          .then(() => dispatch(fetchLeaguesForTeam(teamID)))
+        }else if(!(team.leagueIDs)){
+          dispatch(fetchLeaguesForTeam(teamID))
+        }
+      });
+    }else{
+        dispatch(initFixtures())
+    }
   }
 }
 

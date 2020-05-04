@@ -72,8 +72,11 @@ export const Main = props => {
   function renderEventItem(ev) {
     ev=ev.item;
     return (
-      <View style={{ justifyContent: 'space-around'}}>
-        <Text style={{flex:1, alignSelf: 'center',  textAlign:'center'}}>{ev.elapsed}' {ev.player} {ev.detail}</Text>
+      <View style={{justifyContent:'space-around', alignItems:'center'}}>
+        <Text style={{flex:1}}>{ev.elapsed}'
+        <Text style={{flex:1, fontWeight: 'bold'}}> {ev.detail}: </Text>
+        <Text style={{flex:1}}>{ev.player}</Text>
+        </Text>
       </View>
     );
   };

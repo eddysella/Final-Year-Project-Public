@@ -363,6 +363,7 @@ function fetchLeagueFixtures(leagueIDs, leagueID, lastDate){
           if(storeDate == todayTime){           // Array of fixtureIDs
             dispatch( receiveTodayLeagueFixtures(leagueID, processedData[3], storeDate))
             dispatch( resetLeagueFetch(leagueID));
+            dispatch( fetchFutureLeagueFixtures(leagueIDs));
           }else{
             dispatch( storeFutureDates(Object.keys(processedData[2])))
             dispatch( receiveFutureLeagueFixtures(leagueID, processedData[4], storeDate));
