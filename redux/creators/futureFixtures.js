@@ -170,8 +170,12 @@ function storeFutureDate(){
   return (dispatch, getState) => {
     if(counter == 0){
         let current = getState().fixturesStatus['currentFutureDates'].length
-        let date = getState().futureDates[current];
-        dispatch( receiveFutureFixtures(date))
+        if(getState().futureDates.length >= current){
+          let date = getState().futureDates[current];
+          dispatch( receiveFutureFixtures(date));
+        }else{
+          dispatch( receiveFutureFixtures(null));
+        }
     }
   }
 }
@@ -221,7 +225,11 @@ function fetchTeamFixtures(teamIDs, overrideCheck){
     return getFutureTeamFixtures(teamID, nextPage)
     .then( data => processTeamFixtures(data, nextPage))
     .then( processedData => {
-      if(processedData){
+      if(!processedData){
+        dispatch( receiveFutureTeamFixtures(teamID, [], 'STOP'));
+        counter -= 1;
+        dispatch( storeFutureDate());
+      }else{
         dispatch( storeFixturesByID(processedData[0]));
         for (const date in processedData[1]){
           for (const league in processedData[1][date]){
@@ -244,8 +252,6 @@ function fetchTeamFixtures(teamIDs, overrideCheck){
           teamIDs.shift()
           dispatch(fetchFutureTeamFixtures(teamIDs))
         }
-      }else{
-        dispatch( receiveFutureTeamFixtures(teamID, [], 'STOP'));
       }
     })
   }

@@ -8,7 +8,6 @@ import {
   LEAGUE_RECEIVE_MULTIPLE_LEAGUES,
 } from '../types/leagues'
 import { getAllSeasonsForLeague } from '../../fetch/League'
-import { getFixturesByLeagueAndDate } from '../../fetch/Fixtures'
 import { getTeamsByLeagueID } from '../../fetch/Team'
 import { receiveMultipleTeams } from './teams'
 import { initFixtures } from './fixtures'

@@ -56,10 +56,17 @@ export function fixturesStatus(state={
     case FIXTURES_REQUEST_FUTURE:
       return Object.assign({}, state, { futureFetch: true, });
     case FIXTURES_RECEIVE_FUTURE:
-      return Object.assign({}, state, {
-        futureFetch: false,
-        currentFutureDates: [...state.currentFutureDates, action.timeStamp]
-      });
+      if(!action.timeStamp){
+        return Object.assign({}, state, {
+          futureFetch: false,
+        });
+      }else{
+        return Object.assign({}, state, {
+          futureFetch: false,
+          currentFutureDates: [...state.currentFutureDates, action.timeStamp]
+        });
+      }
+
     default:
       return state;
   }
