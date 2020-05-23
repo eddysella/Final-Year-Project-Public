@@ -37,7 +37,8 @@ Dependencies:
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"
     
-For the application to work a subscription must be made to the following API to receive an authentication key. A 'PRO' subscription is preferable but not necessary. 
+For the application to work a subscription must be made to the following API to receive an authentication key: https://rapidapi.com/api-sports/api/api-football/pricing 
+A 'PRO' subscription is preferable but not necessary. 
 
 ****
 BE CAREFUL AS THERE ARE NO RESTRICTIONS ON THE NUMBER OF API CALLS ALLOWED AND YOU WILL BE CHARGED FOR GOING OVER THE QUOTA!!!
