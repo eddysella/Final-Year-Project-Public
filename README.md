@@ -1,6 +1,6 @@
 The Repo of my final year project for BSc at the University of Sussex in Brighton, UK.
 
-#Compilation Guide
+# Compilation Guide
 
 Dependencies:
 
@@ -56,7 +56,7 @@ export default dict
 
 Once this is done the application can be run from an EXPO terminal, i.e. expo start *project*
 
-#Usage Guide
+# Usage Guide
 
 ![PDF1](https://github.com/eddysella/Final-Year-Project-Public/blob/fixturesV2/readmeImages/one-1.jpg)
 ![PDF2](https://github.com/eddysella/Final-Year-Project-Public/blob/fixturesV2/readmeImages/two-1.jpg)
