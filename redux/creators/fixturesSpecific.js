@@ -74,7 +74,7 @@ export function fetchSpecificFixture(id){
 function createLineups(passedLineups){
     lineups=[];
     if(!passedLineups){
-        return;
+        return null;
     }
     for (team in passedLineups){
         lineups.push({team:team, starting:passedLineups[team]['startXI'], subs:passedLineups[team]['substitutes']});
@@ -139,6 +139,7 @@ function processFixture(data){
         fixture.goalsAwayTeam,
         fixture.elapsed
       ])
+      if(fixture.statusShort == "PST"){}
       stats = createStats(fixture.statistics);
       lineups = createLineups(fixture.lineups);
       collect = {
@@ -158,11 +159,15 @@ function processFixture(data){
  * @return {Array}
  */
 function processEvents(events){
-  events.forEach(event => {
-    if(event.type == 'subst'){
-      event.player = event.player + " > " + event.detail
-      event.detail = 'Substitution'
-    }
-  })
-  return events
+  if(!events){
+    return null;
+  }else{
+    events.forEach(event => {
+      if(event.type == 'subst'){
+        event.player = event.player + " > " + event.detail
+        event.detail = 'Substitution'
+      }
+    })
+    return events
+  }
 }
