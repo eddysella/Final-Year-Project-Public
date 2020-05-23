@@ -39,6 +39,7 @@ export function fixturesStatus(state={
   currentPastDates: [],
   pastFetch: false,
   futureFetch: false,
+  noFuture: false,
 }, action){
   switch(action.type){
     case FIXTURES_RESET:
@@ -57,9 +58,16 @@ export function fixturesStatus(state={
       return Object.assign({}, state, { futureFetch: true, });
     case FIXTURES_RECEIVE_FUTURE:
       if(!action.timeStamp){
-        return Object.assign({}, state, {
-          futureFetch: false,
-        });
+        if(state.currentFutureDates.length == 0){
+          return Object.assign({}, state, {
+            futureFetch: false,
+            currentFutureDates: ["n/a"],
+          });
+        }else{
+          return Object.assign({}, state, {
+            futureFetch: false,
+          });
+        }
       }else{
         return Object.assign({}, state, {
           futureFetch: false,
