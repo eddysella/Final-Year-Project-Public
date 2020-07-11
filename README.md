@@ -1,5 +1,7 @@
 The Repo of my final year project for BSc at the University of Sussex in Brighton, UK.
 
+Just Ball is a cross-platform React-Native application for football statistics and fixtures.
+
 # Compilation Guide
 
 Dependencies:
